@@ -1,4 +1,5 @@
 # HelpMeAndYou
+PER RUNNARLO ENTRARE NELLA CARTELLA FLUTTER_PROJECT E RUNNARE QUESTO COMANDO: flutter run --no-sound-null-safety 
 
 
 
