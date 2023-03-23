@@ -1,13 +1,13 @@
-package com.helpmeandyou.demo;
+package com.HelpMeAndYou.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HelpMeAndYouApplication {
+public class HelpMeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HelpMeAndYouApplication.class, args);
+		SpringApplication.run(HelpMeApplication.class, args);
 	}
 
 }

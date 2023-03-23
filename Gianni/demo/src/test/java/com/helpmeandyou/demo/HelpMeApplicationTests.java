@@ -1,10 +1,10 @@
-package com.helpmeandyou.demo;
+package com.HelpMeAndYou.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HelpMeAndYouApplicationTests {
+class HelpMeApplicationTests {
 
 	@Test
 	void contextLoads() {
