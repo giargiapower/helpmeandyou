@@ -1,4 +1,4 @@
 package com.HelpMeAndYou.demo.Controller;
 
-public class Conto {
+public class ContoController {
 }
