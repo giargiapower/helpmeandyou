@@ -1,15 +1,10 @@
 package com.HelpMeAndYou.demo.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "banca")
-public class Conto {
+public class Conto{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -39,8 +34,4 @@ public class Conto {
         this.saldo += saldo;
     }
 
-    @Override
-    public String toString() {
-        return "com.example.Spring2.Customer [numero di conto=" + id + ", saldo=" + saldo + "]";
-    }
 }

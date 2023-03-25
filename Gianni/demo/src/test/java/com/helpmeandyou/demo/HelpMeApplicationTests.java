@@ -1,4 +1,4 @@
-package com.HelpMeAndYou.demo;
+package com.helpmeandyou.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
