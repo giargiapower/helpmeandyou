@@ -1,5 +1,5 @@
-package com.HelpMeAndYou.demo.Repository;
-import com.HelpMeAndYou.demo.Model.Conto;
+package com.HelpMeAndYou.demo;
+import com.HelpMeAndYou.demo.Conto;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

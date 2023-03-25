@@ -1,13 +1,13 @@
-package com.HelpMeAndYou.demo.Controller;
+package com.HelpMeAndYou.demo;
 
 
-import com.HelpMeAndYou.demo.Repository.ContRepository;
-import com.HelpMeAndYou.demo.Model.Conto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,13 +19,22 @@ public class ContoController {
     @Autowired
     ContRepository repository;
 
-    @PostMapping(value = "/conto/create")
-    public Conto postConto(@RequestBody Conto conto) {
+  /**  @GetMapping("/conto")
+    public List<Conto> getAllConti() {
+        System.out.println("Get all Conti...");
 
-        Conto c = repository.save(new Conto(conto.getSaldo()));
+        List<Conto> conti = new ArrayList<>();
+        repository.findAll().forEach(conti::add);
+
+        return conti;
+    }*/
+    @PostMapping(value = "/conto/create")
+    public Conto postConto(@RequestBody float saldo) {
+
+        Conto c = repository.save(new Conto(saldo));
         return c;
     }
-    @PutMapping("/customers/add/{id}")
+   /** @PutMapping("/conto/add/{id}")
     public ResponseEntity<Conto> updateConto(@PathVariable("id") long id, @RequestBody float saldo_aggiuntivo) {
         System.out.println("Update com.example.Spring2.Conto with ID = " + id + "...");
 
@@ -39,5 +48,5 @@ public class ContoController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
+    }**/
 }
