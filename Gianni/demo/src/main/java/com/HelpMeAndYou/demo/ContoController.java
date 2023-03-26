@@ -19,7 +19,7 @@ public class ContoController {
     @Autowired
     ContRepository repository;
 
-  /**  @GetMapping("/conto")
+    @GetMapping("/conto")
     public List<Conto> getAllConti() {
         System.out.println("Get all Conti...");
 
@@ -27,11 +27,11 @@ public class ContoController {
         repository.findAll().forEach(conti::add);
 
         return conti;
-    }*/
+    }
     @PostMapping(value = "/conto/create")
-    public Conto postConto(@RequestBody float saldo) {
+    public Conto postConto(@RequestBody Conto conto) {
 
-        Conto c = repository.save(new Conto(saldo));
+        Conto c = repository.save(new Conto(conto.getSaldo()));
         return c;
     }
    /** @PutMapping("/conto/add/{id}")
