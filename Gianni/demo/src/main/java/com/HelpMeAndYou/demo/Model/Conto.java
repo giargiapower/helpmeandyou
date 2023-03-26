@@ -1,4 +1,4 @@
-package com.HelpMeAndYou.demo;
+package com.HelpMeAndYou.demo.Model;
 
 import javax.persistence.*;
 
