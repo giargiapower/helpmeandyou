@@ -21,7 +21,19 @@ public class ContoController {
     @Autowired
     ContRepository repository;
 
-    @GetMapping("/conto")
+    @GetMapping("/conto/{id}")
+    public Conto getConto(@PathVariable("id") long id) {
+        Optional<Conto> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Conto _conto = c.get();
+            return _conto;
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping("/conti")
     public List<Conto> getAllConti() {
         System.out.println("Get all Conti...");
 
