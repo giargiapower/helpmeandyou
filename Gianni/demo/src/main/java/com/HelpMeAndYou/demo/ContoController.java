@@ -34,19 +34,19 @@ public class ContoController {
         Conto c = repository.save(new Conto(conto.getSaldo()));
         return c;
     }
-   /** @PutMapping("/conto/add/{id}")
-    public ResponseEntity<Conto> updateConto(@PathVariable("id") long id, @RequestBody float saldo_aggiuntivo) {
+    @PutMapping("/conto/add/{id}")
+    public ResponseEntity<Conto> updateConto(@PathVariable("id") long id, @RequestBody Conto conto) {
         System.out.println("Update com.example.Spring2.Conto with ID = " + id + "...");
 
         Optional<Conto> c = repository.findById(id);
 
         if (c.isPresent()) {
             Conto _conto = c.get();
-            _conto.addSaldo(saldo_aggiuntivo);
+            _conto.addSaldo(conto.getSaldo());
 
             return new ResponseEntity<>(repository.save(_conto), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }**/
+    }
 }
