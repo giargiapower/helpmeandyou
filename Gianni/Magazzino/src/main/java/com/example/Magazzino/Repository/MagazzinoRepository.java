@@ -1,2 +1,4 @@
-package com.example.Magazzino.Repository;public interface MagazzinoRepository {
+package com.example.Magazzino.Repository;
+
+public interface MagazzinoRepository {
 }
