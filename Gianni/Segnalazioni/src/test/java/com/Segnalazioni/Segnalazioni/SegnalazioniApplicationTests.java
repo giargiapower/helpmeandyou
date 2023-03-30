@@ -1,10 +1,10 @@
-package com.example.Magazzino;
+package com.Segnalazioni.Segnalazioni;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MagazzinoApplicationTests {
+class SegnalazioniApplicationTests {
 
 	@Test
 	void contextLoads() {

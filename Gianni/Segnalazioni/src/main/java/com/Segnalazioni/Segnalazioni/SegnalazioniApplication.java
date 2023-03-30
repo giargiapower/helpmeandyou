@@ -1,13 +1,13 @@
-package com.example.Magazzino;
+package com.Segnalazioni.Segnalazioni;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MagazzinoApplication {
+public class SegnalazioniApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MagazzinoApplication.class, args);
+		SpringApplication.run(SegnalazioniApplication.class, args);
 	}
 
 }
