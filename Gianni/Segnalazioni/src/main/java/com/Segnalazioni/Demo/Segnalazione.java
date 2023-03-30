@@ -1,4 +1,4 @@
-package com.Segnalazioni.Segnalazioni.Model;
+package com.Segnalazioni.Demo;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

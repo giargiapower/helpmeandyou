@@ -1,6 +1,6 @@
-package com.Segnalazioni.Segnalazioni.Repository;
+package com.Segnalazioni.Demo;
 
-import com.Segnalazioni.Segnalazioni.Model.Segnalazione;
+import com.Segnalazioni.Demo.Segnalazione;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

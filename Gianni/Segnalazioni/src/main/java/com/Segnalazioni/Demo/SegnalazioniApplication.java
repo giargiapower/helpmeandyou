@@ -1,6 +1,6 @@
-package com.Segnalazioni.Segnalazioni;
+package com.Segnalazioni.Demo;
 
-import org.springframework.boot.SpringApplication;
+import 	org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
