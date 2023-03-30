@@ -17,20 +17,25 @@ public class Segnalazione {
         @Column(name = "descrizione")
         private String descrizione;
 
-        @Column(name = "data")
-        private String data;
+        @Column(name = "tipologia")
+        private String tipologia;
 
-        @Column(name = "utente")
-        private String utente;
+        @Column(name = "utente_segnalante")
+        private String creatore;
+
+        @Column(name = "utente_segnalato")
+        private String segnalato;
+
 
         public Segnalazione() {
         }
 
-        public Segnalazione(String titolo, String descrizione,  String data,  String utente) {
+        public Segnalazione(String titolo, String descrizione,  String tipologia,  String segnalante, String segnalato) {
             this.titolo = titolo;
             this.descrizione = descrizione;
-            this.data = data;
-            this.utente = utente;
+            this.tipologia = tipologia;
+            this.creatore = segnalante;
+            this.segnalato = segnalato;
         }
 
         public long getId() {
@@ -45,12 +50,16 @@ public class Segnalazione {
             return descrizione;
         }
 
-        public String getData() {
-            return data;
+        public String getTipologia() {
+            return tipologia;
         }
 
-        public String getUtente() {
-            return utente;
+        public String getCreatore() {
+            return creatore;
+        }
+
+        public String getSegnalato() {
+            return segnalato;
         }
 
         public void setTitolo(String titolo) {

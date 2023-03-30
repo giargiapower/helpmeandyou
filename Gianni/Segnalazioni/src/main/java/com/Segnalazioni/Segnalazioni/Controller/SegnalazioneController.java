@@ -44,10 +44,10 @@ public class SegnalazioneController {
     @PostMapping(value = "/create")
     public Segnalazione postSegnalazione(@RequestBody Segnalazione segnalazione) {
 
-        Segnalazione s = repository.save(new Segnalazione(segnalazione.getTitolo() , segnalazione.getDescrizione() , segnalazione.getData(), segnalazione.getUtente()));
+        Segnalazione s = repository.save(new Segnalazione(segnalazione.getTitolo() , segnalazione.getDescrizione() , segnalazione.getTipologia(), segnalazione.getCreatore() , segnalazione.getSegnalato()));
         return s;
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Segnalazione> deleteSegnalazione(@PathVariable("id") long id) {
         System.out.println("Delete Segnalazione with ID = " + id + "...");
