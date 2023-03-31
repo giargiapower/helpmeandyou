@@ -3,6 +3,7 @@ package requests.model;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class RequestHelp {
     private String place;
 
     @Column(name = "state")
-    private String state;       // accepted, completed
+    private String state;       // published, accepted, completed
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -47,9 +48,20 @@ public class RequestHelp {
     private User publishedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_type")
     private Category category;
 
+    public RequestHelp(String description, LocalDate day, String place) {
+        this.description = description;
+        this.day = day;
+        this.place = place;
+        this.state = "published";
+        this.acceptedUser = null;
+    }
+
+    public RequestHelp() {
+
+    }
 
 
     public long getId() {
@@ -84,22 +96,62 @@ public class RequestHelp {
         this.place = place;
     }
 
+    public Set<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Set<Material> materials) {
+        this.materials = materials;
+    }
+
+    public User getAcceptedUser() {
+        return acceptedUser;
+    }
+
+    public void setAcceptedUser(User acceptedUser) {
+        this.acceptedUser = acceptedUser;
+    }
+
+    public User getPublishedUser() {
+        return publishedUser;
+    }
+
+    public void setPublishedUser(User publishedUser) {
+        this.publishedUser = publishedUser;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public String getState() {
         return state;
     }
 
-
-
-    public void acceptRequest() {
-        this.state = "accepted";
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public void endRequest() {
-        this.state = "completed";
+    public void addMaterials(List<Material> m){
+        materials.addAll(m);
     }
 
-    public void requestMaterial(Material m){
-        materials.add(m);
+    @Override
+    public String toString() {
+        return "RequestHelp{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", day=" + day +
+                ", place='" + place + '\'' +
+                ", state='" + state + '\'' +
+                ", materials=" + materials +
+                ", acceptedUser=" + acceptedUser +
+                ", publishedUser=" + publishedUser +
+                ", category=" + category +
+                '}';
     }
-
 }

@@ -18,4 +18,20 @@ public class Material {
     private Set<RequestHelp> requests = new HashSet<>();
 
 
+    public Material(String name) {
+        this.name = name;
+    }
+
+    public Material() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", requests=" + requests +
+                '}';
+    }
 }
