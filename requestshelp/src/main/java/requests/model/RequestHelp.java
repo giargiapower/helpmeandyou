@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name = "request_help")
 public class RequestHelp {
@@ -27,13 +29,10 @@ public class RequestHelp {
     @Column(name = "state")
     private String state;       // published, accepted, completed
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "request_material",
-            joinColumns = @JoinColumn(name = "request_id"),
-            inverseJoinColumns = @JoinColumn(name = "material_id")
-    )
-    private Set<Material> materials = new HashSet<>();
+    @ElementCollection(fetch = EAGER)
+    @CollectionTable(name = "requests_materials", joinColumns = @JoinColumn(name = "request_id"))
+    @Column(name = "material_name")
+    private Set<String> materials;
 
     /*
         L'attributo "fetch" specifica il modo in cui il framework Spring recupera l'entità correlata.
@@ -57,6 +56,7 @@ public class RequestHelp {
         this.place = place;
         this.state = "published";
         this.acceptedUser = null;
+        this.materials = new HashSet<>();
     }
 
     public RequestHelp() {
@@ -96,11 +96,11 @@ public class RequestHelp {
         this.place = place;
     }
 
-    public Set<Material> getMaterials() {
+    public Set<String> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(Set<Material> materials) {
+    public void setMaterials(Set<String> materials) {
         this.materials = materials;
     }
 
@@ -110,6 +110,7 @@ public class RequestHelp {
 
     public void setAcceptedUser(User acceptedUser) {
         this.acceptedUser = acceptedUser;
+        this.state = "accepted";
     }
 
     public User getPublishedUser() {
@@ -134,10 +135,6 @@ public class RequestHelp {
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public void addMaterials(List<Material> m){
-        materials.addAll(m);
     }
 
     @Override
