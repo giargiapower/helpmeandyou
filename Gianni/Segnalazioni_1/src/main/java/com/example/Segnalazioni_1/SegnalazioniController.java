@@ -1,8 +1,6 @@
-package com.Segnalazioni.Demo;
+package com.example.Segnalazioni_1;
 
 
-import com.Segnalazioni.Demo.Segnalazione;
-import com.Segnalazioni.Demo.SegnalazioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +13,16 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/segnalazioni")
-public class SegnalazioneController {
+public class SegnalazioniController {
     @Autowired
-    SegnalazioneRepository repository;
+    SegnalazioniRepository repository;
 
     @GetMapping("/{id}")
-    public Segnalazione getSegnalazione(@PathVariable("id") long id) {
-        Optional<Segnalazione> s = repository.findById(id);
+    public Segnalazioni getSegnalazione(@PathVariable("id") long id) {
+        Optional<Segnalazioni> s = repository.findById(id);
 
         if (s.isPresent()) {
-            Segnalazione _segnalazione = s.get();
+            Segnalazioni _segnalazione = s.get();
             return _segnalazione;
         } else {
             return null;
@@ -32,27 +30,27 @@ public class SegnalazioneController {
     }
 
     @GetMapping("/list")
-    public List<Segnalazione> getAllSegnalazioni() {
+    public List<Segnalazioni> getAllSegnalazioni() {
         System.out.println("Get all Segnalations...");
 
-        List<Segnalazione> segnalazione = new ArrayList<>();
+        List<Segnalazioni> segnalazione = new ArrayList<>();
         repository.findAll().forEach(segnalazione::add);
 
         return segnalazione;
     }
 
     @PostMapping(value = "/create")
-    public Segnalazione postSegnalazione(@RequestBody Segnalazione segnalazione) {
+    public Segnalazioni postSegnalazione(@RequestBody Segnalazioni segnalazione) {
 
-        Segnalazione s = repository.save(new Segnalazione(segnalazione.getTitolo() , segnalazione.getDescrizione() , segnalazione.getTipologia(), segnalazione.getCreatore() , segnalazione.getSegnalato()));
+        Segnalazioni s = repository.save(new Segnalazioni(segnalazione.getTitolo() , segnalazione.getDescrizione() , segnalazione.getTipologia(), segnalazione.getCreatore() , segnalazione.getSegnalato()));
         return s;
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Segnalazione> deleteSegnalazione(@PathVariable("id") long id) {
+    public ResponseEntity<Segnalazioni> deleteSegnalazione(@PathVariable("id") long id) {
         System.out.println("Delete Segnalazione with ID = " + id + "...");
 
-        Optional<Segnalazione> c = repository.findById(id);
+        Optional<Segnalazioni> c = repository.findById(id);
         if (c.isPresent()) {
             repository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.OK);
