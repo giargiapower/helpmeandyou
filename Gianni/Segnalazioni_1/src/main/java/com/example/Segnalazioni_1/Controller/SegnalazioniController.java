@@ -1,6 +1,8 @@
-package com.example.Segnalazioni_1;
+package com.example.Segnalazioni_1.Controller;
 
 
+import com.example.Segnalazioni_1.Model.Segnalazioni;
+import com.example.Segnalazioni_1.Repository.SegnalazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
