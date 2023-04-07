@@ -19,8 +19,8 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     AccountRepository repository;
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////
+    // DA SPOSTARE SU MICROSERVIZIO AMMINISTRATORE
     // metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)
     @GetMapping("/da_approvare/list")
     public List<Account> getAllAccountToApprove() {
@@ -61,7 +61,6 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
 
     // crea l'account
     @PostMapping(value = "/create")
@@ -79,6 +78,7 @@ public class AccountController {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
