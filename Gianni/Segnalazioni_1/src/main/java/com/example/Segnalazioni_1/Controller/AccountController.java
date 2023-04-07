@@ -30,6 +30,38 @@ public class AccountController {
         return accounts;
     }
 
+    // metodi per amministratore approva o disapprova la creazione di un account in base ai parametri dell'account
+    // da valutare se aggiungere fattori di sicurezza tipo controllare se chi richiama il microservizio è un amministratore valido
+    @PutMapping("/da_approvare/approva/{id}")
+    public ResponseEntity<Account> approvaAccount(@PathVariable("id") long id) {
+
+        Optional<Account> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Account _account = c.get();
+            _account.setStato("approvato");
+
+            return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/da_approvare/disapprova/{id}")
+    public ResponseEntity<Account> disapprovaAccount(@PathVariable("id") long id) {
+
+        Optional<Account> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Account _account = c.get();
+            _account.setStato("bloccato");
+
+            return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
 
     // crea l'account
     @PostMapping(value = "/create")
