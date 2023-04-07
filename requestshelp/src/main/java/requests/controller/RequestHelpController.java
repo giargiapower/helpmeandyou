@@ -1,16 +1,13 @@
 package requests.controller;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import requests.model.Category;
-import requests.model.Material;
 import requests.model.RequestHelp;
-import requests.model.User;
 import requests.repository.RequestHelpRepository;
-
 import java.util.*;
 
 
@@ -36,47 +33,35 @@ public class RequestHelpController {
 	}
 
 	@PostMapping("/requests")
-	public RequestHelp createRequest(@RequestBody RequestHelp request){
-		System.out.println("post: " + request);
-
-		RequestHelp fin = new RequestHelp(request.getDescription(), request.getDay(), request.getPlace());
-		fin.setMaterials(request.getMaterials());
-		fin.setPublishedUser(request.getPublishedUser());
-		fin.setCategory(request.getCategory());
-		System.out.println(fin);
-
-
+	public RequestHelp createRequest(@RequestBody RequestHelp requestHelp){
+		RequestHelp fin = new RequestHelp(requestHelp.getDescription(), requestHelp.getDay(), requestHelp.getPlace());
+		fin.setPublishedUser(requestHelp.getPublishedUser());
+		fin.setCategory(requestHelp.getCategory());
 		return repository.save(fin);
 	}
 
-	@PutMapping("/requests/{id}/state")
-	public ResponseEntity<RequestHelp> updateRequestState(@PathVariable(value = "id") long requestId, @RequestBody String newStateRequest) {
+	@PutMapping("/requests/accept/{id}")
+	public ResponseEntity<RequestHelp> acceptRequest(@PathVariable(value = "id") long requestId, @RequestBody RequestHelp requestHelp) {
 		Optional <RequestHelp> request = repository.findById(requestId);
-		System.out.println(request);
-		System.out.println("/////////////////");
-		System.out.println(newStateRequest);
-		System.out.println("////////////////");
 
 		if (request.isPresent()) {
-			RequestHelp req = request.get();
-			System.out.println(req);
-			req.setState(newStateRequest);
-
-			return new ResponseEntity<>(repository.save(req), HttpStatus.OK);
+			RequestHelp existingRequest = request.get();
+			existingRequest.setAcceptedUser(requestHelp.getAcceptedUser());
+			existingRequest.setMaterials(requestHelp.getMaterials());
+			return new ResponseEntity<>(repository.save(existingRequest), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PutMapping("/requests/{id}/materials")
-	public ResponseEntity<RequestHelp> updateRequestMaterials(@PathVariable(value = "id") long requestId, @RequestBody List<Material> materials) {
+	@PutMapping("/requests/terminate/{id}")
+	public ResponseEntity<RequestHelp> terminateRequest(@PathVariable(value = "id") long requestId) {
 		Optional <RequestHelp> request = repository.findById(requestId);
 
 		if (request.isPresent()) {
-			RequestHelp req = request.get();
-			req.addMaterials(materials);
-
-			return new ResponseEntity<>(repository.save(req), HttpStatus.OK);
+			RequestHelp existingRequest = request.get();
+			existingRequest.setState("terminated");
+			return new ResponseEntity<>(repository.save(existingRequest), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

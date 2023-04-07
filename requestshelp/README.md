@@ -16,14 +16,6 @@ Mettere su postman get e:
 #### POST
 Fare in un primo momento queste query sul database PgAdmin:
 ```
-insert into material (id, name)
-values (1, 'carrozzina')
-```
-```
-insert into material (id, name)
-values (2, 'stampelle')
-```
-```
 insert into users (id, name)
 values (1, 'gigi')
 ```
@@ -33,34 +25,34 @@ values ('infermieristica')
 ```
 
 Mettere su postman post e all'indirizzo http://localhost:8080/api/requests
-andare su body , settare raw in formato json e inserire ad esempio:
+andare su body, settare raw in formato json e inserire ad esempio:
 ```
 {
     "description" : "aiuto per andare a fare una visita medica per nonna pina",
     "day" : "2023-05-15",
     "place" : "via amati 15, Torino",
-    "materials" : [
-        {
-            "id" : 1
-        },
-        {
-            "id" : 2
-        }
-    ],    
     "publishedUser" : { "id" : 1 },
     "category" : { "type" : "infermieristica" }
 }
 ```
 
 #### PUT
-Mettere su postman put e all'indirizzo http://localhost:8080/api/requests/1/state (1 è l'id della richiesta)
-andare su body , settare raw in formato json e inserire ad esempio:
-```
-{  
-    "state": "accepted"
-}
-```
-A questo punto la richiesta con id 1 avrà lo stato modificato a "accepted"
+- Mettere su postman put e all'indirizzo http://localhost:8080/api/requests/accept/1 (1 è l'id della richiesta)
+andare su body, settare raw in formato json e inserire ad esempio:
+    ```
+    {
+        "acceptedUser" : { "id" : 1 },
+        "materials" : [
+            "carrozzina",
+            "stampelle"
+        ]
+    }
+    ```
+    A questo punto la richiesta con id 1 avrà lo stato modificato a "accepted"
+
+
+- Mettere su postman put con indirizzo http://localhost:8080/api/requests/terminate/1 (1 è l'id della richiesta).
+A questo punto la richiesta con id 1 avrà lo stato modificato a "terminated".
 
 
 #### DELETE
