@@ -19,7 +19,8 @@ public class SegnalazioniController {
     @Autowired
     SegnalazioniRepository repository;
 
-    @GetMapping("/{id}")
+
+    @GetMapping("/segnalazione/{id}")
     public Segnalazioni getSegnalazione(@PathVariable("id") long id) {
         Optional<Segnalazioni> s = repository.findById(id);
 
@@ -31,7 +32,7 @@ public class SegnalazioniController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("/segnalazione/list")
     public List<Segnalazioni> getAllSegnalazioni() {
         System.out.println("Get all Segnalations...");
 
@@ -41,14 +42,14 @@ public class SegnalazioniController {
         return segnalazione;
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/segnalazione/create")
     public Segnalazioni postSegnalazione(@RequestBody Segnalazioni segnalazione) {
 
         Segnalazioni s = repository.save(new Segnalazioni(segnalazione.getTitolo() , segnalazione.getDescrizione() , segnalazione.getTipologia(), segnalazione.getCreatore() , segnalazione.getSegnalato()));
         return s;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/segnalazione/delete/{id}")
     public ResponseEntity<Segnalazioni> deleteSegnalazione(@PathVariable("id") long id) {
         System.out.println("Delete Segnalazione with ID = " + id + "...");
 
