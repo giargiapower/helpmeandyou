@@ -67,18 +67,6 @@ public class AmministatoreController {
         }
     }
 
-    @GetMapping("/segnalazione/{id}")
-    public Segnalazioni getSegnalazione(@PathVariable("id") long id) {
-        Optional<Segnalazioni> s = s_repository.findById(id);
-
-        if (s.isPresent()) {
-            Segnalazioni _segnalazione = s.get();
-            return _segnalazione;
-        } else {
-            return null;
-        }
-    }
-
     @GetMapping("/segnalazione/list")
     public List<Segnalazioni> getAllSegnalazioni() {
         System.out.println("Get all Segnalations...");
@@ -99,6 +87,20 @@ public class AmministatoreController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    //parte per caricamento documenti e curriculum andrà inserito nella parte di login 
+/**    @PostMapping("/upload")
+    public ResponseEntity<Account> handleFileUpload( @RequestParam("file") MultipartFile file ) {
+
+        String fileName = file.getOriginalFilename();
+        try {
+            file.transferTo( new File("C:\\upload\\" + fileName));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.ok("File uploaded successfully.");
+    }
+*/
 
 
 
