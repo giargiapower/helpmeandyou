@@ -88,7 +88,7 @@ public class AmministatoreController {
         }
     }
 
-    //parte per caricamento documenti e curriculum andrà inserito nella parte di login 
+    //parte per caricamento documenti e curriculum andrà inserito nella parte di login
 /**    @PostMapping("/upload")
     public ResponseEntity<Account> handleFileUpload( @RequestParam("file") MultipartFile file ) {
 
