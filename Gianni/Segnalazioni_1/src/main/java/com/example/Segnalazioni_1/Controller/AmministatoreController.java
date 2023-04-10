@@ -52,6 +52,8 @@ public class AmministatoreController {
         return accounts;
     }
 
+    // inizialmente frontend per amministratore chiede tutti tutti gli account da approvare
+    // per ciascun account chiamerà una getCv e getId per ottenere i suoi documenti e curriculum
     @GetMapping("/cv/{fileName:.+}")
     public ResponseEntity<Resource> getCV(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
