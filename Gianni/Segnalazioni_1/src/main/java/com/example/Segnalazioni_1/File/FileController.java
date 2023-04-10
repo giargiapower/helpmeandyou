@@ -1,13 +1,12 @@
-package com.example.Segnalazioni_1.Controller;
+package com.example.Segnalazioni_1.File;
 
 
-import com.example.Segnalazioni_1.File.FileStorageService;
-import com.example.Segnalazioni_1.File.UploadFileResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,29 +23,31 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
+
     @Autowired
     private FileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        return new ResponseEntity<>(fileStorageService.storeFile(file), HttpStatus.OK);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+       /** String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
+        System.out.println(fileDownloadUri);
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+        //return new ResponseEntity<>(new UploadFileResponse(fileName, "fileDownloadUri",
+         //       "file.getContentType()", 3), HttpStatus.OK); //file.getSize()*/
     }
 
-    @PostMapping("/uploadMultipleFiles")
+ /**   @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
