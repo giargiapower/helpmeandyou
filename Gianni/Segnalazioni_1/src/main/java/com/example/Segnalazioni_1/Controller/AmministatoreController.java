@@ -28,11 +28,16 @@ public class AmministatoreController {
     SegnalazioniRepository s_repository;
 
     // metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)
+    // va aggiunta la parte di invio dei documenti e curriculum all'amministratore per la verifica
     @GetMapping("/da_approvare/list")
     public List<Account> getAllAccountToApprove() {
 
         List<Account> accounts = new ArrayList<>();
         repository.findAllByStato("da_approvare").forEach(accounts::add);
+        for (Account a : accounts) {
+            //manda all'amministratore i documenti e curriculum dei ciascun account
+
+        }
         return accounts;
     }
 
