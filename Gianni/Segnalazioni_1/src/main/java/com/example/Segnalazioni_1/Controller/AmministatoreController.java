@@ -1,16 +1,25 @@
 package com.example.Segnalazioni_1.Controller;
 
+import com.example.Segnalazioni_1.File.FileController;
+import com.example.Segnalazioni_1.File.FileStorageService;
 import com.example.Segnalazioni_1.Model.Account;
 import com.example.Segnalazioni_1.Model.Category;
 import com.example.Segnalazioni_1.Model.Segnalazioni;
 import com.example.Segnalazioni_1.Repository.AccountRepository;
 import com.example.Segnalazioni_1.Repository.AmministratoreRepository;
 import com.example.Segnalazioni_1.Repository.SegnalazioniRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +29,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/amministratore")
 public class AmministatoreController {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     AmministratoreRepository repository;
@@ -34,11 +49,55 @@ public class AmministatoreController {
 
         List<Account> accounts = new ArrayList<>();
         repository.findAllByStato("da_approvare").forEach(accounts::add);
-        for (Account a : accounts) {
-            //manda all'amministratore i documenti e curriculum dei ciascun account
-
-        }
         return accounts;
+    }
+
+    @GetMapping("/cv/{fileName:.+}")
+    public ResponseEntity<Resource> getCV(@PathVariable String fileName, HttpServletRequest request) {
+        // Load file as Resource
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType("/CV" + resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @GetMapping("/ID/{fileName:.+}")
+    public ResponseEntity<Resource> getDocumento(@PathVariable String fileName, HttpServletRequest request) {
+        // Load file as Resource
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType("/Documenti_identita" + resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
     // metodo per amministratore approva o disapprova la creazione di un account in base ai parametri dell'account

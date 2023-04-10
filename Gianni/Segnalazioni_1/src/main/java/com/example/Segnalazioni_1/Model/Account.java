@@ -1,6 +1,8 @@
 package com.example.Segnalazioni_1.Model;
 
 
+import org.springframework.core.io.Resource;
+
 import javax.persistence.*;
 
 @Entity
@@ -31,6 +33,12 @@ public class Account {
     @Column(name = "stato")
     private String stato;
 
+    @Column(name = "cv")
+    private String path_curriculum;
+
+    @Column(name = "documento_identita")
+    private String path_documento;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_type")
     private Category category;
@@ -53,6 +61,19 @@ public class Account {
         this.telefono = telefono;
         this.indirizzo = indirizzo;
         this.stato = stato;
+        this.category = category;
+    }
+
+    public Account(String email, String password, String nome, String cognome, String telefono, String indirizzo, String stato, String cv, String id,  Category category) {
+        this.email = email;
+        this.password = password;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.telefono = telefono;
+        this.indirizzo = indirizzo;
+        this.stato = stato;
+        this.path_curriculum = cv;
+        this.path_documento = id;
         this.category = category;
     }
 
@@ -86,6 +107,14 @@ public class Account {
 
     public String getStato() {
         return stato;
+    }
+
+    public String getPath_curriculum() {
+        return path_curriculum;
+    }
+
+    public String getPath_documento() {
+        return path_documento;
     }
 
     public Category getCategory() {
@@ -122,6 +151,14 @@ public class Account {
 
     public void setStato(String stato) {
         this.stato = stato;
+    }
+
+    public void setPath_curriculum(String path_curriculum) {
+        this.path_curriculum = path_curriculum;
+    }
+
+    public void setPath_documento(String path_documento) {
+        this.path_documento = path_documento;
     }
 
     public void setCategory(Category category) {
