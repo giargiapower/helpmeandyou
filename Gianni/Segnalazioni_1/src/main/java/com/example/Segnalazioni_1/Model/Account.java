@@ -31,6 +31,10 @@ public class Account {
     @Column(name = "stato")
     private String stato;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_type")
+    private Category category;
+
     //vanno inseriti documento e curriculum... da capire come salvare
 
     public Account() {
@@ -49,6 +53,7 @@ public class Account {
         this.telefono = telefono;
         this.indirizzo = indirizzo;
         this.stato = stato;
+        this.category = category;
     }
 
     public long getId() {
@@ -83,6 +88,10 @@ public class Account {
         return stato;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -115,4 +124,7 @@ public class Account {
         this.stato = stato;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

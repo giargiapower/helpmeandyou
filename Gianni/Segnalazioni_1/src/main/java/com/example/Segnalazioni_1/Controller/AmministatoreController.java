@@ -1,6 +1,7 @@
 package com.example.Segnalazioni_1.Controller;
 
 import com.example.Segnalazioni_1.Model.Account;
+import com.example.Segnalazioni_1.Model.Category;
 import com.example.Segnalazioni_1.Model.Segnalazioni;
 import com.example.Segnalazioni_1.Repository.AccountRepository;
 import com.example.Segnalazioni_1.Repository.AmministratoreRepository;
@@ -87,6 +88,23 @@ public class AmministatoreController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/aggiorna_categoria/{id}")
+    public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Category category) {
+
+        Optional<Account> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Account _account = c.get();
+            _account.setCategory(category);
+
+            return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
     //parte per caricamento documenti e curriculum andrà inserito nella parte di login
 /**    @PostMapping("/upload")
