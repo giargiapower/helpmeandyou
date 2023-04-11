@@ -1,12 +1,8 @@
 package microservizi.gestione_magazzino.model;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "materiale")
@@ -19,18 +15,17 @@ public class Materiale {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "data")
-    private String data;
+    @OneToMany(mappedBy = "materiale")
+    private List<RequestHelp> richieste = new ArrayList<>();
 
-    @Column(name = "disponibilità")
-    private boolean disponilibità;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "magazzino_id")
+    private Magazzino magazzino;
 
     public Materiale() { }
 
-    public Materiale(String nome, String data, boolean disponilibità) {
+    public Materiale(String nome) {
         this.nome = nome;
-        this.data = data;
-        this.disponilibità = disponilibità;
     }
 
     public Long getId() {
@@ -41,30 +36,19 @@ public class Materiale {
 
     public void setNome(String nome) { this.nome = nome; }
 
-    public void setData(String data) {
-        this.data = data;
-        // Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
-        // this.data = String.valueOf(calendar.getTime());
-    }
-
-    public String getData() {
-        return this.data;
-        // DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ITALY);
-        // return dateFormat.format(this.data);
-    }
-
-    public void setDisponilibità(boolean disponibile) { this.disponilibità = disponibile; }
-
-    public boolean getDisponibilità() { return this.disponilibità; }
-
     // public boolean verificaDisponibilità(String data) { return data.compareTo(this.data) == 0; }
 
-    /*@Override
+    public void setMagazzino(Magazzino magazzino) {
+        this.magazzino = magazzino;
+    }
+
+    @Override
     public String toString() {
-        return "materiale{" +
+        return "Materiale{" +
+                "id=" + id +
                 ", nome='" + nome + '\'' +
-                ", data=" + data +
-                ", disponilibità=" + disponilibità +
+                ", richieste=" + richieste +
+                ", magazzino=" + magazzino +
                 '}';
-    }*/
+    }
 }
