@@ -67,10 +67,9 @@ public class RequestHelpController {
 		}
 	}
 
-	// non so se servirà eliminare una richiesta, ma nel dubbio l'ho inserita
-	// SERVE NEL CASO VENGA BLOCCATO UN UTENTE A FRONTE DI SEGNALAZIONE
+	// Serve nel caso in cui venga bloccato un utente a fronte di segnalazione
 	@DeleteMapping("/requests/{id}")
-	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") long requestId) throws Exception {
+	public Map<String, Boolean> deleteRequest(@PathVariable(value = "id") long requestId) throws Exception {
 		RequestHelp request = repository.findById(requestId).orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + requestId));
 
 		repository.delete(request);
