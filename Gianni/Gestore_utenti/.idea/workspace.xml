@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="17908a90-8f08-410b-968e-df7ebecdd7e1" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2NxRIHu1KT0ojsJZqT7dyt2bq54" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "C:/Users/giann/Desktop/helpmeandyou/Gianni/Segnalazioni_1",
+    "settings.editor.selected.configurable": "spring.boot",
+    "show.migrate.to.gradle.popup": "false",
+    "spring.configuration.checksum": "a2e6ba0b156cb0907a0d3c266fcb0775"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Segnalazioni1Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="Gestore_utenti" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.Gestione_utenti.Gestione_utentiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpringBootOptions">
+    <option name="showAdditionalConfigNotification" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="17908a90-8f08-410b-968e-df7ebecdd7e1" name="Changes" comment="" />
+      <created>1680603666624</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680603666624</updated>
+      <workItem from="1680603668184" duration="1385000" />
+      <workItem from="1680610730200" duration="3680000" />
+      <workItem from="1680614433763" duration="262000" />
+      <workItem from="1680687006685" duration="112000" />
+      <workItem from="1680687319568" duration="73000" />
+      <workItem from="1680696981530" duration="1243000" />
+      <workItem from="1680699287363" duration="672000" />
+      <workItem from="1680853071056" duration="11955000" />
+      <workItem from="1680967771075" duration="2004000" />
+      <workItem from="1681113444809" duration="6035000" />
+      <workItem from="1681119612224" duration="2300000" />
+      <workItem from="1681133041505" duration="4777000" />
+      <workItem from="1681141392638" duration="39000" />
+      <workItem from="1681219591616" duration="4324000" />
+      <workItem from="1681374247010" duration="427000" />
+      <workItem from="1681374713716" duration="311000" />
+      <workItem from="1681375066942" duration="108000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
