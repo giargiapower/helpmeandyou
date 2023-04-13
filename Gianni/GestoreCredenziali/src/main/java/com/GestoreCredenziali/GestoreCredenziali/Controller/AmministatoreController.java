@@ -149,20 +149,5 @@ public class AmministatoreController {
     }
 
 
-    //parte per caricamento documenti e curriculum andrà inserito nella parte di login
-/**    @PostMapping("/upload")
-    public ResponseEntity<Account> handleFileUpload( @RequestParam("file") MultipartFile file ) {
-
-        String fileName = file.getOriginalFilename();
-        try {
-            file.transferTo( new File("C:\\upload\\" + fileName));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        return ResponseEntity.ok("File uploaded successfully.");
-    }
-*/
-
-
 
 }
