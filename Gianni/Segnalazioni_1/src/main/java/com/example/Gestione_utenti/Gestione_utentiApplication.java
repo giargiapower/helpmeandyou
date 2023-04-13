@@ -1,4 +1,4 @@
-package com.example.Segnalazioni_1;
+package com.example.Gestione_utenti;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({
 		FileStorageProperties.class
 })
-public class Segnalazioni1Application {
+public class Gestione_utentiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Segnalazioni1Application.class, args);
+		SpringApplication.run(Gestione_utentiApplication.class, args);
 	}
 
 }

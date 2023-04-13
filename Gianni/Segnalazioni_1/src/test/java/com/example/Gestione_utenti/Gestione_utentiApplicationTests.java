@@ -1,10 +1,10 @@
-package com.example.Segnalazioni_1;
+package com.example.Gestione_utenti;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Segnalazioni1ApplicationTests {
+class Gestione_utentiApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package com.example.Segnalazioni_1.File;
+package com.example.Gestione_utenti.File;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

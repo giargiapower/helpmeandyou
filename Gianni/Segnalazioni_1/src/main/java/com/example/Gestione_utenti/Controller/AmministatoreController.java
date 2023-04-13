@@ -1,13 +1,12 @@
-package com.example.Segnalazioni_1.Controller;
+package com.example.Gestione_utenti.Controller;
 
-import com.example.Segnalazioni_1.File.FileController;
-import com.example.Segnalazioni_1.File.FileStorageService;
-import com.example.Segnalazioni_1.Model.Account;
-import com.example.Segnalazioni_1.Model.Category;
-import com.example.Segnalazioni_1.Model.Segnalazioni;
-import com.example.Segnalazioni_1.Repository.AccountRepository;
-import com.example.Segnalazioni_1.Repository.AmministratoreRepository;
-import com.example.Segnalazioni_1.Repository.SegnalazioniRepository;
+import com.example.Gestione_utenti.File.FileController;
+import com.example.Gestione_utenti.File.FileStorageService;
+import com.example.Gestione_utenti.Model.Account;
+import com.example.Gestione_utenti.Model.Category;
+import com.example.Gestione_utenti.Model.Segnalazioni;
+import com.example.Gestione_utenti.Repository.AmministratoreRepository;
+import com.example.Gestione_utenti.Repository.SegnalazioniRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

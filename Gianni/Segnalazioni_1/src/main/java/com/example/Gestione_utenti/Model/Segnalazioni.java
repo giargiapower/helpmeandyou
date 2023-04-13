@@ -1,4 +1,4 @@
-package com.example.Segnalazioni_1.Model;
+package com.example.Gestione_utenti.Model;
 
 import javax.persistence.*;
 

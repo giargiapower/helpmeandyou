@@ -9,10 +9,10 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Segnalazioni_1</artifactId>
+	<artifactId>Gestore_utenti</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Segnalazioni_1</name>
-	<description>Demo project Segnalazioni</description>
+	<name>Gestore_utenti</name>
+	<description>Demo project per gestione segnalazioni e utenti per Account e amministratori</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

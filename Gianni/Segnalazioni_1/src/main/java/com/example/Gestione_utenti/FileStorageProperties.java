@@ -1,4 +1,4 @@
-package com.example.Segnalazioni_1;
+package com.example.Gestione_utenti;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "file")

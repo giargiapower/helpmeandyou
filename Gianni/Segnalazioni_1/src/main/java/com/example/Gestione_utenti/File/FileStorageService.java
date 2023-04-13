@@ -1,6 +1,6 @@
-package com.example.Segnalazioni_1.File;
+package com.example.Gestione_utenti.File;
 
-import com.example.Segnalazioni_1.FileStorageProperties;
+import com.example.Gestione_utenti.FileStorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

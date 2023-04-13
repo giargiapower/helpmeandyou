@@ -1,7 +1,6 @@
-package com.example.Segnalazioni_1.Repository;
+package com.example.Gestione_utenti.Repository;
 
-import com.example.Segnalazioni_1.Model.Account;
-import com.example.Segnalazioni_1.Model.Segnalazioni;
+import com.example.Gestione_utenti.Model.Account;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

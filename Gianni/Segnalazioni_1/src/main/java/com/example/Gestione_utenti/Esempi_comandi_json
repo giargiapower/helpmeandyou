@@ -11,7 +11,7 @@ GET http://localhost:8080/api/segnalazioni/1
 per mandare un documento o cv :
 modificare il path di file.upload-dir in application.properties inserendo il proprio path che arrivi a /resources/Documents
 all'interno delle cartelle CV e Documenti_identita inserire il file che si vuole mandare
-uare queste richieste : 
+uare queste richieste :
 GET http://localhost:8080/api/amministratore/cv/prova.pdf
 
 GET http://localhost:8080/api/amministratore/documento/prove.pdf.
