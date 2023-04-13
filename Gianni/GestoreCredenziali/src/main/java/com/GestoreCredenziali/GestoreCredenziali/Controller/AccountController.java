@@ -47,6 +47,7 @@ public class AccountController {
             // L'account non è presente, salva l'account nel database
             account.setStato("da_approvare");
             a_repository.save(account);
+            // RINOMINARE I FILE CON IL NOME DELL'UTENTE + DOC/CV
             fileStorageService.storeFile(document);
             fileStorageService.storeFile(curriculum);
             // Restituisce una segnalazione di successo
