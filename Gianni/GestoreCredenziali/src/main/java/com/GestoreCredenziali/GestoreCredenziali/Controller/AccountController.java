@@ -7,9 +7,15 @@ import com.GestoreCredenziali.GestoreCredenziali.Repository.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -28,7 +34,7 @@ public class AccountController {
 
 
     // crea l'account
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/registrazione/create")
     public ResponseEntity<String> postAccount(@RequestBody Account account,
                                               @RequestParam("doc") MultipartFile document,
                                               @RequestParam("cv") MultipartFile curriculum) {
@@ -46,8 +52,23 @@ public class AccountController {
             // Restituisce una segnalazione di successo
             return ResponseEntity.ok("ok");
         }
-        
     }
+
+
+    @GetMapping("/login")
+    public ResponseEntity<String> getDocumento(@RequestBody Account account){
+        Account accountEsistente = a_repository.findByEmail(account.getEmail());
+        if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword())) {
+            return ResponseEntity.ok("ok");
+        } else {
+            // L'account non è presente o password errata
+            return ResponseEntity.badRequest().body("Email o password errati");
+        }
+    }
+
+    
+
+
 
 
 
