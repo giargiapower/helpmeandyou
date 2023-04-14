@@ -61,8 +61,6 @@ public class FileStorageService {
         File curriculum = new File(System.getProperty("user.dir")+"/Documents/CV");
         if (!doc_I.exists())
             doc_I.mkdirs();
-        System.out.println(System.getProperty("user.dir"));
-        System.out.println(doc_I.isDirectory());
         if (!curriculum.exists())
             curriculum.mkdirs();
     }
