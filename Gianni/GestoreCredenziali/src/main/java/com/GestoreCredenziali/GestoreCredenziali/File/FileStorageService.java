@@ -32,9 +32,9 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, String type_doc, String name) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath("/Users/giann/Desktop/helpmeandyou/Gianni/GestoreCredenziali/src/main/resources/Documents/" + type_doc + "/" + name + file.getOriginalFilename().substring(file.getOriginalFilename().length() - 4) );
 
         try {
             // Check if the file's name contains invalid characters
@@ -51,6 +51,8 @@ public class FileStorageService {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
+
+
 
     public Resource loadFileAsResource(String fileName) {
         try {

@@ -7,15 +7,9 @@ import com.GestoreCredenziali.GestoreCredenziali.Repository.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -34,10 +28,12 @@ public class AccountController {
 
 
     // crea l'account
-    @PostMapping(value = "/registrazione/create")
-    public ResponseEntity<String> postAccount(@RequestBody Account account,
-                                              @RequestParam("doc") MultipartFile document,
-                                              @RequestParam("cv") MultipartFile curriculum) {
+    //@RequestBody Account account,
+    // trasforma Request body in tante Requestparam di stringe e costruisci l'account con i parametri
+    @PostMapping(value = "/registrazione/create/account")
+    public ResponseEntity<String> postAccount(@RequestBody Account account){
+        System.out.println(account.getEmail());
+
         // Verifica se l'account è già presente nel database
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null) {
@@ -45,14 +41,25 @@ public class AccountController {
             return ResponseEntity.badRequest().body("Email già presente nel database");
         } else {
             // L'account non è presente, salva l'account nel database
+            account.setPath_curriculum(account.getEmail() + ".pdf");
+            account.setPath_documento(account.getEmail() + ".pdf");
             account.setStato("da_approvare");
             a_repository.save(account);
-            // RINOMINARE I FILE CON IL NOME DELL'UTENTE + DOC/CV
-            fileStorageService.storeFile(document);
-            fileStorageService.storeFile(curriculum);
             // Restituisce una segnalazione di successo
             return ResponseEntity.ok("ok");
-        }
+          }
+    }
+
+
+    @PostMapping(value = "/registrazione/create/Documents")
+    public ResponseEntity<String> postDocuments(@RequestPart("email") String email , @RequestParam("doc") MultipartFile document, @RequestParam("cv") MultipartFile curriculum) {
+        // Verifica se l'account è già presente nel database
+        // RINOMINARE I FILE CON IL NOME DELL'UTENTE + DOC/CV
+        fileStorageService.storeFile(document, "Documenti_identita" , email);
+        fileStorageService.storeFile(curriculum,"CV",  email);
+        // Restituisce una segnalazione di successo
+        return ResponseEntity.ok("ok");
+        //    }
     }
 
 
