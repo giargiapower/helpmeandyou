@@ -60,9 +60,11 @@ public class FileStorageService {
     	File doc_I = new File(System.getProperty("user.dir")+"/Documents/Documenti_identita");
         File curriculum = new File(System.getProperty("user.dir")+"/Documents/CV");
         if (!doc_I.exists())
-            doc_I.mkdir();
+            doc_I.mkdirs();
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(doc_I.isDirectory());
         if (!curriculum.exists())
-            curriculum.mkdir();
+            curriculum.mkdirs();
     }
 
 
@@ -79,5 +81,15 @@ public class FileStorageService {
         } catch (MalformedURLException ex) {
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
+    }
+
+    public void deleteFile(String fileName) {
+    	try {
+    		Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+    		File file = new File(filePath.toString());
+    		file.delete();
+    	} catch (Exception e) {
+    		throw new MyFileNotFoundException("File not found " + fileName, e);
+    	}
     }
 }

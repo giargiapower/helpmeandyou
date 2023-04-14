@@ -35,8 +35,6 @@ public class AccountController {
     // trasforma Request body in tante Requestparam di stringe e costruisci l'account con i parametri
     @PostMapping(value = "/registrazione/create/account")
     public ResponseEntity<String> postAccount(@RequestBody Account account){
-        System.out.println(account.getEmail());
-
         // Verifica se l'account è già presente nel database
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null) {
@@ -54,25 +52,28 @@ public class AccountController {
     }
 
 
+    // PRIMA DI CHIAMARLO E' NECESSARIO CHE PRIMA SIA STATO SALVATO L'ACCOUNT NEL SISTEMA !!!!
     @PostMapping(value = "/registrazione/create/Documents")
     public ResponseEntity<String> postDocuments(@RequestPart("email") String email , @RequestParam("doc") MultipartFile document, @RequestParam("cv") MultipartFile curriculum) {
-        // Verifica se l'account è già presente nel database
-        // RINOMINARE I FILE CON IL NOME DELL'UTENTE + DOC/CV
-        fileStorageService.storeFile(document, "Documenti_identita" , email);
-        fileStorageService.storeFile(curriculum,"CV",  email);
+        String doc = fileStorageService.storeFile(document, "Documenti_identita" , email);
+        String cv = fileStorageService.storeFile(curriculum,"CV",  email);
+        Account account = a_repository.findByEmail(email);
+        account.setPath_curriculum(cv);
+        account.setPath_documento(doc);
+        a_repository.save(account);
         // Restituisce una segnalazione di successo
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("Documenti inviati con successo");
     }
 
 
     @GetMapping("/login")
     public ResponseEntity<String> getDocumento(@RequestBody Account account){
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
-        if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword())) {
+        if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
             return ResponseEntity.ok("ok");
         } else {
             // L'account non è presente o password errata
-            return ResponseEntity.badRequest().body("Email o password errati");
+            return ResponseEntity.badRequest().body("Email o password errati oppure il tuo account non è ancora stato approvato");
         }
     }
 

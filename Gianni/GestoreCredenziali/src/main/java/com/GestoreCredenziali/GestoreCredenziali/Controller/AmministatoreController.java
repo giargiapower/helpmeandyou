@@ -111,6 +111,9 @@ public class AmministatoreController {
                 _account.setStato("approvato");
             } else {
                 _account.setStato("bloccato");
+                //elimino i file caricati
+                fileStorageService.deleteFile(_account.getPath_curriculum());
+                fileStorageService.deleteFile(_account.getPath_documento());
             }
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
         } else {
