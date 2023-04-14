@@ -29,6 +29,20 @@ public class AccountController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    // metti pure qua il metodo per la registrazione e login con le api di gologolo
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
     // crea l'account
     //@RequestBody Account account,
@@ -38,10 +52,11 @@ public class AccountController {
         // Verifica se l'account è già presente nel database
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null) {
-            // L'account è già presente, restituisce una segnalazione corrispondente
+            // L'account è già presente, restituisce la segnalazione corrispondente
             return ResponseEntity.badRequest().body("Email già presente nel database");
         } else {
             // L'account non è presente, salva l'account nel database
+            //questi 2 set non sono strettamente necessari qua però li tengo in caso di possibili refactoring del codice
             account.setPath_curriculum(account.getEmail() + ".pdf");
             account.setPath_documento(account.getEmail() + ".pdf");
             account.setStato("da_approvare");
