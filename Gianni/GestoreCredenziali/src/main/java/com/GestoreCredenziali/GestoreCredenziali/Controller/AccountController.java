@@ -67,13 +67,13 @@ public class AccountController {
 
 
     @GetMapping("/login")
-    public ResponseEntity<String> getDocumento(@RequestBody Account account){
+    public ResponseEntity<Account> login(@RequestBody Account account){
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
-            return ResponseEntity.ok("ok");
+            return ResponseEntity.ok(accountEsistente);
         } else {
             // L'account non è presente o password errata
-            return ResponseEntity.badRequest().body("Email o password errati oppure il tuo account non è ancora stato approvato");
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

@@ -4,6 +4,7 @@ package com.GestoreCredenziali.GestoreCredenziali.Controller;
 import com.GestoreCredenziali.GestoreCredenziali.File.FileController;
 import com.GestoreCredenziali.GestoreCredenziali.File.FileStorageService;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Account;
+import com.GestoreCredenziali.GestoreCredenziali.Model.Amministratore;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Category;
 import com.GestoreCredenziali.GestoreCredenziali.Repository.AmministratoreRepository;
 import org.slf4j.Logger;
@@ -151,6 +152,17 @@ public class AmministatoreController {
         }
     }
 
+
+    @GetMapping("/login")
+    public ResponseEntity<Amministratore> login(@RequestBody Amministratore amministratore) {
+        Account accountEsistente = repository.findByEmail(amministratore.getEmail());
+        if (accountEsistente != null && accountEsistente.getPassword().equals(amministratore.getPassword()) && accountEsistente.getStato().equals("approvato")) {
+            return ResponseEntity.ok().body(amministratore);
+        } else {
+            // L'account non è presente o password errata
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 
 }
