@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/utenti")
@@ -59,7 +62,6 @@ public class AccountController {
         fileStorageService.storeFile(curriculum,"CV",  email);
         // Restituisce una segnalazione di successo
         return ResponseEntity.ok("ok");
-        //    }
     }
 
 
