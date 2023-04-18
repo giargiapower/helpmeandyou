@@ -1,0 +1,4 @@
+entra da terminale nella directory GestoreCredenziali
+esegui : ./mvnw -DskipTests=true clean package
+docker-compose build
+docker-compose up

@@ -37,7 +37,10 @@ public class FileStorageService {
         //Controlla che le cartelle Documents CV e Documenti_identita siano create altrimenti creale
         checkDirectories();
         // Normalize file name
-        String fileName = StringUtils.cleanPath(System.getProperty("user.dir") + "/Documents/" + type_doc + "/" + name + file.getOriginalFilename().substring(file.getOriginalFilename().length() - 4) );
+        String temp = "";
+        if(!System.getProperty("user.dir").equals("\\"))
+            temp = System.getProperty("user.dir");
+        String fileName = StringUtils.cleanPath(temp + "/Documents/" + type_doc + "/" + name + file.getOriginalFilename().substring(file.getOriginalFilename().length() - 4) );
         System.out.println(fileName);
         try {
             // Check if the file's name contains invalid characters
@@ -69,11 +72,17 @@ public class FileStorageService {
 
     public Resource loadFileAsResource(String fileName) {
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            String temp = "";
+            if(!System.getProperty("user.dir").equals("\\"))
+                temp = System.getProperty("user.dir");
+            System.out.println(temp+ fileName);
+            Path filePath = this.fileStorageLocation.resolve(temp + fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
+                System.out.println("file trovato");
                 return resource;
             } else {
+                System.out.println("file non esiste");
                 throw new MyFileNotFoundException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {

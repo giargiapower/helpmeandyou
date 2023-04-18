@@ -51,15 +51,15 @@ public class AmministatoreController {
 
     // inizialmente frontend per amministratore chiede tutti tutti gli account da approvare
     // per ciascun account chiamerà una getCv e getId per ottenere i suoi documenti e curriculum
-    @GetMapping("/cv/{fileName:.+}")
-    public ResponseEntity<Resource> getCV(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/cv")
+    public ResponseEntity<Resource> getCV(@RequestPart("fileName")  String fileName, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        Resource resource = fileStorageService.loadFileAsResource( "Documents/CV/" + fileName);
 
         // Try to determine file's content type
         String contentType = null;
         try {
-            contentType = request.getServletContext().getMimeType("/CV" + resource.getFile().getAbsolutePath());
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
             logger.info("Could not determine file type.");
         }
@@ -75,10 +75,10 @@ public class AmministatoreController {
                 .body(resource);
     }
 
-    @GetMapping("/ID/{fileName:.+}")
-    public ResponseEntity<Resource> getDocumento(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/id")
+    public ResponseEntity<Resource> getDocumento(@RequestPart("fileName") String fileName, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        Resource resource = fileStorageService.loadFileAsResource("Documents/Documenti_identita/" + fileName);
 
         // Try to determine file's content type
         String contentType = null;
@@ -92,11 +92,11 @@ public class AmministatoreController {
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+                 .body(resource);
+
     }
 
     // metodo per amministratore approva o disapprova la creazione di un account in base ai parametri dell'account
@@ -163,6 +163,8 @@ public class AmministatoreController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+
 
 
 }
