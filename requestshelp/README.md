@@ -1,62 +1,62 @@
 # Richieste di aiuto: microservizio
 
 ### Esecuzione
-Run della classe RequestsHelp
+Run della classe RichiestaAiuto
 
 ### Test con Postman: comandi
 
 #### GET
 Mettere su postman get e:
-* Per prendere tutte le richieste di aiuto inserire l'indirizzo: http://localhost:8080/api/requests
+* Per prendere tutte le richieste di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richieste
 
-* Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/requests/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
+* Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
 
 
 
 #### POST
 Fare in un primo momento queste query sul database PgAdmin:
 ```
-insert into users (id, name)
+insert into account (id, nome)
 values (1, 'gigi')
 ```
 ```
-insert into category (type)
+insert into categoria (tipo)
 values ('infermieristica')
 ```
 
-Mettere su postman post e all'indirizzo http://localhost:8080/api/requests
+Mettere su postman post e all'indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/crea
 andare su body, settare raw in formato json e inserire ad esempio:
 ```
 {
-    "description" : "aiuto per andare a fare una visita medica per nonna pina",
-    "day" : "2023-05-15",
+    "descrizione" : "aiuto per andare a fare una visita medica per nonna pina",
+    "giorno" : "2023-05-15",
     "place" : "via amati 15, Torino",
-    "publishedUser" : { "id" : 1 },
-    "category" : { "type" : "infermieristica" }
+    "pubAccount" : { "id" : 1 },
+    "categoria" : { "tipo" : "infermieristica" }
 }
 ```
 
 #### PUT
-- Mettere su postman put e all'indirizzo http://localhost:8080/api/requests/accept/1 (1 è l'id della richiesta)
+- Mettere su postman put e all'indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/accetta/1 (1 è l'id della richiesta)
 andare su body, settare raw in formato json e inserire ad esempio:
     ```
     {
-        "acceptedUser" : { "id" : 1 },
-        "materials" : [
+        "accAccount" : { "id" : 1 },
+        "materiali" : [
             "carrozzina",
             "stampelle"
         ]
     }
     ```
-    A questo punto la richiesta con id 1 avrà lo stato modificato a "accepted"
+    A questo punto la richiesta con id 1 avrà lo stato modificato a "accettata"
 
 
-- Mettere su postman put con indirizzo http://localhost:8080/api/requests/terminate/1 (1 è l'id della richiesta).
-A questo punto la richiesta con id 1 avrà lo stato modificato a "terminated".
+- Mettere su postman put con indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/termina/1 (1 è l'id della richiesta).
+A questo punto la richiesta con id 1 avrà lo stato modificato a "terminata".
 
 
 #### DELETE
 Mettere su postman delete e:
-* Per eliminare una richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/requests/1 (1 è l'id della richiesta)
+* Per eliminare una richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/elimina/1 (1 è l'id della richiesta)
 
 A questo punto la richiesta con id 1 non ci sarà più nel database.
