@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.HashSet;
 import java.time.LocalDate;
 import javax.persistence.*;
-import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "richiesta_aiuto")
@@ -20,9 +19,9 @@ public class RichiestaAiuto {
 	@Column(name = "giorno")
 	private LocalDate giorno;
 
-	// TODO: risistemare il place come classe con indirizzo etc
-	@Column(name = "place")
-	private String place;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "indirizzo_id")
+	private Indirizzo indirizzo;
 
 	@Column(name = "stato")
 	private String stato;       // published, accepted, completed
@@ -48,13 +47,14 @@ public class RichiestaAiuto {
 	@JoinColumn(name = "categoria_tipo")
 	private Categoria categoria;
 
-	public RichiestaAiuto(String descrizione, LocalDate day, String place) {
+	public RichiestaAiuto(String descrizione, LocalDate giorno, Account pubAccount, Categoria categoria) {
 		this.descrizione = descrizione;
-		this.giorno = day;
-		this.place = place;
+		this.giorno = giorno;
 		this.stato = "pubblicata";
 		this.accAccount = null;
+		this.pubAccount = pubAccount;
 		this.materiali = new HashSet<>();
+		this.categoria = categoria;
 	}
 
 	public RichiestaAiuto() {
@@ -86,12 +86,12 @@ public class RichiestaAiuto {
 		this.giorno = day;
 	}
 
-	public String getPlace() {
-		return place;
+	public Indirizzo getIndirizzo() {
+		return indirizzo;
 	}
 
-	public void setPlace(String place) {
-		this.place = place;
+	public void setIndirizzo(Indirizzo place) {
+		this.indirizzo = place;
 	}
 
 	public Set<String> getMaterials() {
@@ -106,8 +106,8 @@ public class RichiestaAiuto {
 		return accAccount;
 	}
 
-	public void setAccAccount(Account acceptedUser) {
-		this.accAccount = acceptedUser;
+	public void setAccAccount(Account accAccount) {
+		this.accAccount = accAccount;
 		this.stato = "accettata";
 	}
 
@@ -115,8 +115,8 @@ public class RichiestaAiuto {
 		return pubAccount;
 	}
 
-	public void setPubAccount(Account publishedUser) {
-		this.pubAccount = publishedUser;
+	public void setPubAccount(Account pubAccount) {
+		this.pubAccount = pubAccount;
 	}
 
 	public Categoria getCategoria() {
@@ -141,7 +141,7 @@ public class RichiestaAiuto {
 				"id=" + id +
 				", descrizione='" + descrizione + '\'' +
 				", giorno=" + giorno +
-				", place='" + place + '\'' +
+				", indirizzo=" + indirizzo +
 				", stato='" + stato + '\'' +
 				", materiali=" + materiali +
 				", accAccount=" + accAccount +
