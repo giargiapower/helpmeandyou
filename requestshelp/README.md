@@ -30,25 +30,24 @@ andare su body, settare raw in formato json e inserire ad esempio:
 {
     "descrizione" : "aiuto per andare a fare una visita medica per nonna pina",
     "giorno" : "2023-05-15",
-    "place" : "via amati 15, Torino",
+    "indirizzo" : {
+        "regione" : "Piemonte",
+        "provincia" : "Torino",
+        "citta" : "Venaria Reale",
+        "indirizzo" : "Via Pessinetto 12"
+    },
+    "materiali" : [
+            "carrozzina",
+            "stampelle"
+        ],
     "pubAccount" : { "id" : 1 },
     "categoria" : { "tipo" : "infermieristica" }
 }
 ```
 
 #### PUT
-- Mettere su postman put e all'indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/accetta/1 (1 è l'id della richiesta)
-andare su body, settare raw in formato json e inserire ad esempio:
-    ```
-    {
-        "accAccount" : { "id" : 1 },
-        "materiali" : [
-            "carrozzina",
-            "stampelle"
-        ]
-    }
-    ```
-    A questo punto la richiesta con id 1 avrà lo stato modificato a "accettata"
+- Mettere su postman put con indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/accetta/1/1 (id della richiesta, id account che accetta la richiesta).
+A questo punto la richiesta con id 1 avrà lo stato modificato a "accettata"
 
 
 - Mettere su postman put con indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/termina/1 (1 è l'id della richiesta).

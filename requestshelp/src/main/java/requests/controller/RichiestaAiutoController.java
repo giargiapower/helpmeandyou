@@ -5,8 +5,10 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import requests.model.Account;
 import requests.model.Indirizzo;
 import requests.model.RichiestaAiuto;
+import requests.repository.AccountRepository;
 import requests.repository.IndirizzoRepository;
 import requests.repository.RichiestaAiutoRepository;
 import java.util.*;
@@ -22,6 +24,9 @@ public class RichiestaAiutoController {
 
 	@Autowired
 	IndirizzoRepository indirizzoRepository;
+
+	@Autowired
+	AccountRepository accountRepository;
 
 	@GetMapping("/richiesta/{id}")
 	public RichiestaAiuto getRichiestaById(@PathVariable(value = "id") long richiestaId) {
@@ -39,30 +44,32 @@ public class RichiestaAiutoController {
 
 	@PostMapping("/richiesta/crea")
 	public RichiestaAiuto creaRichiesta(@RequestBody RichiestaAiuto richiestaAiuto){
-		RichiestaAiuto fin = new RichiestaAiuto(richiestaAiuto.getDescrizione(), richiestaAiuto.getGiorno(), richiestaAiuto.getPubAccount(), richiestaAiuto.getCategoria());
+		RichiestaAiuto fin = new RichiestaAiuto(richiestaAiuto.getDescrizione(), richiestaAiuto.getGiorno(), richiestaAiuto.getIndirizzo(), richiestaAiuto.getMateriali(), richiestaAiuto.getPubAccount(), richiestaAiuto.getCategoria());
 
 		// Crea sempre un nuovo oggetto indirizzo: il costo di tempo per andarlo a cercare sarebbe maggiore del costo in termini di spazio:
 		// ipotizziamo infatti che uno stesso utente non faccia troppe richieste di aiuto, ma che si tratti di aiuti occasionali.
 		Indirizzo ind = richiestaAiuto.getIndirizzo();
 		indirizzoRepository.save(ind);
 
-		fin.setIndirizzo(ind);
-
 		return richiestaAiutoRepository.save(fin);
 	}
 
-	@PutMapping("/richiesta/accetta/{id}")
-	public ResponseEntity<RichiestaAiuto> accettaRichiesta(@PathVariable(value = "id") long richiestaId, @RequestBody RichiestaAiuto richiestaAiuto) {
+	@PutMapping("/richiesta/accetta/{ric_id}/{account_id}")
+	public ResponseEntity<RichiestaAiuto> accettaRichiesta(@PathVariable(value = "ric_id") long richiestaId, @PathVariable(value = "account_id") long accountId) {
 		Optional <RichiestaAiuto> richiesta = richiestaAiutoRepository.findById(richiestaId);
 
 		if (richiesta.isPresent()) {
 			RichiestaAiuto existingRequest = richiesta.get();
-			existingRequest.setAccAccount(richiestaAiuto.getAccAccount());
-			existingRequest.setMaterials(richiestaAiuto.getMaterials());
-			return new ResponseEntity<>(richiestaAiutoRepository.save(existingRequest), HttpStatus.OK);
-		} else {
+
+			Optional <Account> accAccount = accountRepository.findById(accountId);
+			if(accAccount.isPresent()){
+				existingRequest.setAccAccount(accAccount.get());
+				return new ResponseEntity<>(richiestaAiutoRepository.save(existingRequest), HttpStatus.OK);
+
+			} else
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 	}
 
 	@PutMapping("/richiesta/termina/{id}")

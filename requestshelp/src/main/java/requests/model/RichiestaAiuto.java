@@ -24,7 +24,7 @@ public class RichiestaAiuto {
 	private Indirizzo indirizzo;
 
 	@Column(name = "stato")
-	private String stato;       // published, accepted, completed
+	private String stato;		// pubblicata, accettata, completata
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "richieste_materiali", joinColumns = @JoinColumn(name = "richiesta_id"))
@@ -47,13 +47,14 @@ public class RichiestaAiuto {
 	@JoinColumn(name = "categoria_tipo")
 	private Categoria categoria;
 
-	public RichiestaAiuto(String descrizione, LocalDate giorno, Account pubAccount, Categoria categoria) {
+	public RichiestaAiuto(String descrizione, LocalDate giorno, Indirizzo indirizzo, Set<String> materiali, Account pubAccount, Categoria categoria) {
 		this.descrizione = descrizione;
 		this.giorno = giorno;
+		this.indirizzo = indirizzo;
 		this.stato = "pubblicata";
+		this.materiali = materiali;
 		this.accAccount = null;
 		this.pubAccount = pubAccount;
-		this.materiali = new HashSet<>();
 		this.categoria = categoria;
 	}
 
@@ -94,12 +95,12 @@ public class RichiestaAiuto {
 		this.indirizzo = place;
 	}
 
-	public Set<String> getMaterials() {
+	public Set<String> getMateriali() {
 		return materiali;
 	}
 
-	public void setMaterials(Set<String> materials) {
-		this.materiali = materials;
+	public void setMateriali(Set<String> materiali) {
+		this.materiali = materiali;
 	}
 
 	public Account getAccAccount() {
