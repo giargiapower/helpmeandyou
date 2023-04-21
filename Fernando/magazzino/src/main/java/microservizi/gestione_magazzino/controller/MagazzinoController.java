@@ -5,7 +5,7 @@ import microservizi.gestione_magazzino.model.Materiale;
 import microservizi.gestione_magazzino.model.RequestHelp;
 import microservizi.gestione_magazzino.repo.MagazzinoRepository;
 import microservizi.gestione_magazzino.repo.MaterialeRepository;
-import microservizi.gestione_magazzino.repo.RequestHelpRepository;
+import microservizi.gestione_magazzino.repo.RichiestaAiutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class MagazzinoController {
     MaterialeRepository mat_repository;
 
     @Autowired
-    RequestHelpRepository req_repository;
+    RichiestaAiutoRepository req_repository;
 
     public MagazzinoController(MagazzinoRepository repository) {
         this.mag_repository = repository;
