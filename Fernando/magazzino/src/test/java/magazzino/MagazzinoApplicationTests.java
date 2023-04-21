@@ -1,4 +1,4 @@
-package microservizi.gestione_magazzino;
+package magazzino;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

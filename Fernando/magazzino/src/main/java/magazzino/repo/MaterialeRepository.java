@@ -1,6 +1,6 @@
-package microservizi.gestione_magazzino.repo;
+package magazzino.repo;
 
-import microservizi.gestione_magazzino.model.Materiale;
+import magazzino.model.Materiale;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
