@@ -44,7 +44,7 @@ public class RichiestaAiutoController {
 
 	@PostMapping("/richiesta/crea")
 	public RichiestaAiuto creaRichiesta(@RequestBody RichiestaAiuto richiestaAiuto){
-		RichiestaAiuto fin = new RichiestaAiuto(richiestaAiuto.getDescrizione(), richiestaAiuto.getGiorno(), richiestaAiuto.getIndirizzo(), richiestaAiuto.getMateriali(), richiestaAiuto.getPubAccount(), richiestaAiuto.getCategoria());
+		RichiestaAiuto fin = new RichiestaAiuto(richiestaAiuto.getDescrizione(), richiestaAiuto.getGiorno(), richiestaAiuto.getIndirizzo(), richiestaAiuto.getMateriale(), richiestaAiuto.getPubAccount(), richiestaAiuto.getCategoria());
 
 		// Crea sempre un nuovo oggetto indirizzo: il costo di tempo per andarlo a cercare sarebbe maggiore del costo in termini di spazio:
 		// ipotizziamo infatti che uno stesso utente non faccia troppe richieste di aiuto, ma che si tratti di aiuti occasionali.

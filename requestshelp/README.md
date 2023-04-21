@@ -36,10 +36,7 @@ andare su body, settare raw in formato json e inserire ad esempio:
         "citta" : "Venaria Reale",
         "indirizzo" : "Via Pessinetto 12"
     },
-    "materiali" : [
-            "carrozzina",
-            "stampelle"
-        ],
+    "materiale" : "stampelle",
     "pubAccount" : { "id" : 1 },
     "categoria" : { "tipo" : "infermieristica" }
 }

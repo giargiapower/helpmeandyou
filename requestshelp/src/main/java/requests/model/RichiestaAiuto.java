@@ -1,7 +1,5 @@
 package requests.model;
 
-import java.util.Set;
-import java.util.HashSet;
 import java.time.LocalDate;
 import javax.persistence.*;
 
@@ -26,10 +24,8 @@ public class RichiestaAiuto {
 	@Column(name = "stato")
 	private String stato;		// pubblicata, accettata, completata
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "richieste_materiali", joinColumns = @JoinColumn(name = "richiesta_id"))
-	@Column(name = "nome_materiale")
-	private Set<String> materiali;
+	@Column(name = "materiale")
+	private String materiale;
 
 	/*
 		L'attributo "fetch" specifica il modo in cui il framework Spring recupera l'entità correlata.
@@ -47,12 +43,12 @@ public class RichiestaAiuto {
 	@JoinColumn(name = "categoria_tipo")
 	private Categoria categoria;
 
-	public RichiestaAiuto(String descrizione, LocalDate giorno, Indirizzo indirizzo, Set<String> materiali, Account pubAccount, Categoria categoria) {
+	public RichiestaAiuto(String descrizione, LocalDate giorno, Indirizzo indirizzo, String materiale, Account pubAccount, Categoria categoria) {
 		this.descrizione = descrizione;
 		this.giorno = giorno;
 		this.indirizzo = indirizzo;
 		this.stato = "pubblicata";
-		this.materiali = materiali;
+		this.materiale = materiale;
 		this.accAccount = null;
 		this.pubAccount = pubAccount;
 		this.categoria = categoria;
@@ -95,12 +91,12 @@ public class RichiestaAiuto {
 		this.indirizzo = place;
 	}
 
-	public Set<String> getMateriali() {
-		return materiali;
+	public String getMateriale() {
+		return materiale;
 	}
 
-	public void setMateriali(Set<String> materiali) {
-		this.materiali = materiali;
+	public void setMateriale(String materiale) {
+		this.materiale = materiale;
 	}
 
 	public Account getAccAccount() {
@@ -144,7 +140,7 @@ public class RichiestaAiuto {
 				", giorno=" + giorno +
 				", indirizzo=" + indirizzo +
 				", stato='" + stato + '\'' +
-				", materiali=" + materiali +
+				", materiale=" + materiale +
 				", accAccount=" + accAccount +
 				", pubAccount=" + pubAccount +
 				", categoria=" + categoria +
