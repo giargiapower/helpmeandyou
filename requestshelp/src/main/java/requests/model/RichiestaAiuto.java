@@ -24,8 +24,8 @@ public class RichiestaAiuto {
 	@Column(name = "stato")
 	private String stato;		// pubblicata, accettata, completata
 
-	@Column(name = "materiale")
-	private String materiale;
+	@Column(name = "materiale_id")
+	private long materiale_id;
 
 	/*
 		L'attributo "fetch" specifica il modo in cui il framework Spring recupera l'entità correlata.
@@ -43,12 +43,12 @@ public class RichiestaAiuto {
 	@JoinColumn(name = "categoria_tipo")
 	private Categoria categoria;
 
-	public RichiestaAiuto(String descrizione, LocalDate giorno, Indirizzo indirizzo, String materiale, Account pubAccount, Categoria categoria) {
+	public RichiestaAiuto(String descrizione, LocalDate giorno, Indirizzo indirizzo, long materiale_id, Account pubAccount, Categoria categoria) {
 		this.descrizione = descrizione;
 		this.giorno = giorno;
 		this.indirizzo = indirizzo;
 		this.stato = "pubblicata";
-		this.materiale = materiale;
+		this.materiale_id = materiale_id;
 		this.accAccount = null;
 		this.pubAccount = pubAccount;
 		this.categoria = categoria;
@@ -91,12 +91,12 @@ public class RichiestaAiuto {
 		this.indirizzo = place;
 	}
 
-	public String getMateriale() {
-		return materiale;
+	public long getIdMateriale() {
+		return materiale_id;
 	}
 
-	public void setMateriale(String materiale) {
-		this.materiale = materiale;
+	public void setIdMateriale(long materiale_id) {
+		this.materiale_id = materiale_id;
 	}
 
 	public Account getAccAccount() {
@@ -140,7 +140,7 @@ public class RichiestaAiuto {
 				", giorno=" + giorno +
 				", indirizzo=" + indirizzo +
 				", stato='" + stato + '\'' +
-				", materiale=" + materiale +
+				", id_materiale=" + materiale_id +
 				", accAccount=" + accAccount +
 				", pubAccount=" + pubAccount +
 				", categoria=" + categoria +
