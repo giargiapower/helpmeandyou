@@ -1,5 +1,7 @@
 package magazzino.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +16,24 @@ public class Materiale {
 	@Column(name = "nome")
 	private String nome;
 
-	@OneToMany(mappedBy = "materiale")
-	private List<RichiestaAiutoMat> richieste = new ArrayList<>();
+	@OneToMany(mappedBy = "materiale", fetch = FetchType.EAGER)
+	private List<RichiestaAiutoMat> richieste;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "magazzino_id")
+	@JsonIgnore
 	private Magazzino magazzino;
 
 	public Materiale() { }
 
-	public Materiale(String nome) {
+	public Materiale(String nome, Magazzino magazzino) {
 		this.nome = nome;
+		this.richieste = new ArrayList<>();
+		this.magazzino = magazzino;
 	}
 
 	public boolean inUso() {
-		if (richieste.isEmpty())
-			return false;
-		else
-			return true;
+		return !richieste.isEmpty();
 	}
 
 	public void aggiungiRichiesta(RichiestaAiutoMat richiesta) {
@@ -71,12 +73,17 @@ public class Materiale {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Materiale && ((Materiale) obj).getId() == this.id;
+	}
+
+	@Override
 	public String toString() {
 		return "Materiale{" +
 				"id=" + id +
 				", nome='" + nome + '\'' +
 				", richieste=" + richieste +
-				", magazzino=" + magazzino +
+				", magazzino=" + magazzino.getProvincia() + //Evita di serializzare l'oggetto magazzino
 				'}';
 	}
 }

@@ -1,5 +1,7 @@
 package magazzino.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -18,8 +20,8 @@ public class RichiestaAiutoMat {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "materiale_id")
+	@JsonIgnore
 	private Materiale materiale;
-
 
 	public RichiestaAiutoMat(LocalDate giorno, String provincia, Materiale materiale) {
 		this.giorno = giorno;
@@ -69,7 +71,6 @@ public class RichiestaAiutoMat {
 				"id=" + id +
 				", giorno=" + giorno +
 				", provincia='" + provincia + '\'' +
-				", materiale=" + materiale +
 				'}';
 	}
 }
