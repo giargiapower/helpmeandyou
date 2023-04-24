@@ -2,3 +2,58 @@ entra da terminale nella directory GestoreCredenziali
 esegui : ./mvnw -DskipTests=true clean package
 docker-compose build
 docker-compose up
+
+
+
+comandi per postman
+ACCOUNTCONTROLLER
+POST http://localhost:8080/api/utenti/registrazione/create/account
+{
+"email":"prova@prova",
+"password":123,
+"nome":"prova",
+"cognome":"prova",
+"telefono":12344,
+"indirizzo":"viale prova",
+"stato":"da_approvare",
+"cv": null,
+"documento_identita": null
+}
+
+
+qua data una email vanno passati i documenti Documento di identita e Cv
+POST http://localhost:8080/api/utenti/registrazione/create/Documents
+andare su Bodi --> form-data --> inserire campo email con una email già registrata , doc e inserire il file
+per il documento --> cv con rispettivo file di curriculum per il curriculum
+
+
+GET http://localhost:8080/api/utenti/login
+per il login basta passare un account con email e password
+
+AMMINISTRATORECONTROLLER
+
+GET http://localhost:8080/api/amministratore/da_approvare/list
+ritorna tutti gli account da approvare
+
+GET http://localhost:8080/api/amministratore/cv
+inserire come parametro in form-data : fileName e il nome del file salvato. Sappiamo il nome
+perchè quando viene salvato viene castato come emailaccount.estensione del file. noi accettiamo solo i pdf
+che blocchiamo da frontend. ad esempio se l'account è prova@prova allora il file sarà prova@prova.estensione
+
+GET http://localhost:8080/api/amministratore/id
+stessa cosa come per cv
+
+
+PUT http://localhost:8080/api/amministratore/da_approvare/valuta/QUA_INSERISCI_ID_ACCOUNT_DA_APPROVARE
+{"decisione": "approva"} oppure {"decisione": "blocca"}
+
+PUT http://localhost:8080/api/amministratore/aggiorna_categoria/INSERISCI_ID_ACCOUNT
+
+{"categoria": "QUA_INSERISCI_CATEGORIA"}
+
+
+PUT http://localhost:8080/api/amministratore/blocca/INSERISCI_ID_ACCOUNT
+
+
+
+
