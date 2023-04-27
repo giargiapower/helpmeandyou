@@ -1,0 +1,14 @@
+version: '1'
+services:
+  app:
+    build: .
+    image: eureka
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - gateway
+networks:
+  gateway:
+    driver: bridge
+# docker-compose build && docker-compose up

@@ -20,7 +20,7 @@ services:
     image: segnalazioni
     container_name: segnalazioni
     ports:
-      - "8080:8080"
+      - "8082:8082"
     depends_on:
       - dbpostgresql
     networks:

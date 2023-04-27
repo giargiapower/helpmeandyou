@@ -1,0 +1,14 @@
+version: '1'
+services:
+  app:
+    build: .
+    image: apigateway
+    container_name: apigateway
+    ports:
+      - "9000:9000"
+    networks:
+      - gateway
+networks:
+  gateway:
+    driver: bridge
+# docker-compose build && docker-compose up
