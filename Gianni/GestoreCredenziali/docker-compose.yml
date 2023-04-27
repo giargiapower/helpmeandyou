@@ -9,7 +9,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
-      - appbootrestnet
+      - gestore-credenziali
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -17,14 +17,14 @@ services:
       restart: unless-stopped
   app:
     build: .
-    image: appbootrest
-    container_name: appbootrest
+    image: gestore-credenziali
+    container_name: gestore-credenziali
     ports:
-      - "8080:8080"
+      - "8085:8085"
     depends_on:
       - dbpostgresql
     networks:
-      - appbootrestnet
+      - gestore-credenziali
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgresql:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -34,6 +34,6 @@ volumes:
   db-data:
   pgadmin-data:
 networks:
-  appbootrestnet:
+  gestore-credenziali:
     driver: bridge
 # docker-compose build && docker-compose up
