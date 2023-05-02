@@ -1,6 +1,7 @@
 # frontend-vue
 
 ## Project setup
+NB!!! Installare prima **Node.js** (versione 19.2).
 ```
 npm install
 ```
