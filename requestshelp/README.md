@@ -5,6 +5,8 @@ IMPORTANTE: BISOGNA AVERE INSTALLATO IL CONTAINER DOCKER CON RUBBITMQ(BASTA AVER
 
 docker run -d --hostname my-test-rabbit --name test-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-m anagement
 
+LANCIARE IL CONTAINER DI EUREKA PRIMA DI QUESTO MICROSERVIZIO
+
 Run della classe RichiestaAiuto CON DOCKER COMANDI :
 ./mvnw -DskipTests=true clean package
 docker-compose build 
