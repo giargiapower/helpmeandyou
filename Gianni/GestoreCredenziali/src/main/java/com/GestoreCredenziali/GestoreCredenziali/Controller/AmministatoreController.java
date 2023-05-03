@@ -6,6 +6,7 @@ import com.GestoreCredenziali.GestoreCredenziali.File.FileStorageService;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Account;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Amministratore;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Category;
+import com.GestoreCredenziali.GestoreCredenziali.RabbitSender;
 import com.GestoreCredenziali.GestoreCredenziali.Repository.AmministratoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,12 @@ public class AmministatoreController {
 
     @Autowired
     AmministratoreRepository repository;
+
+
+    @Autowired
+    RabbitSender rabbitSender = new RabbitSender();
+
+
 
 
     // metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)
@@ -103,13 +110,12 @@ public class AmministatoreController {
     // da valutare se aggiungere fattori di sicurezza tipo controllare se chi richiama il microservizio è un amministratore valido
     @PutMapping("/da_approvare/valuta/{id}")
     public ResponseEntity<Account> valutaAccount(@PathVariable("id") long id, @RequestBody String decisione) {
-
-        Optional<Account> c = repository.findById(id);
-
-        if (c.isPresent()) {
-            Account _account = c.get();
-            if (decisione.equals("approva")) {
+        Account _account = repository.findById(id);
+        if (_account!=null){
+            if (decisione.contains("approva")) {
                 _account.setStato("approvato");
+                // manda l'account approvato al miscorsevizio di richieste di aiuto
+                rabbitSender.send(_account);
             } else {
                 _account.setStato("bloccato");
                 //elimino i file caricati
@@ -126,10 +132,9 @@ public class AmministatoreController {
     @PutMapping("/aggiorna_categoria/{id}")
     public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Category category) {
 
-        Optional<Account> c = repository.findById(id);
+        Account _account = repository.findById(id);
 
-        if (c.isPresent()) {
-            Account _account = c.get();
+        if (_account!=null){
             _account.setCategory(category);
 
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
@@ -141,10 +146,10 @@ public class AmministatoreController {
     @PutMapping("/blocca/{id}")
     public ResponseEntity<Account> bloccaAccount(@PathVariable("id") long id) {
 
-        Optional<Account> c = repository.findById(id);
+        Account _account = repository.findById(id);
 
-        if (c.isPresent()) {
-            Account _account = c.get();
+        if (_account!=null){
+
             _account.setStato("bloccato");
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
         } else {

@@ -1,13 +1,16 @@
-package requests.model;
+package com.GestoreCredenziali.GestoreCredenziali.Model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import requests.model.Categoria;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "account")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Account {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "email")

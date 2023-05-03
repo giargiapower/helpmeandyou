@@ -9,6 +9,7 @@ import java.util.List;
 public interface AmministratoreRepository extends CrudRepository<Account, Long> {
     Account findByEmail(String email);
 
+    Account findById(long id);
     List<Account> findAllByStato(String stato);
 }
 

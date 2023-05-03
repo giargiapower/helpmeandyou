@@ -1,0 +1,39 @@
+version: '1'
+
+services:
+  dbpostgresql:
+    container_name: postgres_req
+    image: "postgres"
+    ports:
+      - "5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - richieste_aiuto
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      restart: unless-stopped
+  app:
+    build: .
+    image: richieste_aiuto
+    container_name: richieste_aiuto
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dbpostgresql
+    networks:
+      - richieste_aiuto
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgresql:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+volumes:
+  db-data:
+  pgadmin-data:
+networks:
+  richieste_aiuto:
+    driver: bridge
+# docker-compose build && docker-compose up
