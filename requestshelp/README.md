@@ -1,7 +1,14 @@
 # Richieste di aiuto: microservizio
 
 ### Esecuzione
-Run della classe RichiestaAiuto
+IMPORTANTE: BISOGNA AVERE INSTALLATO IL CONTAINER DOCKER CON RUBBITMQ(BASTA AVERE DOCKER INSTALLATO) :
+
+docker run -d --hostname my-test-rabbit --name test-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-m anagement
+
+Run della classe RichiestaAiuto CON DOCKER COMANDI :
+./mvnw -DskipTests=true clean package
+docker-compose build 
+docker-compose up
 
 ### Test con Postman: comandi
 

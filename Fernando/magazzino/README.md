@@ -1,7 +1,8 @@
 # Magazzino: microservizio
 
 ### Esecuzione
-Run della classe MagazzinoApplication
+Run della classe MagazzinoApplication 
+
 
 ### Test con Postman: comandi
 
