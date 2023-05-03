@@ -3,5 +3,5 @@ RUN addgroup -S spring && adduser -S spring -G spring
 VOLUME /tmp
 EXPOSE 8080
 ARG DEPENDENCY=target
-ADD ${DEPENDENCY}/*.jar richieste_aiuto.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/richieste_aiuto.jar"]
+ADD ${DEPENDENCY}/*.jar magazzino.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/magazzino.jar"]

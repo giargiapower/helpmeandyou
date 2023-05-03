@@ -2,14 +2,14 @@ version: '1'
 
 services:
   dbpostgresql:
-    container_name: postgres_req
+    container_name: postgres_mag
     image: "postgres"
     ports:
       - "5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
-      - richieste_aiuto
+      - magazzino
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -17,14 +17,14 @@ services:
       restart: unless-stopped
   app:
     build: .
-    image: richieste_aiuto
-    container_name: richieste_aiuto
+    image: magazzino
+    container_name: magazzino
     ports:
       - "8080:8080"
     depends_on:
       - dbpostgresql
     networks:
-      - richieste_aiuto
+      - magazzino
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgresql:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -34,6 +34,6 @@ volumes:
   db-data:
   pgadmin-data:
 networks:
-  richieste_aiuto:
+  magazzino:
     driver: bridge
 # docker-compose build && docker-compose up
