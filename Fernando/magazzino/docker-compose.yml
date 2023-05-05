@@ -20,7 +20,7 @@ services:
     image: magazzino
     container_name: magazzino
     ports:
-      - "8080:8080"
+      - "8087:8087"
     depends_on:
       - dbpostgresql
     networks:
