@@ -1,16 +1,13 @@
 # Richieste di aiuto: microservizio
 
 ### Esecuzione
-IMPORTANTE: BISOGNA AVERE INSTALLATO IL CONTAINER DOCKER CON RUBBITMQ(BASTA AVERE DOCKER INSTALLATO) :
-
-docker run -d --hostname my-test-rabbit --name test-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-m anagement
-
-LANCIARE IL CONTAINER DI EUREKA PRIMA DI QUESTO MICROSERVIZIO
-
-Run della classe RichiestaAiuto CON DOCKER COMANDI :
+Entrare da terminale nella directory requesthelp ed eseguire:
+```
 ./mvnw -DskipTests=true clean package
-docker-compose build 
+docker-compose build
 docker-compose up
+```
+
 
 ### Test con Postman: comandi
 
@@ -19,7 +16,6 @@ Mettere su postman get e:
 * Per prendere tutte le richieste di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richieste
 
 * Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
-
 
 
 #### POST
@@ -51,10 +47,10 @@ andare su body, settare raw in formato json e inserire ad esempio:
 }
 ```
 
+
 #### PUT
 - Mettere su postman put con indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/accetta/1/1 (id della richiesta, id account che accetta la richiesta).
 A questo punto la richiesta con id 1 avrà lo stato modificato a "accettata"
-
 
 - Mettere su postman put con indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/termina/1 (1 è l'id della richiesta).
 A questo punto la richiesta con id 1 avrà lo stato modificato a "terminata".
