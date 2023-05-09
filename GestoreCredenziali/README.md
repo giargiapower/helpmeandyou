@@ -92,3 +92,14 @@ andare su body, settare raw in formato json e inserire ad esempio:
 	```
 
 - Per bloccare un utente: inserire l'indirizzo http://localhost:8080/api/amministratore/blocca/INSERISCI_ID_ACCOUNT
+
+
+---
+- ### LoginController
+L'ho lasciato in un controller a parte perché mi sembra più ordinato così, ma la porta a cui si interfaccia è la stessa/simile ad AccountController.
+
+#### GET
+- Per fare il login con Google: mettere su google indirizzo http://localhost:8085/api/utenti/oauth_login per restituire un Account
+con le informazioni lette dal profilo Google dell'utente (http://localhost:8085/api/utenti/loginSuccess).
+
+NB!!! No schermata consensi poiché l'app NON accede a contenuti sensibili.

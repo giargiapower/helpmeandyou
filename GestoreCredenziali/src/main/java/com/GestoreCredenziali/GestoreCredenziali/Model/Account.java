@@ -51,6 +51,12 @@ public class Account {
         this.password = password;
     }
 
+    public Account(String email, String nome, String cognome) {
+        this.email = email;
+        this.nome = nome;
+        this.cognome = cognome;
+    }
+
     public Account(String email, String password, String nome, String cognome, String telefono, String indirizzo, String stato) {
         this.email = email;
         this.password = password;

@@ -44,8 +44,6 @@ public class AmministatoreController {
     RabbitSender rabbitSender = new RabbitSender();
 
 
-
-
     // metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)
     // va aggiunta la parte di invio dei documenti e curriculum all'amministratore per la verifica
     @GetMapping("/da_approvare/list")
@@ -103,7 +101,6 @@ public class AmministatoreController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                  .body(resource);
-
     }
 
     // metodo per amministratore approva o disapprova la creazione di un account in base ai parametri dell'account
@@ -131,12 +128,10 @@ public class AmministatoreController {
 
     @PutMapping("/aggiorna_categoria/{id}")
     public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Category category) {
-
         Account _account = repository.findById(id);
 
         if (_account!=null){
             _account.setCategory(category);
-
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -145,18 +140,15 @@ public class AmministatoreController {
 
     @PutMapping("/blocca/{id}")
     public ResponseEntity<Account> bloccaAccount(@PathVariable("id") long id) {
-
         Account _account = repository.findById(id);
 
         if (_account!=null){
-
             _account.setStato("bloccato");
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @GetMapping("/login")
     public ResponseEntity<Amministratore> login(@RequestBody Amministratore amministratore) {
@@ -168,8 +160,4 @@ public class AmministatoreController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
-
-
-
 }

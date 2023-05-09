@@ -12,7 +12,7 @@
 	<artifactId>Gestore_utenti</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Gestore_utenti</name>
-	<description>Demo project per gestione segnalazioni e utenti per Account e amministratori</description>
+	<description>Microservizio per la gestione segnalazioni e utenti per Account e amministratori</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>

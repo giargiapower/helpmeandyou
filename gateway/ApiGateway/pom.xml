@@ -12,7 +12,7 @@
 	<artifactId>ApiGateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ApiGateway</name>
-	<description>Demo project for ApoGateway</description>
+	<description>Microservizio per l'ApiGateway</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.2</spring-cloud.version>
