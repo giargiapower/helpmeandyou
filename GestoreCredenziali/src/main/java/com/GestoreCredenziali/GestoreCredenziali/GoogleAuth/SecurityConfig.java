@@ -18,7 +18,9 @@ public class SecurityConfig {
 	// mentre per tutte le altre richieste non viene richiesto il login.
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http
+				.csrf().disable()
+				.authorizeRequests()
 				.antMatchers("/api/utenti/oauth_login")
 				.authenticated()
 				.anyRequest()
@@ -26,7 +28,8 @@ public class SecurityConfig {
 				.and()
 				.oauth2Login()
 				.defaultSuccessUrl("/api/utenti/loginSuccess", true)
-				.failureUrl("/api/utenti/loginFailure");
+				.failureUrl("/api/utenti/loginFailure")
+		;
 		return http.build();
 	}
 

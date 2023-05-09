@@ -1,6 +1,5 @@
 package com.GestoreCredenziali.GestoreCredenziali.Controller;
 
-
 import com.GestoreCredenziali.GestoreCredenziali.File.FileController;
 import com.GestoreCredenziali.GestoreCredenziali.File.FileStorageService;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Account;
@@ -22,23 +21,19 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/amministratore")
 public class AmministatoreController {
-
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-
 
     @Autowired
     private FileStorageService fileStorageService;
 
     @Autowired
     AmministratoreRepository repository;
-
 
     @Autowired
     RabbitSender rabbitSender = new RabbitSender();
@@ -48,7 +43,6 @@ public class AmministatoreController {
     // va aggiunta la parte di invio dei documenti e curriculum all'amministratore per la verifica
     @GetMapping("/da_approvare/list")
     public List<Account> getAllAccountToApprove() {
-
         List<Account> accounts = new ArrayList<>();
         repository.findAllByStato("da_approvare").forEach(accounts::add);
         return accounts;
