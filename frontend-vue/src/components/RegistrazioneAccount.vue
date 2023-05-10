@@ -2,7 +2,7 @@
   <div class="registrazione">
     <form @reset="gestisciReset" @submit="onSubmit" ref="form">
       <table>
-        <caption>Inserisci le tue credenziali</caption>
+        <h2>Inserisci le tue credenziali</h2>
         <tbody>
         <tr>
           <td><label for="nome">Nome:</label></td>

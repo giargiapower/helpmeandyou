@@ -2,7 +2,7 @@
   <div class="pagamento">
     <form @reset="gestisciReset" @submit="onSubmit">
       <table>
-        <caption>Inserisci i dati della tua carta di credito</caption>
+        <h2>Inserisci i dati della tua carta di credito</h2>
         <tbody>
         <tr>
           <td><label for="nome">Nome:</label></td>
