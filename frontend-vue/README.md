@@ -5,6 +5,9 @@ NB!!! Installare prima **Node.js** (versione 19.2).
 ```
 npm install
 ```
+```
+npm install vue bootstrap bootstrap-vue
+```
 
 ### Compiles and hot-reloads for development
 ```
@@ -21,5 +24,5 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Prendere cose da bootstrap
+https://getbootstrap.com/docs/5.3/getting-started/introduction/
