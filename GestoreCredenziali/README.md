@@ -44,8 +44,10 @@ andare su body, settare raw in formato json e inserire ad esempio:
 	```
 
 - Per settare "Documento d'identità" e "Cv" data un'email: all'indirizzo http://localhost:8085/api/utenti/registrazione/create/Documents
-andare su body --> form-data --> inserire campo email con una email già registrata, doc e inserire il file 
-per il documento --> cv con rispettivo file di curriculum per il curriculum
+andare su body --> form-data --> inserire tra le Key:
+  - "email" con Value una email già registrata
+  - "doc" e inserire il file per il documento
+  - "cv" con rispettivo file di curriculum per il curriculum
 
 
 

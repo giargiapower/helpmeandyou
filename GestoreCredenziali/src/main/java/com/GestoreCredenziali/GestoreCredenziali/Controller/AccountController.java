@@ -11,37 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/utenti")
 public class AccountController {
-
-
     @Autowired
     AccountRepository a_repository;
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-
     @Autowired
     private FileStorageService fileStorageService;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    // metti pure qua il metodo per la registrazione e login con le api di gologolo
-
-
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
     // crea l'account
@@ -91,16 +72,4 @@ public class AccountController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
-
-
-
-
-
-
-
 }
-
-
-
-

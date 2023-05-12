@@ -45,3 +45,11 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 - Per arrestare i microservizi, l'Api Gateway e l'Eureka Server basta premere Ctrl+C nei rispettivi terminali.
 
 In alternativa, è possibile arrestare tutti i container Docker dall'applicazione **Docker Desktop**.
+
+
+----
+**NB!!!**
+Per eliminare tutte le immagini Docker che sono null, eseguire da terminale:
+```
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+```
