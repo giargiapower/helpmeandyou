@@ -19,6 +19,12 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
   kubectl get pods
 ```
 
+- per terminare i pod usare il comando : 
+  ```
+   kubectl scale deployment --all --replicas=0
+  
+  ```
+
 ## NB!!!
 - tutte le chiamate vanno fatte sulla porta 30000
 - io ho utilizzato il node docker-desktop per far partire i pod, non dovrebbero esserci problemi nel caso usaste minikube
