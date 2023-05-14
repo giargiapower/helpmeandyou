@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -f docker-compose.yml --out kubernetes-manifests.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: apigateway
+  name: apigateway
+spec:
+  type: NodePort # Aggiunta della definizione del tipo del servizio
+  ports:
+    - name: "http"
+      port: 9000
+      targetPort: 9000
+      nodePort: 30000 # Porta aperta sulla macchina host
+  selector:
+    io.kompose.service: apigateway
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -f docker-compose.yml --out kubernetes-manifests.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: apigateway
+  name: apigateway
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      io.kompose.service: apigateway
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -f docker-compose.yml --out kubernetes-manifests.yaml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/apigateway-gateway: "true"
+        io.kompose.service: apigateway
+    spec:
+      containers:
+        - image: giargiapower/helpmeandyou:apigateway
+          name: apigateway
+          ports:
+            - containerPort: 9000
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: apigateway-gateway
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/apigateway-gateway: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/apigateway-gateway: "true"

@@ -4,9 +4,33 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 
 --Breve descrizione progetto--
 
-## Esecuzione
+## Esecuzione con Kubernetes
+- installare kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - Aprire **Docker Desktop**
+- Attivare nelle impostazioni **Kubernetes**
+- Aprire terminale ed entrare nella directory /helpmeandyou
+- lanciare lo script col comando :
+  ```
+  kubectl apply -f .\deployment.yaml
+  ```
+- verranno fatti partire tutti i pod e i servizi necessari
+- per verificare che i pod siano partiti correttamente lanciare il comando:
+```
+  kubectl get pods
+```
 
+## NB!!!
+- tutte le chiamate vanno fatte sulla porta 30000
+- io ho utilizzato il node docker-desktop per far partire i pod, non dovrebbero esserci problemi nel caso usaste minikube
+- se volete mettere usare docker-desktop o eliminate miikube o cambiate il node in cui far partire i pod
+
+## per anna
+consentire il login di google con le porte 8085, 30000 e 9000
+
+
+
+## Esecuzione senza Kubernetes
+- Aprire **Docker Desktop**
 - Inizialmente **per avviare RabbitMQ**: la prima volta eseguire da terminale il comando:
 	```
 	docker run -d --hostname my-test-rabbit --name test-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management

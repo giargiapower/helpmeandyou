@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import requests.model.Account;
+import requests.model.Categoria;
 import requests.model.Indirizzo;
 import requests.model.RichiestaAiuto;
 import requests.repository.AccountRepository;
+import requests.repository.CategoriaRepository;
 import requests.repository.IndirizzoRepository;
 import requests.repository.RichiestaAiutoRepository;
 import java.util.*;
@@ -27,6 +29,9 @@ public class RichiestaAiutoController {
 
 	@Autowired
 	AccountRepository accountRepository;
+
+	@Autowired
+	CategoriaRepository categoriaRepository;
 
 	@GetMapping("/richiesta/{id}")
 	public RichiestaAiuto getRichiestaById(@PathVariable(value = "id") long richiestaId) {
@@ -84,6 +89,16 @@ public class RichiestaAiutoController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	// creato metodo per la creazione delle categorie cosi da non doverle
+	// inserire manualmente nel database
+	@PostMapping("/categoria/crea")
+	public Categoria creaCategoria(@RequestBody Categoria categoria){
+		Categoria fin = new Categoria(categoria.getTipo());
+		return categoriaRepository.save(fin);
+	}
+
+
 
 	// Serve nel caso in cui venga bloccato un utente a fronte di segnalazione
 	@DeleteMapping("/richiesta/elimina/{id}")
