@@ -61,11 +61,6 @@ const routes = [
     component: BachecaView
   },
   {
-    path: '/accedi-registrati/bacheca/accetta-richiesta',
-    name: 'accetta-richiesta',
-    component: () => import('../views/AccettaRichiestaView.vue')
-  },
-  {
     path:'/accedi-registrati/bacheca/crea-richiesta',
     name: 'crea-richiesta',
     component: () => import('../views/CreaRichiestaView.vue')

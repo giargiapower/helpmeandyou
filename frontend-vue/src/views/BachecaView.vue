@@ -5,11 +5,13 @@
     <div class="lista-richieste">
       <ul>
         <li v-for="item in richieste" :key="item.id">
-          <richiesta-item
+          <p>{{item}}</p>
+          <!-- <richiesta-item
               :id="item.id"
-              :autore="item.autore"
+              :nome="item.nome"
+              :cognome="item.cognome"
               :descrizione="item.descrizione">
-          </richiesta-item>
+          </richiesta-item> -->
         </li>
       </ul>
     </div>
@@ -18,21 +20,47 @@
 
 <script>
 import BachecaNavBar from "@/components/BachecaNavBar";
-import RichiestaItem from "@/components/RichiestaItem";
+// import RichiestaItem from "@/components/RichiestaItem";
+import axios from 'axios';
 
 export default {
   name: "BachecaView",
   components: {
-    RichiestaItem,
+    // RichiestaItem,
     BachecaNavBar
+  },
+  methods: {
+    async fetchRichieste() {
+      axios.get('/api/richiesteaiuto/richieste')
+          .then(response => {
+            this.richieste = response.data;
+            console.log('Richieste aggiungete con successo');
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    }
   },
   data() {
     return {
       richieste: [
-        {id: 1, autore: "Marco", descrizione: "prima richiesta"},
-        {id: 2, autore: "Mario", descrizione: "seconda richiesta"}
+        {
+          id: 1,
+          nome: "Marco",
+          cognome: "Digiani",
+          descrizione: "prima richiesta",
+        },
+        {
+          id: 2,
+          nome: "Luca",
+          cognome: "Bicchiere",
+          descrizione: "seconda richiesta",
+        }
       ]
     }
+  },
+  mounted() {
+    this.fetchRichieste()
   }
 }
 </script>

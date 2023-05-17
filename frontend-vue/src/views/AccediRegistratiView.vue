@@ -17,10 +17,10 @@
       <fieldset>
         <legend>Login</legend>
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
+        <input type="email" name="email" id="email" value="{{email}}" required>
 
         <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
+        <input type="password" name="password" id="password" value="{{password}}" required>
 
         <!-- Collega AccediRegistratiView con BachecaView -->
         <input type="submit" value="Accedi"> |
@@ -33,6 +33,7 @@
 
 <script>
   import HomeNavBar from "@/components/HomeNavBar";
+  import axios from "axios";
 
   export default {
     name: "AccediRegistratiView",
@@ -40,7 +41,20 @@
       HomeNavBar
     },
     methods: {
+      fetchLogin() {
+        axios.get('api/utenti/login', {
+          email: this.email,
+          password: this.password
+        })
+            .then(response => {
+              console.log(response)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+      },
       onSubmit() {
+
         this.$refs.form.reset();
         this.$router.push('../accedi-registrati/bacheca');
       },
@@ -48,6 +62,15 @@
         this.$refs.form.reset();
         this.$router.push('../accedi-registrati/registrazione');
       }
+    },
+    data() {
+      return {
+        email: '',
+        password: ''
+      }
+    },
+    mounted() {
+      this.fetchLogin()
     }
   }
 </script>
