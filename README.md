@@ -1,40 +1,101 @@
-# HelpMeAndYou
+# HelpMeAndYou: backend
 Progetto di Tecniche Avanzate di Sviluppo Software 2022/2023 di 
 Anna Fontana, Gianni Molinari e Fernando Serrano.
 
 --Breve descrizione progetto--
 
+---
+## COSE CHE NON MI FUNZIONANO:
+- gestore_cred_amministratore_controller:
+  - prendi cv singolo utente
+  - prendi documento singolo utente
+  - aggiorna categoria account
+- magazzino, da sistemare:
+  - richiedi singolo magazzino
+  - prendi tutti i materiali dato un magazzino
+
+---
+## per anna
+Consentire il login di google con le porte 8085, 30000 e 9000
+
+---
 ## Esecuzione con Kubernetes
-- installare kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- Installare kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - Aprire **Docker Desktop**
-- Attivare nelle impostazioni **Kubernetes**
+- Andare nelle impostazioni -> **Kubernetes** -> spuntare **Enable Kubernetes**
 - Aprire terminale ed entrare nella directory /helpmeandyou
-- lanciare lo script col comando :
+- **Lanciare lo script** col comando:
   ```
   kubectl apply -f .\deployment.yaml
   ```
-- verranno fatti partire tutti i pod e i servizi necessari
-- per verificare che i pod siano partiti correttamente lanciare il comando:
-```
-  kubectl get pods
-```
+- Verranno fatti partire tutti i pod e i servizi necessari.
+  - Per verificare che i pod siano partiti correttamente lanciare il comando:
+	```
+	  kubectl get pods
+	```
+	oppure ```watch 'kubectl get pods'``` per vederli in tempo reale
+  - Per verificare che i servizi siano partiti correttamente lanciare il comando:
+	```
+	  kubectl get services
+	```
+- Per **terminare**:
+  - **i pod** usare il comando:
+    ```
+    kubectl delete deployment --all
+    ```
+      oppure:```kubectl scale deployment --all --replicas=0```
+  - **i servizi** usare il comando:
+    ```
+    kubectl delete service --all
+    ```
 
-- per terminare i pod usare il comando : 
-  ```
-   kubectl scale deployment --all --replicas=0
-  
-  ```
+---
+- Per **testare RabbitMQ**:
+  - esporre la porta 15672 del pod di RabbitMQ con il comando:
+	```
+	kubectl port-forward <nome_pod_rabbitmq> 15672:15672
+	```
+	(Per sapere il nome del pod di RabbitMQ lanciare il comando ```kubectl get pods```)
+  - andare su http://localhost:15672/ e loggarsi con le credenziali di default (user: guest, password: guest)
+  - si dovrebbe vedere una coda (richieste - account)
 
+
+- Per accedere al **servizio di Eureka Server**:
+  - esporre la porta 8761 del pod di Eureka Server con il comando:
+  ```
+    kubectl port-forward <nome_pod_eurekaserver> 8761:8761
+    ```
+    (Per sapere il nome del pod dell'EurekaServer lanciare il comando ```kubectl get pods```)
+  - andare su http://localhost:8761/
+  - si dovrebbe vedere la pagina di Eureka Server con i vari microservizi registrati (API-Gateway, Gestore-Credenziali, Magazzino, Richieste_aiuto, Segnalazioni)
+
+---
+- Per **testare il contenuto dei database su kubernetes**:
+  - da terminale scrivere il comando:
+  ```
+  kubectl exec -it <nome_pod_dbpostgresql...> -- psql -U postgres
+  ```
+  (Per sapere il nome del pod del db lanciare il comando ```kubectl get pods```)
+  - fare la query desiderata (es. ```SELECT * FROM public.segnalazione WHERE id = 1;```)
+  - per vedere tutte le tabelle del db fare ```\dt```
+  - per vedere i tipi di campi di una tabella fare ```\d <nome_tabella>```
+
+---
 ## NB!!!
-- tutte le chiamate vanno fatte sulla porta 30000
-- io ho utilizzato il node docker-desktop per far partire i pod, non dovrebbero esserci problemi nel caso usaste minikube
-- se volete mettere usare docker-desktop o eliminate miikube o cambiate il node in cui far partire i pod
+- ***Tutte le chiamate vanno fatte sulla porta 30000*** (es. http://localhost:30000/api/amministratore/da_approvare/list)
+- *Per vedere i pod in tempo reale eseguire su UBUNTU il comando:*
+  ```
+  watch 'kubectl get pods'
+  ```
+- *Se compaiono errori strani eseguire il comando seguente:*
+  ```
+  kubectl delete pvc --all
+  ```
+- Noi abbiamo utilizzato il node docker-desktop per far partire i pod, non dovrebbero esserci problemi nel caso si usi minikube
+- Se si vuole usare docker-desktop o eliminare minikube o cambiare il node in cui far partire i pod
 
-## per anna
-consentire il login di google con le porte 8085, 30000 e 9000
 
-
-
+---
 ## Esecuzione senza Kubernetes
 - Aprire **Docker Desktop**
 - Inizialmente **per avviare RabbitMQ**: la prima volta eseguire da terminale il comando:
@@ -67,7 +128,7 @@ consentire il login di google con le porte 8085, 30000 e 9000
 	docker-compose up
 	```
 
-## Terminare l'esecuzione
+### Terminare l'esecuzione
 - Per arrestare RabbitMQ scrivere a terminale:
 	```
 	docker stop test-rabbit
@@ -77,8 +138,8 @@ consentire il login di google con le porte 8085, 30000 e 9000
 In alternativa, è possibile arrestare tutti i container Docker dall'applicazione **Docker Desktop**.
 
 
-----
-**NB!!!**
+### **NB!!!**
+
 Per eliminare tutte le immagini Docker che sono null, eseguire da terminale:
 ```
 docker rmi $(docker images --filter "dangling=true" -q --no-trunc)

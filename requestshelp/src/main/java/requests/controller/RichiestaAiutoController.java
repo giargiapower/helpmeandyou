@@ -59,6 +59,15 @@ public class RichiestaAiutoController {
 		return richiestaAiutoRepository.save(fin);
 	}
 
+	// TODO: forse meglio metterlo nella parte dell'amministratore
+	// creato metodo per la creazione delle categorie così da non doverle
+	// inserire manualmente nel database
+	@PostMapping("/categoria/crea")
+	public Categoria creaCategoria(@RequestBody Categoria categoria){
+		Categoria fin = new Categoria(categoria.getTipo());
+		return categoriaRepository.save(fin);
+	}
+
 	@PutMapping("/richiesta/accetta/{ric_id}/{account_id}")
 	public ResponseEntity<RichiestaAiuto> accettaRichiesta(@PathVariable(value = "ric_id") long richiestaId, @PathVariable(value = "account_id") long accountId) {
 		Optional <RichiestaAiuto> richiesta = richiestaAiutoRepository.findById(richiestaId);
@@ -89,16 +98,6 @@ public class RichiestaAiutoController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-
-	// creato metodo per la creazione delle categorie cosi da non doverle
-	// inserire manualmente nel database
-	@PostMapping("/categoria/crea")
-	public Categoria creaCategoria(@RequestBody Categoria categoria){
-		Categoria fin = new Categoria(categoria.getTipo());
-		return categoriaRepository.save(fin);
-	}
-
-
 
 	// Serve nel caso in cui venga bloccato un utente a fronte di segnalazione
 	@DeleteMapping("/richiesta/elimina/{id}")

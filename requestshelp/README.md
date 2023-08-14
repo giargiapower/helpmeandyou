@@ -1,4 +1,7 @@
 # Richieste di aiuto: microservizio
+Per eseguire con Kubernetes: stesse chiamate di sotto, ma sulla porta 30000.
+
+---
 
 ### Esecuzione
 Entrare da terminale nella directory requesthelp ed eseguire:
@@ -8,28 +11,29 @@ docker-compose build
 docker-compose up
 ```
 
+---
 
 ### Test con Postman: comandi
 
 #### GET
 Mettere su postman get e:
-* Per prendere tutte le richieste di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richieste
+- Per prendere tutte le richieste di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richieste
 
-* Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
+- Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
 
+- ***TODO:*** Per prendere tutte le categorie inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/categorie
 
 #### POST
-Fare in un primo momento queste query sul database PgAdmin:
+In un primo momento assicurarsi che ci siano almeno un account e una categoria nel database:
+- Per creare una categoria mettere su postman POST e all'indirizzo: http://localhost:8080/api/richiesteaiuto/categoria/crea andare su body, settare raw in formato json e inserire ad esempio:
 ```
-insert into account (id, nome)
-values (1, 'gigi')
+{
+	"tipo" : "infermieristica"
+}
 ```
-```
-insert into categoria (tipo)
-values ('infermieristica')
-```
+- Per l'account invece farlo dall'amministratore_controller
 
-Mettere su postman post e all'indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/crea
+A questo punto mettere su postman post e all'indirizzo http://localhost:8080/api/richiesteaiuto/richiesta/crea
 andare su body, settare raw in formato json e inserire ad esempio:
 ```
 {

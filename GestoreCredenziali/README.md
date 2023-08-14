@@ -1,4 +1,7 @@
 # GestoreCredenziali: microservizio
+Per eseguire con Kubernetes: stesse chiamate di sotto, ma sulla porta 30000.
+
+---
 
 ### Esecuzione
 Entrare da terminale nella directory GestoreCredenziali ed eseguire:
@@ -8,6 +11,7 @@ docker-compose build
 docker-compose up
 ```
 
+---
 
 ### Test con Postman: comandi
 
@@ -58,7 +62,7 @@ Mettere su postman get e:
 - Per ritornare tutti gli utenti da approvare: inserire l'indirizzo http://localhost:8085/api/amministratore/da_approvare/list
 
 - Per ritornare il cv di un utente: inserire l'indirizzo http://localhost:8085/api/amministratore/cv
-  e inserire come parametro in form-data: fileName e il nome del file salvato. Sappiamo il nome
+  andare su Body -> inserire come parametro in form-data (alto sinistra): fileName (Key) e il nome del file salvato. Sappiamo il nome
   perchè quando viene salvato viene castato come emailaccount.estensione del file. noi accettiamo solo i pdf
   che blocchiamo da frontend. ad esempio se l'account è prova@prova allora il file sarà prova@prova.estensione
 

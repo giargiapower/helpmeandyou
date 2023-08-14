@@ -1,4 +1,7 @@
 # Magazzino: microservizio
+Per eseguire con Kubernetes: stesse chiamate di sotto, ma sulla porta 30000.
+
+---
 
 ### Esecuzione
 Entrare da terminale nella directory magazzino ed eseguire:
@@ -7,6 +10,8 @@ Entrare da terminale nella directory magazzino ed eseguire:
 docker-compose build
 docker-compose up
 ```
+
+---
 
 ### Test con Postman: comandi
 
@@ -59,7 +64,7 @@ INSERT INTO materiale(id, nome, magazzino_id) VALUES (1, 'stampelle', 1)
 
 
 #### DELETE
-- Per eliminare un materiale da un magazzino: mettere su postman delete e all'indirizzo http://localhost:8080/api/magazzini/elimina/1/1
+- Per eliminare un materiale da un magazzino: mettere su postman delete e all'indirizzo http://localhost:8080/api/magazzini/elimina/1/2 (1: id magazzino, 2: id materiale)
 
 - Per eliminare un magazzino: mettere su postman delete e all'indirizzo http://localhost:8080/api/magazzini/elimina/1
 
