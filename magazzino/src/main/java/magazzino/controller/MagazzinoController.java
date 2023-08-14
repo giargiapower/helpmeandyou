@@ -39,6 +39,7 @@ public class MagazzinoController {
 		return magazzini;
 	}
 
+	// TODO: da sistemare, restituisce materiali ripetuti con lo stesso id
 	// Restituisce tutte le informazioni di un magazzino dato il suo id
 	@GetMapping("/{id}")
 	public Magazzino getMagazzino(@PathVariable("id") long id) {
@@ -46,6 +47,7 @@ public class MagazzinoController {
 		return m.orElse(null);
 	}
 
+	// TODO: da sistemare, restituisce materiali ripetuti con lo stesso id
 	// Restituisce tutti i materiali di un magazzino dato il suo id
 	@GetMapping("/{id_magazzino}/materiali")
 	public ResponseEntity<List<Materiale>> getAllMateriali(@PathVariable("id_magazzino") long magId) {

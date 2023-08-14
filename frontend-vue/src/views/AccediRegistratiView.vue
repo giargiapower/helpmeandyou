@@ -1,26 +1,14 @@
 <template>
-  <!--
-   In HTML, l'attributo action specifica l'URL del server che deve gestire la richiesta di invio dei dati
-   del form quando viene sottomesso.
-   Nel caso dell'attributo action="/", il valore "/" rappresenta la radice del sito web,
-   il che significa che quando il form viene sottomesso, i dati verranno inviati alla homepage del sito.
-   Ad esempio, se si sta utilizzando un server per elaborare i dati inviati dal form,
-   l'attributo action dovrà contenere l'URL del server che gestisce la richiesta POST del form,
-   ad esempio action="/submit-form". In questo caso, la richiesta di invio del form verrà inviata all'URL specificato,
-   in modo che il server possa elaborare i dati e restituire una risposta al browser.
-
-   <form action="/" method="POST" ref="form">
-  -->
   <div class="accedi-registrati">
     <home-nav-bar />
     <form @submit="onSubmit" ref="form">
       <fieldset>
         <legend>Login</legend>
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="{{email}}" required>
+        <input type="email" @value="this.email" required>
 
         <label for="password">Password:</label>
-        <input type="password" name="password" id="password" value="{{password}}" required>
+        <input type="password" @value="this.password" required>
 
         <!-- Collega AccediRegistratiView con BachecaView -->
         <input type="submit" value="Accedi"> |
@@ -33,7 +21,7 @@
 
 <script>
   import HomeNavBar from "@/components/HomeNavBar";
-  import axios from "axios";
+  // import axios from "axios";
 
   export default {
     name: "AccediRegistratiView",
@@ -42,19 +30,25 @@
     },
     methods: {
       fetchLogin() {
-        axios.get('api/utenti/login', {
-          email: this.email,
-          password: this.password
-        })
+        fetch('api/utenti/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email: this.email, password: this.password})
+        }).then(response => response.json())
+            .then(data => console.log(data))
+      },
+      /*fetchLogin() {
+        axios.get('api/utenti/login', {params: {email: this.email, password: this.password}})
             .then(response => {
-              console.log(response)
+              console.log(response);
+              // this.$refs.form.reset();
+              // this.$router.push('../accedi-registrati/bacheca');
             })
             .catch(error => {
               console.log(error)
             })
-      },
+      },*/
       onSubmit() {
-
         this.$refs.form.reset();
         this.$router.push('../accedi-registrati/bacheca');
       },
@@ -69,7 +63,7 @@
         password: ''
       }
     },
-    mounted() {
+    computed() {
       this.fetchLogin()
     }
   }

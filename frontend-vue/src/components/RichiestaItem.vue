@@ -1,10 +1,16 @@
 <template>
   <div class="richiesta-aiuto">
-    <h3>{{ nome + ' ' + cognome }}</h3>
-    <p>{{ descrizione }}</p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#aiuto">
-      Aiuta
-    </button>
+
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ nome + ' ' + cognome }}</h5>
+        <p class="card-text">{{ descrizione }}</p>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#aiuto">
+          Aiuta
+        </a>
+      </div>
+    </div>
+
     <div class="modal fade" id="aiuto" data-bs-backdrop="static" tabindex="-1" aria-labelledby="aiutoLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -17,39 +23,38 @@
               <tbody>
               <tr>
                 <td>
-                  <p>Nome richiedente: {{ nome }}</p>
-                </td>
-                <td>
-                  <button class="segnala" @click="onSegnala">Segnala</button>
+                  <p>Richiedente: {{ nome }} {{ cognome }}</p><hr>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <p>Cognome richiedente: {{ cognome }}</p>
+                  <p>Descrizione: {{ descrizione }}</p><hr>
                 </td>
               </tr>
               </tbody>
             </table>
-            <p>Seleziona i materiali che ti servono per il giorno {{ formattedDate }}</p>
+            <p>Seleziona i materiali che ti servono per il giorno {{ data }}:</p>
             <ul>
               <li>
-                <!-- TODO aggiungere la lista di tutti i materiali disponibili nel magazzino -->
-                Lista dei materiali nel magazzino !!!
+                <div>Materiale utilizzati per completare la richiesta: {{this.materialeRichiesta.nome}}</div>
               </li>
             </ul>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer d-flex mb-3">
+            <button type="button" class="btn btn-primary me-auto" @click="onSegnala">Segnala</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-            <button type="button" class="btn btn-primary">Accetta</button>
+            <button type="button" class="btn btn-primary" @click="onAccetta">Accetta</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
-import moment from "moment/moment";
+
+import axios from "axios";
 
 export default {
   name: "RichiestaItem",
@@ -58,9 +63,29 @@ export default {
     descrizione: { required: true, type: String },
     nome: { required: true, type: String },
     cognome: { required: true, type: String },
-    data: { required: true, type: Date}
+    data: { required: true, type: Date},
+    idMateriale: {required: true, type: Number}
+  },
+  data() {
+    return {
+      materialeRichiesta: {}
+    }
   },
   methods: {
+    // Funzione che carica dal server i materiali presenti nel magazzino per mostrarli nel componente
+    async fetchMateriali() {
+      await axios.get('/api/magazzini/6/materiali')
+          .then(response => {
+            response.data.forEach(element => {
+              if(element.id === this.idMateriale)
+                this.materialeRichiesta = element;
+            });
+            console.log('Materiali caricati con successo!');
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    },
     onSegnala() {
       alert("Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.");
     },
@@ -68,16 +93,11 @@ export default {
       alert(`Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."`)
     }
   },
-  data() {
-    return {
-      // TODO Recuperare la lista dei materiali dal magazzino
-      listaMateriali: []
-    }
+  mounted() {
+    this.fetchMateriali()
   },
-  computed: {
-    formattedDate() {
-      return moment(this.data).format('DD/MM/YYYY');
-    }
+  computed() {
+    this.fetchMateriali()
   }
 }
 </script>
@@ -89,5 +109,10 @@ ul {
 }
 table {
   margin: auto;
+}
+.richiesta-aiuto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

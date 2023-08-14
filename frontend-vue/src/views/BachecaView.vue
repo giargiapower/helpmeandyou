@@ -3,38 +3,50 @@
     <bacheca-nav-bar></bacheca-nav-bar>
     <h1>Bacheca</h1>
     <div class="lista-richieste">
-      <ul>
-        <li v-for="item in richieste" :key="item.id">
-          <p>{{item}}</p>
-          <!-- <richiesta-item
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" v-for="item in richieste" :key="item.id">
+          <richiesta-item v-for="nominativo in nominativi" :key="nominativo.id"
               :id="item.id"
-              :nome="item.nome"
-              :cognome="item.cognome"
-              :descrizione="item.descrizione">
-          </richiesta-item> -->
-        </li>
-      </ul>
+              :nome="nominativo.nome"
+              :cognome="nominativo.cognome"
+              :descrizione="item.descrizione"
+              :data="item.giorno"
+              :id-materiale="item.idMateriale"> <!-- TODO: chiarire data richiesta effettuata /
+                                                       data richiesta accettata /
+                                                       data richiesta completata -->
+          </richiesta-item>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import BachecaNavBar from "@/components/BachecaNavBar";
-// import RichiestaItem from "@/components/RichiestaItem";
+import RichiestaItem from "@/components/RichiestaItem";
 import axios from 'axios';
 
 export default {
   name: "BachecaView",
   components: {
-    // RichiestaItem,
+    RichiestaItem,
     BachecaNavBar
   },
   methods: {
     async fetchRichieste() {
-      axios.get('/api/richiesteaiuto/richieste')
+      await axios.get('/api/richiesteaiuto/richieste')
           .then(response => {
             this.richieste = response.data;
+
+            // Assegnazione dei nomi e dei cognomi alla proprietà "nominativi"
+            this.nominativi = this.richieste.map(richiesta => ({
+              id: richiesta.id,
+              nome: richiesta.pubAccount.nome,
+              cognome: richiesta.pubAccount.cognome
+            }));
+
             console.log('Richieste aggiungete con successo');
+            console.log(this.richieste)
           })
           .catch(error => {
             console.log(error)
@@ -43,30 +55,15 @@ export default {
   },
   data() {
     return {
-      richieste: [
-        {
-          id: 1,
-          nome: "Marco",
-          cognome: "Digiani",
-          descrizione: "prima richiesta",
-        },
-        {
-          id: 2,
-          nome: "Luca",
-          cognome: "Bicchiere",
-          descrizione: "seconda richiesta",
-        }
-      ]
+      richieste: [],
+      nominativi: []
     }
   },
   mounted() {
-    this.fetchRichieste()
+    this.fetchRichieste();
+  },
+  computed() {
+    this.fetchRichieste();
   }
 }
 </script>
-
-<style scoped>
-ul {
-  list-style: none;
-}
-</style>
