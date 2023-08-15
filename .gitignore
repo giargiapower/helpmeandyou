@@ -1,0 +1,5 @@
+/dist/*
+/node_modules/*
+/frontend-vue/.browserslistrc
+/frontend-vue/.eslintrc.js
+/.idea/*
