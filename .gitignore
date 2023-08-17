@@ -1,5 +1,6 @@
 /dist/*
 /node_modules/*
+/.idea/*
 /frontend-vue/.browserslistrc
 /frontend-vue/.eslintrc.js
-/.idea/*
+/frontend-vue/package-lock.json

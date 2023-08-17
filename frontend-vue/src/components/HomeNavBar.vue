@@ -24,7 +24,7 @@
 						<router-link to="/accedi-registrati" class="nav-link">Accedi/Registrati</router-link>  <!-- Collega HomeView a AccediRegistratiView -->
 					</li>
 					<li class="nav-item">
-						<router-link to="/contatti" class="nav-link">Contatti</router-link>
+						<router-link to="/dona-ora" class="nav-link">Donazione</router-link>
 					</li>
 				</ul>
 			</div>
@@ -40,6 +40,10 @@
 </script>
 
 <style scoped>
+	*{
+		font-size: 17px;
+
+	}
 	.logo-image {
 		max-width: 200px; /* Regola la larghezza massima dell'immagine */
 		height: auto; /* L'altezza verrà ridimensionata in base all'aspetto originale */

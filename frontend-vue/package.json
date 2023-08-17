@@ -9,9 +9,12 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.2",
+    "@popperjs/core": "^2.11.8",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
+    "bootstrap-icons": "^1.10.5",
     "bootstrap-vue": "^2.23.1",
+    "consolidate": "^1.0.1",
     "core-js": "^3.8.3",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21",

@@ -83,7 +83,7 @@
 				}
 			}
 		},
-		destroyed() {
+		unmounted() {
 			this.stopTypedEffects(); // Interrompi gli effetti Typed quando il componente viene distrutto
 		}
 	}
@@ -130,8 +130,8 @@
 		color: white;
 		cursor: pointer;
 		transition: background-color 0.5s ease;
-		border-radius: 45px;
-		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* ombra al testo */
+		border-radius: 20px;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* ombra al bottone */
 	}
 
 	.hero-button:hover {

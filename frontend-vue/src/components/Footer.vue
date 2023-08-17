@@ -18,7 +18,7 @@
 
 		<div class="footer-bottom">
 			<div class="container">
-				<p class="pull-left copyright">© Footer 2023. All rights reserved.</p>
+				<p class="pull-left copyright">Copyright © 2023. All rights reserved.</p>
 			</div>
 		</div>
 	</footer>
@@ -26,7 +26,7 @@
 
 <script>
 	export default {
-		name: "Footer"
+		name: "PageFooter"
 	}
 </script>
 

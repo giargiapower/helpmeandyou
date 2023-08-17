@@ -8,15 +8,13 @@ Frontend sviluppato con Vue.js.
 
 ## Esecuzione
 Dopo aver eseguito il backend, per eseguire il frontend:
-- Aprire terminale ed entrare nella directory /frontend-vue
+- **Aprire terminale ed entrare nella directory /frontend-vue**
+- La prima volta lanciare i comandi di "install" nella sezione seguente
 - Lanciare il comando:
   ```
   npm run serve
   ```
 - Aprire il browser e andare su http://localhost:8080/
-- Si dovrebbe vedere la pagina di login
-- Per accedere con un account di Google, cliccare sul pulsante "Accedi con Google"
-- Si verrà reindirizzati alla pagina di login di Google
 
 ---
 
@@ -24,12 +22,6 @@ Dopo aver eseguito il backend, per eseguire il frontend:
 NB!!! Installare prima **Node.js** (versione 19.2).
 ```
 npm install
-```
-```
-npm install vue bootstrap bootstrap-vue
-```
-```
-npm install typed.js
 ```
 
 #### Compiles and hot-reloads for development
@@ -49,3 +41,15 @@ npm run lint
 
 #### Prendere cose da bootstrap
 https://getbootstrap.com/docs/5.3/getting-started/introduction/
+
+
+### Note
+In passato ho installato anche:
+```
+npm install vue bootstrap bootstrap-vue
+
+npm install typed.js
+
+npm i bootstrap-icons
+```
+ma penso siano state installate come dipendenze in automatico nel package.json.
