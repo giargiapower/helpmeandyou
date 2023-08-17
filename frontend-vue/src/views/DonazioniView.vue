@@ -49,7 +49,7 @@
 													<button class="btn btn-primary mx-2 flex-grow-1" type="reset" id="annulla">Annulla</button>
 													<!-- Button trigger modal -->
 <!--													<button class="btn btn-primary mx-2 flex-grow-1" type="submit" data-bs-toggle="modal" data-bs-target="#inviaDenaro">Invia denaro</button>-->
-													<button class="btn btn-primary mx-2 flex-grow-1" type="submit" data-bs-target="#inviaDenaro">Invia denaro</button>
+													<button class="btn btn-primary mx-2 flex-grow-1" type="submit">Invia denaro</button>
 												</div>
 											</fieldset>
 										</form>
@@ -139,11 +139,11 @@
 		},
 		methods: {
 			gestisciReset() {
+				this.$refs.form.reset();
 				this.$router.push('/');
 			},
 			onSubmit() {
-				alert("Grazie per la tua donazione!\n" +
-					"I tuoi fondi contribuiranno all'acquisto di materiali per il progetto HelpMe&You.");
+				alert("Grazie per la tua donazione!\n I tuoi fondi contribuiranno all'acquisto di materiali per il progetto HelpMe&You.");
 				this.$router.push('/');
 			}
 		}
@@ -201,7 +201,7 @@
 	}
 
 	@media (min-width: 62em) {
-		 /*Stili per schermi più grandi */
+		/*Stili per schermi più grandi */
 		#cardParteSx{
 			border-top-right-radius: 0;
 			border-bottom-left-radius: 32px;

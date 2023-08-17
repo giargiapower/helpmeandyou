@@ -3,7 +3,7 @@
 		<home-nav-bar/>
 		<div class="hero-section">
 			<div class="hero-content">
-				<form @submit="onSubmit" ref="form">
+				<form @submit="onSubmitLogin" ref="form">
 					<fieldset>
 						<legend>Login</legend>
 						<div class="mb-3">
@@ -33,11 +33,79 @@
 
 				<div class="register-option">
 					<div class="or-label">Non hai ancora un account? Registrati ora!</div>
-					<button class="btn btn-block btn-primary" @click="onClick" id="registrati-button">Registrati</button>
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-block btn-primary" id="chiaro-button" data-bs-toggle="modal" data-bs-target="#registrazioneModal">Registrati</button>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="registrazioneModal" data-bs-backdrop="static" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registrazioneModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<form ref="form" @reset="gestisciReset" @submit="onSubmitRegistrazione">
+					<fieldset>
+						<div class="modal-body">
+							<legend class="custom-legend">
+								<span class="legend-text">Registrazione: inserisci i tuoi dati</span>
+								<button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</legend>
+							<p class="text-muted">Nota: Per effettuare la registrazione occorre essere maggiorenni.</p>
+
+							<div class="input-group mb-3">
+								<span class="input-group-text">Nome</span>
+								<input type="text" class="form-control" aria-label="Nome" aria-describedby="Nome" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Cognome</span>
+								<input type="text" class="form-control" aria-label="Cognome" aria-describedby="Cognome" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Data di nascita</span>
+								<input type="date" class="form-control" :max="maxDate" aria-label="Data nascita" aria-describedby="Data nascita" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Numero di telefono</span>
+								<span class="input-group-text">+39</span>
+								<input type="text" class="form-control" minlength="10" maxlength="10" aria-label="Numero telefono" aria-describedby="Numero telefono" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Email</span>
+								<input type="email" class="form-control" aria-label="Email" aria-describedby="Email" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Password</span>
+								<input type="password" class="form-control" aria-label="Password" aria-describedby="Password" pattern=".{8,}" title="La password deve avere almeno 8 caratteri" required>
+							</div>
+<!--								TODO: io toglierei il domicilio all'utente e lo lascerei solo alla richiesta. Se vuole l'utente filtra la regione della richiesta e stop-->
+							<div class="input-group mb-3">
+								<span class="input-group-text">Domicilio(?)</span>
+								<input type="text" class="form-control" aria-label="Domicilio" aria-describedby="Domicilio" required>
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Documento d'identità</span>
+								<input type="file" class="form-control" aria-label="Documento d'identità" aria-describedby="Documento d'identità" required>
+<!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Curriculum</span>
+								<input type="file" class="form-control" aria-label="Curriculum" aria-describedby="Curriculum" required>
+<!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary mx-4 flex-grow-1" data-bs-dismiss="modal" type="reset" id="chiaro-button">Annulla</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Conferma</button>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
 
 <!--	<div class="accedi-registrati">-->
 <!--		<form @submit="onSubmit" ref="form">-->
@@ -59,53 +127,74 @@
 </template>
 
 <script>
-import HomeNavBar from "@/components/HomeNavBar";
-// import axios from "axios";
+	import HomeNavBar from "@/components/HomeNavBar";
+	// import axios from "axios";
 
-export default {
-	name: "AccediRegistratiView",
-	components: {
-		HomeNavBar
-	},
-	methods: {
-		fetchLogin() {
-			fetch('api/utenti/login', {
-				method: 'POST',
-				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify({email: this.email, password: this.password})
-			}).then(response => response.json())
-				.then(data => console.log(data))
+	export default {
+		name: "AccediRegistratiView",
+		components: {
+			HomeNavBar
 		},
-		/*fetchLogin() {
-		  axios.get('api/utenti/login', {params: {email: this.email, password: this.password}})
-			  .then(response => {
-				console.log(response);
-				// this.$refs.form.reset();
-				// this.$router.push('../accedi-registrati/bacheca');
-			  })
-			  .catch(error => {
-				console.log(error)
-			  })
-		},*/
-		onSubmit() {
-			this.$refs.form.reset();
-			this.$router.push('../accedi-registrati/bacheca');
+		methods: {
+			fetchLogin() {
+				fetch('api/utenti/login', {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify({email: this.email, password: this.password})
+				}).then(response => response.json())
+					.then(data => console.log(data))
+			},
+			/*fetchLogin() {
+			  axios.get('api/utenti/login', {params: {email: this.email, password: this.password}})
+				  .then(response => {
+					console.log(response);
+					// this.$refs.form.reset();
+					// this.$router.push('../accedi-registrati/bacheca');
+				  })
+				  .catch(error => {
+					console.log(error)
+				  })
+			},*/
+			onSubmitLogin() {
+				this.$refs.form.reset();
+				this.$router.push('../accedi-registrati/bacheca');
+			},
+			onSubmitRegistrazione() {
+				// TODO: fare l'alert più carino
+				alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
+
+				this.$refs.form.reset();
+				this.$router.push('/');
+				// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
+				window.location.href = '/';
+			},
+			gestisciReset() {
+				this.$refs.form.reset();
+			},
+			// onClick() {
+			// 	this.$refs.form.reset();
+			// 	// this.$router.push('../accedi-registrati/registrazione');
+			// },
+			calculateMaxDate() {
+				const currentDate = new Date();
+				const maxYear = currentDate.getFullYear() - 18; // Calcola la data massima per avere almeno 18 anni
+				const maxMonth = currentDate.getMonth() + 1; // Aggiungi 1 perché i mesi in JavaScript sono indicizzati da 0
+				const maxDay = currentDate.getDate();
+
+				return `${maxYear}-${maxMonth.toString().padStart(2, '0')}-${maxDay.toString().padStart(2, '0')}`;
+			}
 		},
-		onClick() {
-			this.$refs.form.reset();
-			this.$router.push('../accedi-registrati/registrazione');
+		data() {
+			return {
+				email: '',
+				password: '',
+				maxDate: this.calculateMaxDate()
+			}
+		},
+		computed() {
+			this.fetchLogin()
 		}
-	},
-	data() {
-		return {
-			email: '',
-			password: ''
-		}
-	},
-	computed() {
-		this.fetchLogin()
 	}
-}
 </script>
 
 <style scoped>
@@ -122,7 +211,7 @@ export default {
 	}
 
 	.hero-content {
-		background-color: rgb(255, 255, 255);
+		background-color: #ffffff;
 		border-radius: 45px;
 		padding: 1.5em 3em;
 		display: inline-block;
@@ -133,8 +222,11 @@ export default {
 	legend {
 		font-weight: bold;
 		font-size: 2em;
-		margin-bottom: 1em;
 		/*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); !* ombra al testo *!*/
+	}
+
+	p {
+		margin-bottom: 2em;
 	}
 
 	.mb-3 {
@@ -166,13 +258,13 @@ export default {
 		background-color: #b70000ff;
 	}
 
-	#registrati-button {
+	#chiaro-button {
 		background-color: #ffffff;
 		border: 0.1px solid rgba(13, 23, 196, 0.5);
 		color: #0d17c4ff;
 	}
 
-	#registrati-button:hover {
+	#chiaro-button:hover {
 		background-color: #0d17c419;
 	}
 
@@ -209,5 +301,33 @@ export default {
 			transform: translateY(0);
 			opacity: 1;
 		}
+	}
+
+	/*Parte Registrazione*/
+	.modal-content{
+		background-color: #ffffff;
+		border-radius: 45px;
+		padding: 1.5em 3em;
+		display: inline-block;
+		height: fit-content;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
+	form{
+		background-color: #ffffff;	  /* Aggiunge stile di sfondo per tutta la pagina */
+	}
+
+	.custom-legend{
+		display: flex;
+		align-items: center;
+	}
+
+	.legend-text {
+		flex-grow: 1;
+		text-align: center;
+	}
+
+	.btn-close {
+		align-self: flex-start;
 	}
 </style>
