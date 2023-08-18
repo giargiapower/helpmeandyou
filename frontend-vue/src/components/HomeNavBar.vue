@@ -1,21 +1,13 @@
 <template>
 	<nav class="navbar navbar-expand-lg" style="background-color: #e9faf5">
-		<div class="container">
+		<div class="container-fluid">
 			<router-link to="/" class="navbar-brand">
 				<img src="@/assets/logo_app-removebg.png" alt="HelpMe&You" class="logo-image">
 			</router-link>
-			<button
-				class="navbar-toggler"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#navbarNav"
-				aria-controls="navbarNav"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-			>
+			<button class="navbar-toggler" type="button" @click="toggleNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
+			<div class="collapse navbar-collapse" :class="{ show: isNavOpen }" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<router-link to="/" class="nav-link">Home</router-link>
@@ -35,8 +27,18 @@
 
 <script>
 	export default {
-		name: "NavBar"
-	};
+		name: "NavBar",
+		data() {
+			return {
+				isNavOpen: false // Inizialmente la navbar è chiusa
+			};
+		},
+		methods: {
+			toggleNav() {
+				this.isNavOpen = !this.isNavOpen;
+			}
+		}
+	}
 </script>
 
 <style scoped>

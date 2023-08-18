@@ -1,21 +1,61 @@
+<!--TODO: DA TOGLIERE. Secondo me sarebbe meglio usare un'unica navbar e visualizzare cose diverse a seconda del ruolo dell'utente (loggato o meno)-->
+
 <template>
-  <div class="nav-bar">
-    <nav>
-      <router-link to="/accedi-registrati/bacheca">Bacheca</router-link> |
-      <router-link to="/accedi-registrati/bacheca/crea-richiesta">Crea richiesta</router-link> |
-      <router-link to="/accedi-registrati/bacheca/mie-attivita">Le mie attività</router-link> |
-      <router-link to="/accedi-registrati/bacheca/profilo">Profilo</router-link> |
-      <router-link to="/accedi-registrati">Logout</router-link>
-    </nav>
-  </div>
+	<nav class="navbar navbar-expand-lg" style="background-color: #e9faf5">
+		<div class="container-fluid">
+			<router-link to="/" class="navbar-brand">
+				<img src="@/assets/logo_app-removebg.png" alt="HelpMe&You" class="logo-image">
+			</router-link>
+			<button class="navbar-toggler" type="button" @click="toggleNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" :class="{ show: isNavOpen }" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<router-link to="/accedi-registrati/bacheca" class="nav-link">Bacheca</router-link>
+					</li>
+					<li class="nav-item">
+						<router-link to="/accedi-registrati/bacheca/crea-richiesta" class="nav-link">Crea richiesta</router-link>
+					</li>
+					<li class="nav-item">
+						<router-link to="/accedi-registrati/bacheca/mie-attivita" class="nav-link">Le mie attività</router-link>
+					</li>
+					<li class="nav-item">
+						<router-link to="/accedi-registrati/bacheca/profilo" class="nav-link">Profilo</router-link>
+					</li>
+					<li class="nav-item">
+						<router-link to="/" class="nav-link">Logout</router-link>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 </template>
 
 <script>
-export default {
-  name: "BachecaNavBar"
-}
+	export default {
+		name: "BachecaNavBar",
+		data() {
+			return {
+				isNavOpen: false // Inizialmente la navbar è chiusa
+			};
+		},
+		methods: {
+			toggleNav() {
+				this.isNavOpen = !this.isNavOpen;
+			}
+		}
+	};
 </script>
 
 <style scoped>
+	*{
+		font-size: 17px;
 
+	}
+	.logo-image {
+		max-width: 200px; /* Regola la larghezza massima dell'immagine */
+		height: auto; /* L'altezza verrà ridimensionata in base all'aspetto originale */
+	}
 </style>
