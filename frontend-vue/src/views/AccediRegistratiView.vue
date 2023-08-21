@@ -52,7 +52,7 @@
 								<span class="legend-text">Registrazione: inserisci i tuoi dati</span>
 								<button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</legend>
-							<p class="text-muted">Nota: Per effettuare la registrazione occorre essere maggiorenni.</p>
+							<p class="text-muted">Nota: Per effettuare la registrazione occorre essere maggiorenni</p>
 
 							<div class="input-group mb-3">
 								<span class="input-group-text">Nome</span>
@@ -96,7 +96,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-secondary mx-4 flex-grow-1" data-bs-dismiss="modal" type="reset" id="chiaro-button">Annulla</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" data-bs-dismiss="modal" type="reset" id="chiaro-button">Annulla</button>
 							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Conferma</button>
 						</div>
 					</fieldset>
@@ -233,7 +233,7 @@
 		text-align: start;
 	}
 
-	button {
+	.btn-primary {
 		margin: 20px 0; /* Aggiunge spazio verticale prima e dopo il bottone */
 		padding: 10px 20px;
 		font-size: 18px;
@@ -246,7 +246,7 @@
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
-	button:hover {
+	.btn-primary:hover {
 		background-color: #0d17c4ff;
 	}
 

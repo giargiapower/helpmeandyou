@@ -51,5 +51,9 @@ npm install vue bootstrap bootstrap-vue
 npm install typed.js
 
 npm i bootstrap-icons
+
+npm install bootstrap
+
+npm install vuex --save
 ```
 ma penso siano state installate come dipendenze in automatico nel package.json.

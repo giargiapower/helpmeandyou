@@ -17,7 +17,7 @@
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Provincia</span>
-							<input type="text" class="form-control" aria-label="Provincia" aria-describedby="Provincia" required>
+							<input type="text" class="form-control" minlength="3" aria-label="Provincia" aria-describedby="Provincia" title="Inserisci il nome per esteso" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Città</span>
@@ -27,8 +27,8 @@
 							<span class="input-group-text">Indirizzo</span>
 							<input type="text" class="form-control" aria-label="Indirizzo" aria-describedby="Indirizzo" id="indirizzo" required>
 
-							<span class="input-group-text ms-4" id="numeroCivico">N°</span>
-							<input type="text" class="form-control" aria-label="NumeroCivico" aria-describedby="NumeroCivico" required>
+<!--							<span class="input-group-text ms-4" id="numeroCivico">N°</span>-->
+<!--							<input type="text" class="form-control" aria-label="NumeroCivico" aria-describedby="NumeroCivico" required>-->
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Categoria</span>
@@ -269,7 +269,6 @@
 	legend {
 		font-weight: bold;
 		font-size: 2em;
-		/*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); !* ombra al testo *!*/
 	}
 
 	p {
@@ -297,14 +296,6 @@
 		background-color: #0d17c4ff;
 	}
 
-	#google-button {
-		background-color: #dd4b39;
-	}
-
-	#google-button:hover {
-		background-color: #b70000ff;
-	}
-
 	#chiaro-button {
 		background-color: #ffffff;
 		border: 0.1px solid rgba(13, 23, 196, 0.5);
@@ -313,30 +304,6 @@
 
 	#chiaro-button:hover {
 		background-color: #0d17c419;
-	}
-
-	.or-container {
-		align-items: center;
-		display: flex;
-		margin: 10px 0;
-	}
-
-	.line-separator {
-		background-color: #ccccccff;
-		flex-grow: 5;
-		height: 1px;
-	}
-
-	.or-label {
-		flex-grow: 1;
-		margin: 0 15px;
-		text-align: center;
-	}
-
-	.divider {
-		border: none;
-		border-top: 1px solid #ccccccff;
-		margin: 15px 0;
 	}
 
 	@keyframes fadeInUp {
@@ -351,31 +318,8 @@
 	}
 
 	/*Parte Registrazione*/
-	.modal-content{
-		background-color: #ffffff;
-		border-radius: 45px;
-		padding: 1.5em 3em;
-		display: inline-block;
-		height: fit-content;
-		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-	}
-
 	form{
 		background-color: #ffffff;	  /* Aggiunge stile di sfondo per tutta la pagina */
-	}
-
-	.custom-legend{
-		display: flex;
-		align-items: center;
-	}
-
-	.legend-text {
-		flex-grow: 1;
-		text-align: center;
-	}
-
-	.btn-close {
-		align-self: flex-start;
 	}
 
 	#indirizzo{
