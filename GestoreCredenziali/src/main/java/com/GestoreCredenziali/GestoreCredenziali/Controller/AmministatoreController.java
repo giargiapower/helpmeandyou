@@ -51,7 +51,7 @@ public class AmministatoreController {
     // inizialmente frontend per amministratore chiede tutti gli account da approvare
     // per ciascun account chiamerà una getCv e getId per ottenere i suoi documenti e curriculum
     @GetMapping("/cv")
-    public ResponseEntity<Resource> getCV(@RequestPart("fileName")  String fileName, HttpServletRequest request) {
+    public ResponseEntity<Resource> getCV(@RequestParam("fileName")  String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource( "Documents/CV/" + fileName);
 
@@ -75,7 +75,7 @@ public class AmministatoreController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Resource> getDocumento(@RequestPart("fileName") String fileName, HttpServletRequest request) {
+    public ResponseEntity<Resource> getDocumento(@RequestParam("fileName") String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource("Documents/Documenti_identita/" + fileName);
 
