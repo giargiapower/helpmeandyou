@@ -324,8 +324,9 @@
 		name: "MieAttivitaView",
 		components: {BachecaNavBar},
 		methods: {
-			onSubmit() {
+			async onSubmit() {
 				if (this.$refs.form.checkValidity()) {
+					await
 					alert(`Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.`);
 				} else {
 					alert('Form non valido')

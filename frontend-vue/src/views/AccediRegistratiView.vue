@@ -136,14 +136,14 @@
 			HomeNavBar
 		},
 		methods: {
-			fetchLogin() {
+			/*fetchLogin() {
 				fetch('api/utenti/login', {
 					method: 'POST',
 					headers: {'Content-Type': 'application/json'},
 					body: JSON.stringify({email: this.email, password: this.password})
 				}).then(response => response.json())
 					.then(data => console.log(data))
-			},
+			},*/
 			/*fetchLogin() {
 			  axios.get('api/utenti/login', {params: {email: this.email, password: this.password}})
 				  .then(response => {
@@ -159,6 +159,18 @@
 				this.$refs.form.reset();
 				this.$router.push('../accedi-registrati/bacheca');
 			},
+			// async onSubmitLogin(email, password) {
+			// 	const axiosInstance = axios.create({timeout: 5000});
+			// 	await axiosInstance.post(`/api/utenti/login?email=${email}&password=${password}`)
+			// 		.then(response => {
+			// 			console.log(response.data);
+			// 			this.$refs.form.reset();
+			// 			this.$router.push('../accedi-registrati/bacheca');
+			// 		})
+			// 		.catch(errors => {
+			// 			console.log(errors);
+			// 		})
+			// },
 			onSubmitRegistrazione() {
 				// TODO: fare l'alert più carino
 				alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
