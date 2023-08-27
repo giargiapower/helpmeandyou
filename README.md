@@ -7,8 +7,6 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 ---
 ## COSE CHE NON MI FUNZIONANO:
 - gestore_cred_amministratore_controller:
-  - prendi cv singolo utente
-  - prendi documento singolo utente
   - aggiorna categoria account
 - magazzino, da sistemare:
   - richiedi singolo magazzino
@@ -46,7 +44,7 @@ Consentire il login di google con le porte 8085, 30000 e 9000
       oppure:```kubectl scale deployment --all --replicas=0```
   - **i servizi** usare il comando:
     ```
-    kubectl delete service --all
+    kubectl delete services --all
     ```
 
 ---

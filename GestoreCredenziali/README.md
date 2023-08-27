@@ -61,13 +61,17 @@ andare su body --> form-data --> inserire tra le Key:
 Mettere su postman get e:
 - Per ritornare tutti gli utenti da approvare: inserire l'indirizzo http://localhost:8085/api/amministratore/da_approvare/list
 
-- Per ritornare il cv di un utente: inserire l'indirizzo http://localhost:8085/api/amministratore/cv
-  andare su Body -> inserire come parametro in form-data (alto sinistra): fileName (Key) e il nome del file salvato. Sappiamo il nome
-  perchè quando viene salvato viene castato come emailaccount.estensione del file. noi accettiamo solo i pdf
-  che blocchiamo da frontend. ad esempio se l'account è prova@prova allora il file sarà prova@prova.estensione
+- Per ritornare il cv di un utente:
+  - inserire l'indirizzo http://localhost:8085/api/amministratore/cv
+  - andare su Body -> form-data (alto sinistra)
+  - scrivere come Key "fileName" e come Value il nome del file salvato (es. "prova@prova.pdf"). 
+    NB!! Sappiamo il nome del file perchè quando viene salvato viene castato come emailaccount.estensione del file. Noi accettiamo solo i pdf
+    che blocchiamo da frontend. Ad esempio se l'account è prova@prova allora il file sarà prova@prova.estensione
 
-- Per ritornare il cv di un utente: inserire su postman l'indirizzo http://localhost:8085/api/amministratore/id
-  e poi stessa cosa come per cv
+- Per ritornare il documento di un utente:
+  - inserire su postman l'indirizzo http://localhost:8085/api/amministratore/id
+  - andare su Body -> form-data (alto sinistra)
+  - scrivere come Key "fileName" e come Value il nome del file salvato (es. "prova@prova.pdf").
 
 
 #### PUT
