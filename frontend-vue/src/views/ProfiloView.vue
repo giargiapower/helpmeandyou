@@ -60,8 +60,8 @@
 										</div>
 										<button v-if="!editing" class="btn btn-block btn-primary d-grid gap-2 col-6 mx-auto" type="button" @click="toggleEditing">Modifica</button>
 										<div v-else class="d-flex justify-content-center">
-											<button class="btn btn-primary mx-2 flex-grow-1" type="button" @click="cancelEditing" id="annulla">Annulla</button>
-											<button class="btn btn-primary mx-2 flex-grow-1" type="button" @click="toggleEditing">Salva</button>
+											<button class="btn btn-primary mx-2 mx-md-3 mx-lg-5 flex-grow-1" type="button" @click="cancelEditing" id="annulla">Annulla</button>
+											<button class="btn btn-primary mx-2 mx-md-3 mx-lg-5 flex-grow-1" type="button" @click="toggleEditing">Salva</button>
 										</div>
 									</div>
 								</div>
@@ -153,7 +153,7 @@
 			},
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
-					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :)
+					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :) (solo in caso di eventuali modifiche)
 					this.phoneNumber = this.editedPhoneNumber;
 					this.email = this.editedEmail;
 					this.domicile = this.editedDomicile;
