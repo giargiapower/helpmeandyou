@@ -49,13 +49,17 @@
 										<div class="row">
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Documento d'identità</p>
+<!--												TODO: volendo mettere il link per il download qui sotto come fatto altrove-->
 												<h6 class="text-muted f-w-400">{{ editing ? '' : identityDocument }}</h6>
-												<input v-if="editing" v-model="editedIdentityDocument" type="file" class="form-control">
+<!--												<input v-if="editing" v-model="editedIdentityDocument" type="file" class="form-control">-->
+												<input v-if="editing" type="file" class="form-control">
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Curriculum</p>
+												<!--												TODO: volendo mettere il link per il download qui sotto come fatto altrove-->
 												<h6 class="text-muted f-w-400">{{ editing ? '' : curriculum }}</h6>
-												<input v-if="editing" v-model="editedCurriculum" type="file" class="form-control">
+<!--												<input v-if="editing" v-model="editedCurriculum" type="file" class="form-control">-->
+												<input v-if="editing" type="file" class="form-control">
 											</div>
 										</div>
 										<button v-if="!editing" class="btn btn-block btn-primary d-grid gap-2 col-6 mx-auto" type="button" @click="toggleEditing">Modifica</button>
