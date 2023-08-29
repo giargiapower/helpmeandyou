@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-expand-lg" style="background-color: #e9faf5">
+	<nav class="navbar navbar-expand-lg">
 		<div class="container-fluid">
 			<router-link to="/" class="navbar-brand">
 				<img src="@/assets/logo_app-removebg.png" alt="HelpMe&You" class="logo-image">
@@ -49,5 +49,8 @@
 	.logo-image {
 		max-width: 200px; /* Regola la larghezza massima dell'immagine */
 		height: auto; /* L'altezza verrà ridimensionata in base all'aspetto originale */
+	}
+	.navbar {
+		background: linear-gradient(to right, rgba(118, 236, 183, 0.8), rgb(233, 250, 245));
 	}
 </style>

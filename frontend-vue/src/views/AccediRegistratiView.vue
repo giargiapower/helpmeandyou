@@ -337,6 +337,7 @@
 	.legend-text {
 		flex-grow: 1;
 		text-align: center;
+		color: black;
 	}
 
 	.btn-close {

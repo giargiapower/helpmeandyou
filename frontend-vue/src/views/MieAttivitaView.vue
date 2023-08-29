@@ -1,7 +1,7 @@
 <template>
-	<bacheca-nav-bar/>
 	<!-- Section: Design Block -->
 	<div class="home-container">
+		<bacheca-nav-bar/>
 		<section class="text-center">
 			<!-- Background image -->
 			<div class="p-5 bg-image"/>
