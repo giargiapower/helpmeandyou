@@ -190,6 +190,7 @@
 		min-height: 100%;
 		text-align: center;
 		animation: fadeInUp 1s ease;
+		background: linear-gradient(to bottom, #a7fada, #ccfaee, #e9faf5, rgba(13, 23, 196, 0.15));
 	}
 
 	.hero-section {
@@ -201,13 +202,13 @@
 
 	.hero-content {
 		text-align: center;
-		color: black;
+		color: white;
 		margin-top: 50px;
 		margin-bottom: 30px;
-		padding: 2em 4em;
-		padding-top: 2.5em;
+		padding: 1em 3em;
+		padding-top: 2em;
 		display: inline-block;
-		background-color: rgb(255, 255, 255); /* colore #76ecb7 con opacità al 50% */
+		background-color: rgba(118, 236, 183, 0.6); /* colore #76ecb7 con opacità al 50% */
 		border-radius: 45px;
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* ombra al testo */
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -224,8 +225,8 @@
 	/* Stile per le scritte a schermo intero */
 	@media (min-width: 767.5px){
 		.container {
-			margin-top: 50px;
-			margin-bottom: 50px;
+			margin-top: 100px;
+			margin-bottom: 0;
 		}
 	}
 
@@ -273,18 +274,10 @@
 		color: white;
 	}
 
-	.red-background {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		/*background: url("@/assets/home-background.jpg") center/cover no-repeat;*/
-		/*clip-path: polygon(0 50%, 0 0, 100% 0, 100% 50%, 50% 100%);*/
-	}
-
 	.card-container {
-		margin: 50px;
+		margin-top: 30px;
+		margin-right: 50px;
+		margin-left: 50px;
 	}
 
 </style>

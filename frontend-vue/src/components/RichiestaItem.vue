@@ -215,6 +215,7 @@
 		/*margin-left: 20px;*/
 		margin-bottom: 50px;
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+		border-width: 1px;
 		border-radius: 20px;
 	}
 
