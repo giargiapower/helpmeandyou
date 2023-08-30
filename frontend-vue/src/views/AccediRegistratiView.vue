@@ -235,7 +235,7 @@
 		font-weight: bold;
 		font-size: 2em;
 		color: black;
-		/*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); !* ombra al testo *!*/
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	}
 
 	p {

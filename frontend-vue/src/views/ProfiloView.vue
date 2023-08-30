@@ -20,7 +20,7 @@
 								</div>
 								<div class="col-sm-8">
 									<div class="card-block">
-										<h3 class="m-b-25 p-b-5 b-b-default f-w-600">Il mio profilo</h3>
+										<h3 class="m-b-25 p-b-5 b-b-default f-w-600" id="title">Il mio profilo</h3>
 										<div class="row">
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Data di nascita</p>
@@ -237,9 +237,17 @@
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
+	#title {
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		font-size: 2.5em;
+	}
+
 	@media (max-width: 575.5px) {
 		.img-fluid {
 			max-width: 40%; /* Dimensione massima per schermi piccoli */
+		}
+		#title {
+			font-size: 2.3em;
 		}
 	}
 
@@ -250,6 +258,9 @@
 		}
 		.card-block h5 {
 			font-size: 18px;
+		}
+		#title {
+			font-size: 2.3em;
 		}
 	}
 
@@ -275,6 +286,9 @@
 		.card-block .row {
 			margin-bottom: 10px;
 			padding-bottom: 2.5px;
+		}
+		#title {
+			font-size: 2em;
 		}
 	}
 

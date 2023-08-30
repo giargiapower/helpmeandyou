@@ -176,7 +176,7 @@
 		font-weight: bold;
 		font-size: 2em;
 		margin-bottom: 1em;
-		/*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); !* ombra al testo *!*/
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	}
 
 	.gradient-custom-2 {

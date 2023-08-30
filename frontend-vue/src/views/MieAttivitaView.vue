@@ -356,6 +356,7 @@
 		font-weight: bold;
 		font-size: 2.5em;
 		margin-bottom: 20px;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	}
 
 	@keyframes fadeInUp {
