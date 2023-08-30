@@ -14,13 +14,14 @@
 			<div class="modal-content">
 				<form ref="form">
 					<fieldset>
-						<div class="modal-body">
+						<div class="modal-header">
 							<legend class="custom-legend">
 								<span class="legend-text">Dai il tuo aiuto!</span>
 								<button type="button" class="btn btn-outline-danger" @click="onSegnala">Segnala</button>
 							</legend>
-
-							<div class="container text-center mt-5">
+						</div>
+						<div class="modal-body">
+							<div class="container text-center">
 								<div class="row row-cols-1 row-cols-md-2">
 									<div class="col">
 										<div class="list-group-item d-flex">

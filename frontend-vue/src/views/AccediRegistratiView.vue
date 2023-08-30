@@ -29,7 +29,7 @@
 					</button>
 				</div>
 
-				<div class="divider"></div>
+				<div class="divider"/>
 
 				<div class="register-option">
 					<div class="or-label">Non hai ancora un account? Registrati ora!</div>
@@ -53,6 +53,8 @@
 								<button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</legend>
 							<p class="text-muted">Nota: Per effettuare la registrazione occorre essere maggiorenni</p>
+
+							<div class="divider2"/>
 
 							<div class="input-group mb-3">
 								<span class="input-group-text">Nome</span>
@@ -303,6 +305,13 @@
 		border: none;
 		border-top: 1px solid #ccccccff;
 		margin: 15px 0;
+	}
+
+	.divider2 {
+		border: none;
+		border-top: 1px solid rgba(204, 204, 204, 0.6);
+		margin-bottom: 33px;
+		margin-top: -10px;
 	}
 
 	@keyframes fadeInUp {

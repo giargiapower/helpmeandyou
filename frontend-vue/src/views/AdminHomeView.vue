@@ -1,30 +1,76 @@
 <template>
-	<div class="admin-home">
+	<div class="home-container">
 		<admin-nav-bar></admin-nav-bar>
-		<h2>Approvazione utenti</h2>
-		<table>
-			<thead>
-			<tr>
-				<th>Utenti</th>
-				<th>Stato account</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="utente in listaUtentiDaApprovare" :key="utente.id">
-				<td>{{ utente.nome + ' ' + utente.cognome }}</td>
-				<td v-if="utente.stato === 'da_approvare'">Approvare</td>
-				<td v-else>Aggiornamento</td>
-				<td>
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + utente.id">
-						Verifica
-					</button>
-				</td>
-			</tr>
-			</tbody>
-			<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente">
-			</verifica-utente-item>
-		</table>
+		<section class="text-center">
+			<div class="p-5 bg-image"/>
+			<div class="col-lg-10 mx-auto">
+				<div class="card mx-4 shadow-5-strong">
+					<div class="card-body py-5">
+						<div class="row d-flex justify-content-center">
+							<div class="col-lg-10">
+								<h1 class="fw-bold mb-5">Approvazione utenti</h1>
+								<div class="table-responsive">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Utente</th>
+												<th scope="col">Stato account</th>
+												<th scope="col"></th>
+											</tr>
+										</thead>
+										<tbody class="table-group-divider">
+											<tr v-for="utente in listaUtentiDaApprovare" :key="utente.id">
+												<th scope="row">1</th>
+												<td>{{ utente.nome + ' ' + utente.cognome }}</td>
+												<td v-if="utente.stato === 'da_approvare'">Approvare</td>
+												<td v-else>Aggiornamento</td>
+												<td>
+													<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + utente.id">Verifica</button>
+												</td>
+											</tr>
+										</tbody>
+										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente"/>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bg-color"></div>
+		</section>
 	</div>
+
+
+
+<!--	<div class="admin-home">-->
+<!--		<admin-nav-bar></admin-nav-bar>-->
+<!--		<h2>Approvazione utenti</h2>-->
+<!--		<table>-->
+<!--			<thead>-->
+<!--			<tr>-->
+<!--				<th>Utenti</th>-->
+<!--				<th>Stato account</th>-->
+<!--			</tr>-->
+<!--			</thead>-->
+<!--			<tbody>-->
+<!--			<tr v-for="utente in listaUtentiDaApprovare" :key="utente.id">-->
+<!--				<td>{{ utente.nome + ' ' + utente.cognome }}</td>-->
+<!--				<td v-if="utente.stato === 'da_approvare'">Approvare</td>-->
+<!--				<td v-else>Aggiornamento</td>-->
+<!--				<td>-->
+<!--					<button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + utente.id">-->
+<!--						Verifica-->
+<!--					</button>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--			</tbody>-->
+<!--			<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente">-->
+<!--			</verifica-utente-item>-->
+<!--		</table>-->
+<!--	</div>-->
+
 </template>
 
 <script>
@@ -63,7 +109,61 @@ export default {
 </script>
 
 <style scoped>
-table {
-	margin: auto;
-}
+	.home-container {
+		min-height: 100%;
+		text-align: center;
+		background: linear-gradient(to top, #595cff, #9bf8f4, #9bf8f4);
+		animation: fadeInUp 1s ease;
+	}
+
+	h1 {
+		font-weight: bold;
+		font-size: 2.5em;
+		margin-bottom: 20px;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	}
+
+	@keyframes fadeInUp {
+		from {
+			transform: translateY(20px);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+
+	.bg-image {
+		background: url("@/assets/home-background.jpg") center/cover no-repeat;
+		height: 45vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.bg-color {
+		background: linear-gradient(to bottom, rgba(13, 23, 196, 0), rgba(13, 23, 196, 0));
+		height: 50px;
+	}
+
+	.shadow-5-strong {
+		margin-top: -100px;
+		border-radius: 45px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+	}
+
+	.btn-primary {
+		background-color: #5c6df8;
+		border: none;
+		color: white;
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		border-radius: 20px;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
+	.btn-primary:hover {
+		background-color: #0d17c4ff;
+	}
 </style>

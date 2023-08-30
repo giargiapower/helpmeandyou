@@ -175,13 +175,15 @@
 			<div class="modal-content">
 				<form ref="form">
 					<fieldset>
-						<div class="modal-body">
+						<div class="modal-header">
 							<legend class="custom-legend">
 								<span class="legend-text">Informazioni aggiuntive</span>
 								<button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</legend>
+						</div>
 
-							<div class="container text-center mt-5">
+						<div class="modal-body">
+							<div class="container text-center">
 								<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2">
 									<div class="col">
 										<div class="list-group-item d-flex">
@@ -259,7 +261,7 @@
 								<button type="reset" class="btn-close btn-lg" data-bs-dismiss="modal" aria-label="Close"></button>
 							</legend>
 							<p class="text-muted">Nota: Inserisci il maggior numero di dettagli possibile</p>
-
+							<div class="divider"/>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Descrizione del problema</span>
 								<textarea rows="5" class="form-control" minlength="20" aria-label="Descrizione richiesta" aria-describedby="Descrizione richiesta" title="La descrizione deve avere almeno 20 caratteri" required></textarea>
@@ -472,4 +474,10 @@
 		font-size: 16px;
 	}
 
+	.divider {
+		border: none;
+		border-top: 1px solid rgba(204, 204, 204, 0.6);
+		margin-bottom: 33px;
+		margin-top: -10px;
+	}
 </style>

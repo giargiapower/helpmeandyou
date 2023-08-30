@@ -53,7 +53,7 @@
 	}
 
 	.hero-section {
-		background: linear-gradient(to bottom, #0061ff, #60efff);
+		background: linear-gradient(to bottom, #595cff, #9bf8f4);
 		height: 100vh;
 		display: flex;
 		align-items: center;
@@ -76,10 +76,6 @@
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	}
 
-	p {
-		margin-bottom: 2em;
-	}
-
 	.mb-3 {
 		text-align: start;
 	}
@@ -99,48 +95,6 @@
 
 	.btn-primary:hover {
 		background-color: #0d17c4ff;
-	}
-
-	#google-button {
-		background-color: #dd4b39;
-	}
-
-	#google-button:hover {
-		background-color: #b70000ff;
-	}
-
-	#chiaro-button {
-		background-color: #ffffff;
-		border: 0.1px solid rgba(13, 23, 196, 0.5);
-		color: #0d17c4ff;
-	}
-
-	#chiaro-button:hover {
-		background-color: #0d17c419;
-	}
-
-	.or-container {
-		align-items: center;
-		display: flex;
-		margin: 10px 0;
-	}
-
-	.line-separator {
-		background-color: #ccccccff;
-		flex-grow: 5;
-		height: 1px;
-	}
-
-	.or-label {
-		flex-grow: 1;
-		margin: 0 15px;
-		text-align: center;
-	}
-
-	.divider {
-		border: none;
-		border-top: 1px solid #ccccccff;
-		margin: 15px 0;
 	}
 
 	@keyframes fadeInUp {
