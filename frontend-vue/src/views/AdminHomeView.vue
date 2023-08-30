@@ -86,8 +86,14 @@ export default {
 		async fetchUtentiDaApprovare() {
 			await axios.get('/api/amministratore/da_approvare/list')
 				.then(response => {
-					this.listaUtentiDaApprovare = response.data;
+					this.listaUtentiDaApprovare = response.data.map(utente => {
+						if (utente.category === null) {
+							utente.category = "Nessuna categoria";
+						}
+						return utente;
+					});
 					console.log('Lista utenti caricata con successo.')
+					console.log(this.listaUtentiDaApprovare)
 				})
 				.catch(errors => {
 					console.error(errors)

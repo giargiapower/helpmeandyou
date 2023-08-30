@@ -81,7 +81,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary mx-4 flex-grow-1" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
 							<button class="btn btn-primary mx-4 flex-grow-1" @click="onAccetta">Accetta</button>
 						</div>
 					</fieldset>
