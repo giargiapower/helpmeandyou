@@ -74,44 +74,47 @@
 </template>
 
 <script>
-import AdminNavBar from "@/components/AdminNavBar";
-import axios from "axios";
-import VerificaUtenteItem from "@/components/VerificaUtenteItem";
+	import AdminNavBar from "@/components/AdminNavBar";
+	import axios from "axios";
+	import VerificaUtenteItem from "@/components/VerificaUtenteItem";
 
-export default {
-	name: "AdminHomeView",
-	components: {VerificaUtenteItem, AdminNavBar},
-	methods: {
-		// Funzione che calcola la lista di utenti da approvare
-		async fetchUtentiDaApprovare() {
-			await axios.get('/api/amministratore/da_approvare/list')
-				.then(response => {
-					this.listaUtentiDaApprovare = response.data.map(utente => {
-						if (utente.category === null) {
-							utente.category = "Nessuna categoria";
-						}
-						return utente;
-					});
-					console.log('Lista utenti caricata con successo.')
-					console.log(this.listaUtentiDaApprovare)
-				})
-				.catch(errors => {
-					console.error(errors)
-				})
+	export default {
+		name: "AdminHomeView",
+		components: {
+			VerificaUtenteItem,
+			AdminNavBar
+		},
+		methods: {
+			// Funzione che calcola la lista di utenti da approvare
+			async fetchUtentiDaApprovare() {
+				await axios.get('/api/amministratore/da_approvare/list')
+					.then(response => {
+						this.listaUtentiDaApprovare = response.data.map(utente => {
+							if (utente.category === null) {
+								utente.category = "Nessuna categoria";
+							}
+							return utente;
+						});
+						console.log('Lista utenti caricata con successo.')
+						console.log(this.listaUtentiDaApprovare)
+					})
+					.catch(errors => {
+						console.error(errors)
+					})
+			}
+		},
+		data() {
+			return {
+				listaUtentiDaApprovare: []
+			}
+		},
+		computed() {
+			this.fetchUtentiDaApprovare();
+		},
+		mounted() {
+			this.fetchUtentiDaApprovare();
 		}
-	},
-	data() {
-		return {
-			listaUtentiDaApprovare: []
-		}
-	},
-	computed() {
-		this.fetchUtentiDaApprovare();
-	},
-	mounted() {
-		this.fetchUtentiDaApprovare();
 	}
-}
 </script>
 
 <style scoped>

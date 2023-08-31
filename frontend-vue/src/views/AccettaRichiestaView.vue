@@ -1,3 +1,4 @@
+<!--TODO: DA ELIMINARE!!!-->
 <template>
   <div class="accetta-richiesta">
     <table>

@@ -11,28 +11,12 @@
 						<div class="mb-3">
 							<input class="form-control" ref="password" type="password" id="password" name="password" v-model="password" @value="this.password" placeholder="Password" required>
 						</div>
-						<!-- Collega AccediRegistratiView con BachecaView -->
 						<button class="btn btn-block btn-primary" type="submit">Accedi</button>
 					</fieldset>
 				</form>
 			</div>
 		</div>
 	</div>
-
-
-
-<!--	<div class="admin-home">-->
-<!--		<h1>Login Amministratore</h1>-->
-<!--		<form @submit="onSubmit" ref="form">-->
-<!--			<fieldset>-->
-<!--				<label>Username:</label>-->
-<!--				<input type="text" required><br>-->
-<!--				<label>Password:</label>-->
-<!--				<input type="password" required>-->
-<!--			</fieldset>-->
-<!--			<input type="submit" value="Accedi">-->
-<!--		</form>-->
-<!--	</div>-->
 </template>
 
 <script>
@@ -107,6 +91,4 @@
 			opacity: 1;
 		}
 	}
-
 </style>
-
