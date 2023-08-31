@@ -20,8 +20,8 @@
 											</tr>
 										</thead>
 										<tbody class="table-group-divider">
-											<tr v-for="utente in listaUtentiDaApprovare" :key="utente.id">
-												<th scope="row">1</th>
+											<tr v-for="(utente, index) in listaUtentiDaApprovare" :key="utente.id">
+												<th scope="row">{{ index + 1 }}</th>
 												<td>{{ utente.nome + ' ' + utente.cognome }}</td>
 												<td v-if="utente.stato === 'da_approvare'">Approvare</td>
 												<td v-else>Aggiornamento</td>

@@ -13,7 +13,7 @@
 						<router-link to="/admin/admin-home" class="nav-link">Approvazione utenti</router-link>
 					</li>
 					<li class="nav-item">
-						<router-link to="/admin/admin-segnalazioni" class="nav-link">Segnalazioni</router-link>
+						<router-link to="/admin/admin-segnalazioni" class="nav-link">Segnalazioni utenti</router-link>
 					</li>
 					<li class="nav-item">
 						<router-link to="/admin/admin-gestione-utenti" class="nav-link">Gestione utenti</router-link>
