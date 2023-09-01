@@ -227,7 +227,6 @@
 
 	.btn-primary {
 		padding: 5px 20px;
-		font-size: 17px;
 		background-color: #5c6df8;
 		border: none;
 		color: white;

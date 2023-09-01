@@ -23,7 +23,7 @@
 											<th scope="row">1</th>
 											<td>ciccio pasticcio</td>
 											<td class="text-end">
-												<button class="btn btn-primary" type="button" @click="openModal()">Visualizza</button>
+												<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal()">Visualizza</button>
 											</td>
 										</tr>
 										</tbody>
@@ -180,7 +180,6 @@
 
 	.btn-primary {
 		padding: 5px 20px;
-		font-size: 17px;
 		background-color: #5c6df8;
 		border: none;
 		color: white;
