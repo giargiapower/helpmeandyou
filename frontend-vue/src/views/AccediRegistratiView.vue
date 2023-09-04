@@ -3,7 +3,7 @@
 		<home-nav-bar/>
 		<div class="hero-section">
 			<div class="hero-content">
-				<form @submit="onSubmitLogin" ref="form">
+				<form @submit.prevent="onSubmitLogin" ref="form">
 					<fieldset>
 						<legend>Login</legend>
 						<div class="mb-3">
@@ -45,7 +45,7 @@
 	<div class="modal fade" id="registrazioneModal" data-bs-backdrop="static" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registrazioneModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-xl">
 			<div class="modal-content">
-				<form ref="form" @reset="gestisciReset" @submit="onSubmitRegistrazione">
+				<form ref="form" @reset="gestisciReset" @submit.prevent="onSubmitRegistrazione">
 					<fieldset>
 						<div class="modal-body">
 							<legend class="custom-legend">
@@ -58,11 +58,11 @@
 
 							<div class="input-group mb-3">
 								<span class="input-group-text">Nome</span>
-								<input type="text" class="form-control" aria-label="Nome" aria-describedby="Nome" required>
+								<input type="text" class="form-control" v-model="nome" aria-label="Nome" aria-describedby="Nome" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Cognome</span>
-								<input type="text" class="form-control" aria-label="Cognome" aria-describedby="Cognome" required>
+								<input type="text" class="form-control" v-model="cognome" aria-label="Cognome" aria-describedby="Cognome" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Data di nascita</span>
@@ -71,29 +71,29 @@
 							<div class="input-group mb-3">
 								<span class="input-group-text">Numero di telefono</span>
 								<span class="input-group-text">+39</span>
-								<input type="text" class="form-control" minlength="10" maxlength="10" aria-label="Numero telefono" aria-describedby="Numero telefono" required>
+								<input type="text" class="form-control" v-model="telefono" minlength="10" maxlength="10" aria-label="Numero telefono" aria-describedby="Numero telefono" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Email</span>
-								<input type="email" class="form-control" aria-label="Email" aria-describedby="Email" required>
+								<input type="email" class="form-control" v-model="email" aria-label="Email" aria-describedby="Email" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Password</span>
-								<input type="password" class="form-control" aria-label="Password" aria-describedby="Password" pattern=".{8,}" title="La password deve avere almeno 8 caratteri" required>
+								<input type="password" class="form-control" v-model="password" aria-label="Password" aria-describedby="Password" pattern=".{8,}" title="La password deve avere almeno 8 caratteri" required>
 							</div>
 <!--								TODO: io toglierei il domicilio all'utente e lo lascerei solo alla richiesta. Se vuole l'utente filtra la regione della richiesta e stop-->
 							<div class="input-group mb-3">
 								<span class="input-group-text">Domicilio(?)</span>
-								<input type="text" class="form-control" aria-label="Domicilio" aria-describedby="Domicilio" required>
+								<input type="text" class="form-control" v-model="indirizzo" aria-label="Domicilio" aria-describedby="Domicilio" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Documento d'identità</span>
-								<input type="file" class="form-control" aria-label="Documento d'identità" aria-describedby="Documento d'identità" required>
+								<input type="file" class="form-control" v-on="documento_identita" aria-label="Documento d'identità" aria-describedby="Documento d'identità">
 <!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Curriculum</span>
-								<input type="file" class="form-control" aria-label="Curriculum" aria-describedby="Curriculum" required>
+								<input type="file" class="form-control" v-on="cv" aria-label="Curriculum" aria-describedby="Curriculum">
 <!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
 							</div>
 						</div>
@@ -130,7 +130,7 @@
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
-	// import axios from "axios";
+	import axios from "axios";
 
 	export default {
 		name: "AccediRegistratiView",
@@ -138,49 +138,73 @@
 			HomeNavBar
 		},
 		methods: {
-			/*fetchLogin() {
-				fetch('api/utenti/login', {
-					method: 'POST',
-					headers: {'Content-Type': 'application/json'},
-					body: JSON.stringify({email: this.email, password: this.password})
-				}).then(response => response.json())
-					.then(data => console.log(data))
-			},*/
-			/*fetchLogin() {
-			  axios.get('api/utenti/login', {params: {email: this.email, password: this.password}})
-				  .then(response => {
-					console.log(response);
+			// TODO: per il momento non va, probabile debba essere una POST, ma dà 403 error e problemi di CORS
+			async onSubmitLogin() {
+        // await axios.get('api/utenti/login',
+		// 	{
+		// 		params: {
+		// 			account: {
+		// 				email: this.email,
+		// 				password: this.password
+		// 			}
+		// 		}
+        //     })
+        //     .then(response => {
+        //       console.log(response.data);
+        //       this.$refs.form.reset();
+        //       this.$router.push('../accedi-registrati/bacheca');
+            // })
+            // .catch(error => {
+            //   console.log(error);
+            // })
+      },
+			// Funziona che permette a un utente di registrarsi
+			// per funzionare si è dovuto aggiungere il dominio del frontend "http://localhost:8080" alle "origins" cel controller
+			// in AccountController
+			async onSubmitRegistrazione() {
+				await axios.post('/api/utenti/registrazione/create/account',
+					{
+						email: this.email,
+						password: this.password,
+						nome: this.nome,
+						cognome: this.cognome,
+						telefono: this.telefono,
+						indirizzo: this.indirizzo,
+						stato: 'da_approvare',
+						cv: this.cv,
+						documento_identita: this.documento_identita
+				},
+					{
+						headers: {
+							'Content-Type': "application/json",
+							'responseType': 'json'
+						}
+					})
+					.then(response => {
+					// TODO: fare l'alert più carino
+					alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
+					console.log(response.data);
 					// this.$refs.form.reset();
-					// this.$router.push('../accedi-registrati/bacheca');
-				  })
-				  .catch(error => {
-					console.log(error)
-				  })
-			},*/
-			onSubmitLogin() {
-				this.$refs.form.reset();
-				this.$router.push('../accedi-registrati/bacheca');
-			},
-			// async onSubmitLogin(email, password) {
-			// 	const axiosInstance = axios.create({timeout: 5000});
-			// 	await axiosInstance.post(`/api/utenti/login?email=${email}&password=${password}`)
-			// 		.then(response => {
-			// 			console.log(response.data);
-			// 			this.$refs.form.reset();
-			// 			this.$router.push('../accedi-registrati/bacheca');
-			// 		})
-			// 		.catch(errors => {
-			// 			console.log(errors);
-			// 		})
-			// },
-			onSubmitRegistrazione() {
-				// TODO: fare l'alert più carino
-				alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
-
-				this.$refs.form.reset();
-				this.$router.push('/');
-				// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
-				window.location.href = '/';
+					// this.$router.push('/');
+					// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
+					window.location.href = '/';
+				})
+					.catch(error => {
+						// Handle the error
+						if (error.response) {
+							// The request was made and the server responded with a status code
+							alert(error.response.data);
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							// The request was made but no response was received
+							console.error('No response received:', error.request);
+						} else {
+							// Something happened in setting up the request that triggered an error
+							console.error('Error:', error.message);
+						}
+					})
 			},
 			gestisciReset() {
 				this.$refs.form.reset();
@@ -202,11 +226,18 @@
 			return {
 				email: '',
 				password: '',
+				nome: '',
+				cognome:'',
+				telefono: null,
+				indirizzo: '',
+				cv: null,
+				documento_identita: null,
 				maxDate: this.calculateMaxDate()
 			}
 		},
 		computed() {
-			this.fetchLogin()
+			// this.onSubmitLogin();
+			this.onSubmitRegistrazione();
 		}
 	}
 </script>
