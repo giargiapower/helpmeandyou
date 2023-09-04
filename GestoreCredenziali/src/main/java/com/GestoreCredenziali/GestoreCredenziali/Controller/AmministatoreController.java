@@ -4,9 +4,10 @@ import com.GestoreCredenziali.GestoreCredenziali.File.FileController;
 import com.GestoreCredenziali.GestoreCredenziali.File.FileStorageService;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Account;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Amministratore;
-import com.GestoreCredenziali.GestoreCredenziali.Model.Category;
+import com.GestoreCredenziali.GestoreCredenziali.Model.Categoria;
 import com.GestoreCredenziali.GestoreCredenziali.RabbitSender;
 import com.GestoreCredenziali.GestoreCredenziali.Repository.AmministratoreRepository;
+import com.GestoreCredenziali.GestoreCredenziali.Repository.CategoriaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class AmministatoreController {
 
     @Autowired
     AmministratoreRepository repository;
+
+    @Autowired
+    CategoriaRepository categoriaRepository;
 
     @Autowired
     RabbitSender rabbitSender = new RabbitSender();
@@ -121,11 +125,11 @@ public class AmministatoreController {
 
 
     @PutMapping("/aggiorna_categoria/{id}")
-    public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Category category) {
+    public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Categoria categoria) {
         Account _account = repository.findById(id);
 
         if (_account!=null){
-            _account.setCategory(category);
+            _account.setCategoria(categoria);
             return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -153,5 +157,18 @@ public class AmministatoreController {
             // L'account non è presente o password errata
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @GetMapping("/categorie")
+    public List<Categoria> getAllCategorie() {
+        List<Categoria> categories = new ArrayList<>();
+        categoriaRepository.findAll().forEach(categories::add);
+        return categories;
+    }
+
+    @PostMapping("/categoria/crea")
+    public Categoria creaCategoria(@RequestBody Categoria categoria){
+        Categoria fin = new Categoria(categoria.getTipo());
+        return categoriaRepository.save(fin);
     }
 }

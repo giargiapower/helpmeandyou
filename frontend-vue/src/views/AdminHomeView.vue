@@ -90,8 +90,8 @@
 				await axios.get('/api/amministratore/da_approvare/list')
 					.then(response => {
 						this.listaUtentiDaApprovare = response.data.map(utente => {
-							if (utente.category === null) {
-								utente.category = "Nessuna categoria";
+							if (utente.categoria === null) {
+								utente.categoria = "Nessuna categoria";
 							}
 							return utente;
 						});

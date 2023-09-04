@@ -113,8 +113,8 @@
 <!--									<p>Cognome: {{ utente.cognome }}</p>-->
 <!--									<p>N° Telefono: {{ utente.telefono }}</p>-->
 <!--									<p>Indirizzo: {{ utente.indirizzo }}</p>-->
-<!--									<p v-if="utente.category === null">Categoria: Nessuna categoria</p>-->
-<!--									<p v-else>Categoria: {{ utente.category }}</p>-->
+<!--									<p v-if="utente.categoria === null">Categoria: Nessuna categoria</p>-->
+<!--									<p v-else>Categoria: {{ utente.categoria }}</p>-->
 <!--									<button type="button" class="btn btn-secondary" data-bs-target="#aggiornaCat" data-bs-toggle="modal">Aggiorna categoria-->
 <!--									</button>-->
 <!--								</td>-->
@@ -238,7 +238,7 @@ export default {
 		cancelEditing() {
 			this.editing = false;
 			this.editedCategory= '';
-			this.categoryCopy = this.utente.category;
+			this.categoryCopy = this.utente.categoria;
 		}
 	},
 	data() {
@@ -246,7 +246,7 @@ export default {
 			file: '',
 			editing: false,
 			editedCategory: '',
-			categoryCopy: this.utente.category
+			categoryCopy: this.utente.categoria
 		}
 	},
 	computed() {

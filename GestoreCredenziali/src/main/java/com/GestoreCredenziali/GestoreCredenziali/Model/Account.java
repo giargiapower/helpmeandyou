@@ -38,8 +38,8 @@ public class Account {
     private String path_documento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_type")
-    private Category category;
+    @JoinColumn(name = "categoria_tipo")
+    private Categoria categoria;
 
     //vanno inseriti documento e curriculum... da capire come salvare
 
@@ -65,10 +65,10 @@ public class Account {
         this.telefono = telefono;
         this.indirizzo = indirizzo;
         this.stato = stato;
-        this.category = category;
+        this.categoria = categoria;
     }
 
-    public Account(String email, String password, String nome, String cognome, String telefono, String indirizzo, String stato, String cv, String id, Category category) {
+    public Account(String email, String password, String nome, String cognome, String telefono, String indirizzo, String stato, String cv, String id, Categoria categoria) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -78,7 +78,7 @@ public class Account {
         this.stato = stato;
         this.path_curriculum = cv;
         this.path_documento = id;
-        this.category = category;
+        this.categoria = categoria;
     }
 
     public long getId() {
@@ -121,8 +121,8 @@ public class Account {
         return path_documento;
     }
 
-    public Category getCategory() {
-        return category;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
     public void setId(long id) {
@@ -165,7 +165,7 @@ public class Account {
         this.path_documento = path_documento;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

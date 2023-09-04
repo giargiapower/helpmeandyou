@@ -115,7 +115,7 @@ public class Account {
         return path_documento;
     }
 
-    public Categoria getCategory() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
@@ -159,7 +159,7 @@ public class Account {
         this.path_documento = path_documento;
     }
 
-    public void setCategory(Categoria categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 }

@@ -27,7 +27,7 @@ public class RabbitReciver {
         /**ho dovuto fare questa cafonata percè rabbit ha dei problemi con il type id ovvero mi chiama
          la classe come com.GestioneCredenziali.....Account e non Account e basta dunque il reciever
          non capisce che classe sia . DUNQUE FORZO IL CASTING PER RISOLVERE IL PROBLEMA**/
-        requests.model.Account accountEsistente = new requests.model.Account(account.getEmail(), account.getPassword(), account.getNome(), account.getCognome(), account.getTelefono(), account.getIndirizzo(), account.getStato(), account.getPath_curriculum(), account.getPath_documento(), account.getCategory());
+        requests.model.Account accountEsistente = new requests.model.Account(account.getEmail(), account.getPassword(), account.getNome(), account.getCognome(), account.getTelefono(), account.getIndirizzo(), account.getStato(), account.getPath_curriculum(), account.getPath_documento(), account.getCategoria());
         accountEsistente.setId(account.getId());
         accountRepository.save(accountEsistente);
     }

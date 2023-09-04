@@ -6,11 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import requests.model.Account;
-import requests.model.Categoria;
 import requests.model.Indirizzo;
 import requests.model.RichiestaAiuto;
 import requests.repository.AccountRepository;
-import requests.repository.CategoriaRepository;
 import requests.repository.IndirizzoRepository;
 import requests.repository.RichiestaAiutoRepository;
 import java.util.*;
@@ -29,9 +27,6 @@ public class RichiestaAiutoController {
 
 	@Autowired
 	AccountRepository accountRepository;
-
-	@Autowired
-	CategoriaRepository categoriaRepository;
 
 	@GetMapping("/richiesta/{id}")
 	public RichiestaAiuto getRichiestaById(@PathVariable(value = "id") long richiestaId) {
@@ -57,15 +52,6 @@ public class RichiestaAiutoController {
 		indirizzoRepository.save(ind);
 
 		return richiestaAiutoRepository.save(fin);
-	}
-
-	// TODO: forse meglio metterlo nella parte dell'amministratore
-	// creato metodo per la creazione delle categorie così da non doverle
-	// inserire manualmente nel database
-	@PostMapping("/categoria/crea")
-	public Categoria creaCategoria(@RequestBody Categoria categoria){
-		Categoria fin = new Categoria(categoria.getTipo());
-		return categoriaRepository.save(fin);
 	}
 
 	@PutMapping("/richiesta/accetta/{ric_id}/{account_id}")
