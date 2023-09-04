@@ -62,19 +62,20 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Documento:</span>
-											<span>...</span>
-<!--											<p v-if="utente.path_documento === utente.email + '.pdf'">Documento d'identità non caricato</p>-->
-<!--											                  <a v-else href="#" @click="idDocPath(utente.email + '.pdf')">Download Doc.Identità</a>-->
-<!--											<a v-else href="#">Download Doc.Identità</a>-->
+<!--											<span>...</span>-->
+<!--											è giusto che sia (utente.path_documento === utente.email) perché
+												se non è presente il doc, viene salvato in automatico con la mail -->
+											<p v-if="utente.path_documento === utente.email + '.pdf'">Documento d'identità non caricato</p>
+											<a v-else href="#" @click="idDocPath(utente.email + '.pdf')">Download Doc.Identità</a>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Curriculum:</span>
-											<span>...</span>
-<!--											<p v-if="utente.path_curriculum === utente.email + '.pdf'">CV non caricato</p>-->
-<!--											                  <a v-else href="#" @click="cvPath(utente.email + '.pdf')">Download CV</a>-->
-<!--											<a v-else href="#">Download CV</a>-->
+<!--											<span>...</span>-->
+<!--											vale lo stesso del documento d'identità -->
+											<p v-if="utente.path_curriculum === utente.email + '.pdf'">CV non caricato</p>
+											<a v-else href="#" @click="cvPath(utente.email + '.pdf')">Download CV</a>
 										</div>
 									</div>
 								</div>
@@ -165,7 +166,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 
 export default {
 	name: "VerificaUtenteItem",
@@ -178,55 +179,55 @@ export default {
 		PER FARLO FUNZIONARE è STATA CAMBIATA L'ANNOTAZIONE DA @RequestPart a @RequestParam,
 		perchè si chiama una GET e non una POST
 		 */
-		// async cvPath(file) {
-		//   await axios.get(`/api/amministratore/cv?fileName=${file}`,
-		//       {
-		//         responseType: "blob",
-		//         headers: {
-		//           Accept: 'application/pdf'
-		//         }
-		//       })
-		//       .then(response => {
-		//         // Create a URL for the blob response and open it in a new window for download
-		//         const pdfURL = URL.createObjectURL(response.data);
-		//         console.log(pdfURL);
-		//         const downloadLink = document.createElement('a');
-		//         console.log(downloadLink);
-		//         downloadLink.href = pdfURL;
-		//         downloadLink.download = file;
-		//         downloadLink.click();
-		//         // Clean up the URL object after the download
-		//         URL.revokeObjectURL(pdfURL);
-		//       })
-		//       .catch(errors => {
-		//         console.log(errors);
-		//       })
-		// },
+		async cvPath(file) {
+			await axios.get(`/api/amministratore/cv?fileName=${file}`,
+				{
+					responseType: "blob",
+					headers: {
+						Accept: 'application/pdf'
+					}
+				})
+				.then(response => {
+					// Create a URL for the blob response and open it in a new window for download
+					const pdfURL = URL.createObjectURL(response.data);
+					console.log(pdfURL);
+					const downloadLink = document.createElement('a');
+					console.log(downloadLink);
+					downloadLink.href = pdfURL;
+					downloadLink.download = file;
+					downloadLink.click();
+					// Clean up the URL object after the download
+					URL.revokeObjectURL(pdfURL);
+				})
+				.catch(errors => {
+					console.log(errors);
+				})
+		},
 		// Funzione che ritorna il documento d'identità di un utente
-		// async idDocPath(file){
-		//   await axios.get(`/api/amministratore/id?fileName=${file}`,
-		//       {
-		//         responseType: "blob",
-		//         headers: {
-		//           Accept: 'application/pdf'
-		//         }
-		//       })
-		//       .then(response => {
-		//         // Create a URL for the blob response and open it in a new window for download
-		//         const pdfURL = URL.createObjectURL(response.data);
-		//         console.log(pdfURL);
-		//         const downloadLink = document.createElement('a');
-		//         console.log(downloadLink);
-		//         downloadLink.href = pdfURL;
-		//         downloadLink.download = file;
-		//         downloadLink.click();
-		//         // Clean up the URL object after the download
-		//         URL.revokeObjectURL(pdfURL);
-		//       })
-		//       .catch(errors => {
-		//         console.error(errors);
-		//       })
-		// }
+		async idDocPath(file) {
+			await axios.get(`/api/amministratore/id?fileName=${file}`,
+				{
+					responseType: "blob",
+					headers: {
+						Accept: 'application/pdf'
+					}
+				})
+				.then(response => {
+					// Create a URL for the blob response and open it in a new window for download
+					const pdfURL = URL.createObjectURL(response.data);
+					console.log(pdfURL);
+					const downloadLink = document.createElement('a');
+					console.log(downloadLink);
+					downloadLink.href = pdfURL;
+					downloadLink.download = file;
+					downloadLink.click();
+					// Clean up the URL object after the download
+					URL.revokeObjectURL(pdfURL);
+				})
+				.catch(errors => {
+					console.error(errors);
+				})
+		},
 		editCategory() {
 			if (this.editing) {
 				this.categoryCopy = this.editedCategory;
@@ -237,7 +238,7 @@ export default {
 		},
 		cancelEditing() {
 			this.editing = false;
-			this.editedCategory= '';
+			this.editedCategory = '';
 			this.categoryCopy = this.utente.categoria;
 		}
 	},
@@ -250,7 +251,8 @@ export default {
 		}
 	},
 	computed() {
-		// this.cvPath(this.file);
+		this.cvPath(this.file);
+		this.idDocPath(this.file);
 	}
 }
 </script>
