@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar/>
+		<bacheca-nav-bar :id-utente="idUtente"/>
 		<div class="hero-section">
 
 			<div class="hero-content row">
@@ -62,7 +62,7 @@
 		<div class = "card-container">
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 				<div class="col" v-for="item in richieste" :key="item.id">
-					<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale">
+					<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
 						<!-- TODO: chiarire data richiesta effettuata / data richiesta accettata / data richiesta completata -->
 					</richiesta-item>
 				</div>
@@ -117,6 +117,7 @@
 						// Assegnazione dei nomi, cognomi e i componenti dell'indirizzo alla proprietà "nominativi"
 						this.nominativi = this.richieste.map(richiesta => ({
 							id: richiesta.id,
+							idUtenteRichiesta: richiesta.pubAccount.id,
 							nome: richiesta.pubAccount.nome,
 							cognome: richiesta.pubAccount.cognome,
 							regione: richiesta.indirizzo.regione,
@@ -152,6 +153,12 @@
 				const minDay = currentDate.getDate();
 
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
+			},
+			// Funzione che salva l'ID dell'utente loggato
+			IdUtenteLoggato() {
+				const url = window.location.href;
+				const partiUrl = url.split('/');
+				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		},
 		data() {
@@ -161,7 +168,8 @@
 				typedTitle: null,
 				minDate: this.calculateMinDate(),
 				maxDate: null,
-				startDate: this.calculateMinDate()
+				startDate: this.calculateMinDate(),
+				idUtente: null
 			}
 		},
 		beforeRouteEnter(to, from, next) {
@@ -175,6 +183,7 @@
 		},
 		mounted() {
 			this.fetchRichieste();
+			this.IdUtenteLoggato();
 		},
 		unmounted() {
 			this.stopTypedEffects(); // Interrompi gli effetti Typed quando il componente viene distrutto

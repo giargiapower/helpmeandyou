@@ -17,7 +17,7 @@
 						<div class="modal-header">
 							<legend class="custom-legend">
 								<span class="legend-text">Dai il tuo aiuto!</span>
-								<button type="button" class="btn btn-outline-danger" @click="onSegnala">Segnala</button>
+								<button type="button" class="btn btn-outline-danger" @click.prevent="onSegnala">Segnala</button>
 							</legend>
 						</div>
 						<div class="modal-body">
@@ -145,6 +145,7 @@
 		name: "RichiestaItem",
 		props: {
 			id: {required: true, type: Number},
+			idUtenteRichiesta: {required: true, type: Number},
 			descrizione: {required: true, type: String},
 			nome: {required: true, type: String},
 			cognome: {required: true, type: String},
@@ -154,7 +155,8 @@
 			citta: {required: true, type: String},
 			categoria: {required: true, type: String},
 			indirizzo: {required: true, type: String},
-			idMateriale: {required: true, type: Number}
+			idMateriale: {required: true, type: Number},
+			idUtenteLoggato: {required: true, type: Number}
 		},
 		data() {
 			return {
@@ -176,11 +178,24 @@
 						console.log(error);
 					})
 			},
-			onSegnala() {
-				alert("Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.");
-				// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
-				window.location.href = '/accedi-registrati/bacheca/';
-			},
+			async onSegnala() {
+      await axios.post('/api/segnalazioni/segnalazione/create',
+          {
+            titolo: '',
+            descrizione: '',
+            tipologia: 'segnalazione richiesta',
+            creatore: this.idUtenteLoggato,
+            segnalato: this.idUtenteRichiesta
+          })
+          .then(response => {
+            console.log(response.data)
+            alert("Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.");
+			window.location.href = `/accedi-registrati/bacheca/${this.idUtenteLoggato}`;
+          })
+          .catch(errors => {
+            console.log(errors);
+          })
+    },
 			onAccetta() {
 				alert(`Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."`)
 			}

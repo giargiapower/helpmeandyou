@@ -1,7 +1,7 @@
 <template>
 	<!-- Section: Design Block -->
 	<div class="home-container">
-		<bacheca-nav-bar/>
+		<bacheca-nav-bar :id-utente="idUtente"/>
 		<section class="text-center">
 			<!-- Background image -->
 			<div class="p-5 bg-image"/>
@@ -333,14 +333,24 @@
 				} else {
 					alert('Form non valido')
 				}
+			},
+			// Funzione che salva l'ID dell'utente loggato
+			IdUtenteLoggato() {
+				const url = window.location.href;
+				const partiUrl = url.split('/');
+				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		},
 		data() {
 			return {
 				PrimoshowDropdown: false,
 				SecondoshowDropdown: false,
-				TerzoshowDropdown: false
+				TerzoshowDropdown: false,
+				idUtente: null
 			}
+		},
+		mounted() {
+			this.IdUtenteLoggato();
 		}
 	}
 </script>

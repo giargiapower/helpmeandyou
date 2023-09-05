@@ -56,22 +56,22 @@ const routes = [
     component: () => import('../views/RegistrazioneView.vue')
   },
   {
-    path: '/accedi-registrati/bacheca',
+    path: '/accedi-registrati/bacheca/:idUtente',
     name: 'bacheca',
     component: BachecaView
   },
   {
-    path:'/accedi-registrati/bacheca/crea-richiesta',
+    path:'/accedi-registrati/bacheca/crea-richiesta/:idUtente',
     name: 'crea-richiesta',
     component: () => import('../views/CreaRichiestaView.vue')
   },
   {
-    path: '/accedi-registrati/bacheca/mie-attivita',
+    path: '/accedi-registrati/bacheca/mie-attivita/:idUtente',
     name: 'mie-attivita',
     component: () => import('../views/MieAttivitaView.vue')
   },
   {
-    path: '/accedi-registrati/bacheca/profilo',
+    path: '/accedi-registrati/bacheca/profilo/:idUtente',
     name: 'profilo',
     component: () => import('../views/ProfiloView.vue')
   },

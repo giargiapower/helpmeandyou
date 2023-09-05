@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar/>
+		<bacheca-nav-bar :id-utente="idUtente"/>
 		<div class="hero-section">
 			<div class="hero-content">
 				<form @submit="onSubmit" ref="form">
@@ -154,12 +154,12 @@
 		methods: {
 			onReset() {
 				this.$refs.form.reset();
-				this.$router.push('./');
+				this.$router.push(`../${this.idUtente}`);
 			},
 			onSubmit() {
 				alert(`Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".`);
 				this.$refs.form.reset();
-				this.$router.push('./');
+				this.$router.push(`../${this.idUtente}`);
 			},
 			// Funzione che calcola la lista dei materiali non duplicati
 			uniqueMateriali() {
@@ -216,6 +216,12 @@
 				const minDay = currentDate.getDate();
 
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
+			},
+			// Funzione che salva l'ID dell'utente loggato
+			IdUtenteLoggato() {
+				const url = window.location.href;
+				const partiUrl = url.split('/');
+				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		},
 		data() {
@@ -227,13 +233,15 @@
 				listaMateriali: [],
 				categorie: [],
 				uniqueId: _.uniqueId(),
-				minDate: this.calculateMinDate()
+				minDate: this.calculateMinDate(),
+				idUtente: null
 			}
 		},
 		mounted() {
 			this.fetchMateriali();
 			this.uniqueMateriali();
 			this.fetchCategorieRichieste();
+			this.IdUtenteLoggato();
 		},
 		computed() {
 			this.fetchMateriali();

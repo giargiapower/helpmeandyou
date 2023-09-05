@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar/>
+		<bacheca-nav-bar :id-utente="idUtente"/>
 		<div class="hero-section">
 			<div class="container">
 				<div class="page-content page-container" id="page-content">
@@ -144,16 +144,17 @@
 				editedDomicile: 'Via delle vie, 1',
 				editedIdentityDocument: 'Carta d\'identità',	// dato di tipo file
 				editedCurriculum: 'Curriculum',		// dato di tipo file
-				editing: false
+				editing: false,
+				idUtente: null
 			};
 		},
 		methods: {
 			onSubmit() {
 				alert("Salvataggio dati profilo effettuato con successo!");
-				this.$router.push('/accedi-registrati/bacheca');
+				this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
 			},
 			gestisciReset() {
-				this.$router.push('/accedi-registrati/bacheca');
+				this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
 			},
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
@@ -197,7 +198,16 @@
 				} else {
 					this.emailError = '';
 				}
+			},
+			// Funzione che salva l'ID dell'utente loggato
+			IdUtenteLoggato() {
+				const url = window.location.href;
+				const partiUrl = url.split('/');
+				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
+		},
+		mounted() {
+			this.IdUtenteLoggato();
 		}
 	}
 </script>

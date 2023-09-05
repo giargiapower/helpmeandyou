@@ -145,7 +145,7 @@
             .then(response => {
               console.log(response.data);
               this.$refs.form.reset();
-              this.$router.push('../accedi-registrati/bacheca');
+              this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
             })
             .catch(error => {
 				// Handle the error
