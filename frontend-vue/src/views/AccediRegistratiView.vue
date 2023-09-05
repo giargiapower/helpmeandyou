@@ -138,29 +138,36 @@
 			HomeNavBar
 		},
 		methods: {
-			// TODO: per il momento non va, probabile debba essere una POST, ma dà 403 error e problemi di CORS
+			// Funione che verifica le credenziali del login
+			// per funzionare, da GET è diventata una POST
 			async onSubmitLogin() {
-        // await axios.get('api/utenti/login',
-		// 	{
-		// 		params: {
-		// 			account: {
-		// 				email: this.email,
-		// 				password: this.password
-		// 			}
-		// 		}
-        //     })
-        //     .then(response => {
-        //       console.log(response.data);
-        //       this.$refs.form.reset();
-        //       this.$router.push('../accedi-registrati/bacheca');
-            // })
-            // .catch(error => {
-            //   console.log(error);
-            // })
+        await axios.post('api/utenti/login', {email: this.email, password: this.password})
+            .then(response => {
+              console.log(response.data);
+              this.$refs.form.reset();
+              this.$router.push('../accedi-registrati/bacheca');
+            })
+            .catch(error => {
+				// Handle the error
+				alert('Credenziali errate! Riprova o registrati.')
+				if (error.response) {
+					// The request was made and the server responded with a status code
+					console.error('Response Data:', error.response.data);
+					console.error('Response Status:', error.response.status);
+					console.error('Response Headers:', error.response.headers);
+				} else if (error.request) {
+					// The request was made but no response was received
+					console.error('No response received:', error.request);
+				} else {
+					// Something happened in setting up the request that triggered an error
+					console.error('Error:', error.message);
+				}
+			})
       },
 			// Funziona che permette a un utente di registrarsi
 			// per funzionare si è dovuto aggiungere il dominio del frontend "http://localhost:8080" alle "origins" cel controller
 			// in AccountController
+			// TODO: manca il set dei documenti, per ora si lasciano vuoti
 			async onSubmitRegistrazione() {
 				await axios.post('/api/utenti/registrazione/create/account',
 					{
@@ -236,7 +243,7 @@
 			}
 		},
 		computed() {
-			// this.onSubmitLogin();
+			this.onSubmitLogin();
 			this.onSubmitRegistrazione();
 		}
 	}

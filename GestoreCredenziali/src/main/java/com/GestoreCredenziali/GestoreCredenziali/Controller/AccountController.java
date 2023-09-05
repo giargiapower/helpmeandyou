@@ -62,7 +62,7 @@ public class AccountController {
     }
 
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account){
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
