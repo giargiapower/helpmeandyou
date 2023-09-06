@@ -74,6 +74,8 @@
 		</div>
 	</div>
 
+	<SuccessShower ref="succShower" :message="successMessage"/>
+
 <!--	TODO: da sistemare: vogliamo che compaia solo se lo status della chiamata al backend "Invia Denaro" va a buon fine :)-->
 	<!-- Modal -->
 <!--	<div class="modal fade" id="inviaDenaro" tabindex="-1" aria-labelledby="inviaDenaroLabel" aria-hidden="true">-->
@@ -131,11 +133,18 @@
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 
 	export default {
 		name: "DonazioniView",
 		components: {
-			HomeNavBar
+			HomeNavBar,
+			SuccessShower
+		},
+		data() {
+			return {
+				successMessage: ''
+			}
 		},
 		methods: {
 			gestisciReset() {
@@ -143,7 +152,9 @@
 				this.$router.push('/');
 			},
 			onSubmit() {
-				alert("Grazie per la tua donazione!\n I tuoi fondi contribuiranno all'acquisto di materiali per il progetto HelpMe&You.");
+				this.successMessage ='Grazie per la tua donazione!\n I tuoi fondi contribuiranno all\'acquisto di materiali per il progetto HelpMe&You.';
+				this.$refs.succShower.toggle();
+				this.$refs.form.reset();
 				this.$router.push('/');
 			}
 		}

@@ -92,6 +92,12 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	.home-container {
+		min-height: 100%;
+		text-align: center;
+		background-color: #e9faf5;	  /* Aggiunge stile di sfondo per tutta la pagina */
+		animation: fadeInUp 1s ease;	/* Applica l'animazione a tutta la pagina */
+	}
 	.hero-section {
 		background: url("@/assets/home-background.jpg") center/cover no-repeat;
 		height: 100vh;
@@ -148,13 +154,6 @@
 
 	.img-fluid {
 		width: 40em;
-	}
-
-	.home-container {
-		min-height: 100%;
-		text-align: center;
-		background-color: #e9faf5;	  /* Aggiunge stile di sfondo per tutta la pagina */
-		animation: fadeInUp 1s ease both;	/* Applica l'animazione a tutta la pagina */
 	}
 
 	h2 {

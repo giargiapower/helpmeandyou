@@ -1,3 +1,4 @@
+<!--TODO: da eliminare-->
 <template>
   <div class="registrazione-view">
     <home-nav-bar />

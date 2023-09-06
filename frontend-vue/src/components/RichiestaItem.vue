@@ -82,7 +82,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
-							<button class="btn btn-primary mx-4 flex-grow-1" @click="onAccetta">Accetta</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="onAccetta">Accetta</button>
 						</div>
 					</fieldset>
 				</form>
@@ -135,14 +135,18 @@
 <!--		</div>-->
 <!--	</div>-->
 
-
+	<SuccessShower ref="succShower" :message="successMessage"/>
 </template>
 
 <script>
 	import axios from "axios";
+	import SuccessShower from "@/components/SuccessShower";
 
 	export default {
 		name: "RichiestaItem",
+		components: {
+			SuccessShower
+		},
 		props: {
 			id: {required: true, type: Number},
 			idUtenteRichiesta: {required: true, type: Number},
@@ -160,7 +164,8 @@
 		},
 		data() {
 			return {
-				materialeRichiesta: {}
+				materialeRichiesta: {},
+				successMessage: ''
 			}
 		},
 		methods: {
@@ -179,25 +184,37 @@
 					})
 			},
 			async onSegnala() {
-      await axios.post('/api/segnalazioni/segnalazione/create',
-          {
-            titolo: '',
-            descrizione: '',
-            tipologia: 'segnalazione richiesta',
-            creatore: this.idUtenteLoggato,
-            segnalato: this.idUtenteRichiesta
-          })
-          .then(response => {
-            console.log(response.data)
-            alert("Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.");
-			window.location.href = `/accedi-registrati/bacheca/${this.idUtenteLoggato}`;
-          })
-          .catch(errors => {
-            console.log(errors);
-          })
-    },
+				await axios.post('/api/segnalazioni/segnalazione/create',
+					{
+						titolo: '',
+						descrizione: '',
+						tipologia: 'segnalazione richiesta',
+						creatore: this.idUtenteLoggato,
+						segnalato: this.idUtenteRichiesta
+					})
+					.then(response => {
+						console.log(response.data);
+						this.successMessage ='Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.';
+						this.$refs.succShower.toggle();
+						// Cattura il valore di 'this' in una variabile esterna (per evitare il problema di "undefined")
+						const self = this;
+						setTimeout(function() {
+							self.idUtenteLoggato;
+							window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
+						}, 3000);
+					})
+					.catch(errors => {
+						console.log(errors);
+					})
+			},
 			onAccetta() {
-				alert(`Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."`)
+				this.successMessage ='Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."';
+				this.$refs.succShower.toggle();
+				const self = this;
+				setTimeout(function() {
+					self.idUtenteLoggato;
+					window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
+				}, 3000);
 			}
 		},
 		mounted() {
@@ -210,25 +227,7 @@
 </script>
 
 <style scoped>
-	/*ul {*/
-	/*	list-style-type: none;*/
-	/*	padding: 0;*/
-	/*}*/
-
-	/*table {*/
-	/*	margin: auto;*/
-	/*}*/
-
-	/*.richiesta-aiuto {*/
-	/*	display: flex;*/
-	/*	justify-content: center;*/
-	/*	align-items: center;*/
-	/*}*/
-
-	/* Modal */
 	.card {
-		/*margin-right: 20px;*/
-		/*margin-left: 20px;*/
 		margin-bottom: 50px;
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 		border-width: 1px;

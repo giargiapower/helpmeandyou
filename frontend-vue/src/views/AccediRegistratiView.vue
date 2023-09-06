@@ -106,6 +106,8 @@
 			</div>
 		</div>
 	</div>
+	<ErrorShower ref="errShower" :message="errorMessage"/>
+	<SuccessShower ref="succShower" :message="successMessage"/>
 
 
 
@@ -130,40 +132,69 @@
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
-	import {googleTokenLogin} from "vue3-google-login";
+	import ErrorShower from "@/components/ErrorShower.vue";
+	import SuccessShower from "@/components/SuccessShower";
 	import axios from "axios";
+	import { googleTokenLogin } from "vue3-google-login";
 
 	export default {
 		name: "AccediRegistratiView",
 		components: {
-			HomeNavBar
+			HomeNavBar,
+			ErrorShower,
+			SuccessShower
+		},
+		data() {
+			return {
+				email: '',
+				password: '',
+				nome: '',
+				cognome: '',
+				telefono: null,
+				indirizzo: '',
+				cv: null,
+				documento_identita: null,
+				maxDate: this.calculateMaxDate(),
+				errorMessage: '',
+				successMessage: ''
+			}
+		},
+		computed() {
+			this.onSubmitLogin();
+			this.onSubmitRegistrazione();
 		},
 		methods: {
-			// Funione che verifica le credenziali del login
-			// per funzionare, da GET è diventata una POST
+			// Funione che verifica le credenziali del login. Per funzionare, da GET è diventata una POST
 			async onSubmitLogin() {
-				await axios.post('api/utenti/login', {email: this.email, password: this.password})
-					.then(response => {
-						console.log(response.data);
-						this.$refs.form.reset();
-						this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
-					})
-					.catch(error => {
-						// Handle the error
-						alert('Credenziali errate! Riprova o registrati.')
-						if (error.response) {
-							// The request was made and the server responded with a status code
-							console.error('Response Data:', error.response.data);
-							console.error('Response Status:', error.response.status);
-							console.error('Response Headers:', error.response.headers);
-						} else if (error.request) {
-							// The request was made but no response was received
-							console.error('No response received:', error.request);
-						} else {
-							// Something happened in setting up the request that triggered an error
-							console.error('Error:', error.message);
-						}
-					})
+				try {
+					await axios.post('api/utenti/login', {email: this.email, password: this.password})
+						.then(response => {
+							console.log(response.data);
+							this.$refs.form.reset();
+							this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
+						})
+						.catch(error => {
+							// Handle the error
+							this.errorMessage = 'Credenziali errate! Riprova o registrati.';
+							this.$refs.errShower.toggle();
+							if (error.response) {
+								// The request was made and the server responded with a status code
+								console.error('Response Data:', error.response.data);
+								console.error('Response Status:', error.response.status);
+								console.error('Response Headers:', error.response.headers);
+							} else if (error.request) {
+								// The request was made but no response was received
+								console.error('No response received:', error.request);
+							} else {
+								// Something happened in setting up the request that triggered an error
+								console.error('Error:', error.message);
+							}
+						})
+				} catch (e) {
+					this.errorMessage = e.toString() || 'Errore inatteso';
+					this.$refs.errShower.toggle();
+					console.log(e);
+				}
 			},
 
 			googleLogin() {
@@ -189,31 +220,30 @@
 								this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
 							})
 							.catch(error => {
-								// Handle the error
-								alert('Credenziali errate! Riprova o registrati.')
+								this.errorMessage = 'Credenziali errate! Riprova o registrati.';
+								this.$refs.errShower.toggle();
 								if (error.response) {
-									// The request was made and the server responded with a status code
 									console.error('Response Data:', error.response.data);
 									console.error('Response Status:', error.response.status);
 									console.error('Response Headers:', error.response.headers);
 								} else if (error.request) {
-									// The request was made but no response was received
 									console.error('No response received:', error.request);
 								} else {
-									// Something happened in setting up the request that triggered an error
 									console.error('Error:', error.message);
 								}
 							})
-
 					})
 					.catch(error => {
-						console.log(error)
+						if (error.toString() !== 'Error: Popup window closed'){
+							this.errorMessage = error.toString() || 'Errore inatteso';
+							this.$refs.errShower.toggle();
+							console.log(error)
+						}
 					});
 			},
 
-			// Funziona che permette a un utente di registrarsi
-			// per funzionare si è dovuto aggiungere il dominio del frontend "http://localhost:8080" alle "origins" cel controller
-			// in AccountController
+			// Funziona che permette a un utente di registrarsi. Per funzionare si è dovuto aggiungere il dominio del
+			// frontend "http://localhost:8080" alle "origins" cel controller in AccountController
 			// TODO: manca il set dei documenti, per ora si lasciano vuoti
 			async onSubmitRegistrazione() {
 				await axios.post('/api/utenti/registrazione/create/account',
@@ -235,27 +265,24 @@
 						}
 					})
 					.then(response => {
-						// TODO: fare l'alert più carino
-						alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
 						console.log(response.data);
-						// this.$refs.form.reset();
-						// this.$router.push('/');
-						// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
-						window.location.href = '/';
+						this.successMessage ='Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!';
+						this.$refs.succShower.toggle();
+						// Ritardo di 5 secondi (5000 millisecondi)
+						setTimeout(function() {
+							window.location.href = '/';
+						}, 5000);
 					})
 					.catch(error => {
-						// Handle the error
 						if (error.response) {
-							// The request was made and the server responded with a status code
-							alert(error.response.data);
+							this.errorMessage = error.toString() || 'Errore inatteso';
+							this.$refs.errShower.toggle();
 							console.error('Response Data:', error.response.data);
 							console.error('Response Status:', error.response.status);
 							console.error('Response Headers:', error.response.headers);
 						} else if (error.request) {
-							// The request was made but no response was received
 							console.error('No response received:', error.request);
 						} else {
-							// Something happened in setting up the request that triggered an error
 							console.error('Error:', error.message);
 						}
 					})
@@ -263,35 +290,14 @@
 			gestisciReset() {
 				this.$refs.form.reset();
 			},
-			// onClick() {
-			// 	this.$refs.form.reset();
-			// 	// this.$router.push('../accedi-registrati/registrazione');
-			// },
 			calculateMaxDate() {
 				const currentDate = new Date();
 				const maxYear = currentDate.getFullYear() - 18; // Calcola la data massima per avere almeno 18 anni
-				const maxMonth = currentDate.getMonth() + 1; // Aggiungi 1 perché i mesi in JavaScript sono indicizzati da 0
+				const maxMonth = currentDate.getMonth() + 1; // Aggiunge 1 perché i mesi in JavaScript sono indicizzati da 0
 				const maxDay = currentDate.getDate();
 
 				return `${maxYear}-${maxMonth.toString().padStart(2, '0')}-${maxDay.toString().padStart(2, '0')}`;
 			}
-		},
-		data() {
-			return {
-				email: '',
-				password: '',
-				nome: '',
-				cognome: '',
-				telefono: null,
-				indirizzo: '',
-				cv: null,
-				documento_identita: null,
-				maxDate: this.calculateMaxDate()
-			}
-		},
-		computed() {
-			this.onSubmitLogin();
-			this.onSubmitRegistrazione();
 		}
 	}
 </script>

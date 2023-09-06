@@ -70,6 +70,8 @@
 		</div>
 	</div>
 
+	<SuccessShower ref="succShower" :message="successMessage"/>
+
 
 
 <!--	<div class="crea-richiesta">-->
@@ -145,19 +147,49 @@
 
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 	import axios from 'axios';
 	import _ from 'lodash';
 
 	export default {
 		name: "CreaRichiestaView",
-		components: {BachecaNavBar},
+		components: {
+			BachecaNavBar,
+			SuccessShower
+		},
+		data() {
+			return {
+				selectedCategoria: '',
+				selectedMateriale: '',
+				textValue: '',
+				listaRichieste: [],
+				listaMateriali: [],
+				categorie: [],
+				uniqueId: _.uniqueId(),
+				minDate: this.calculateMinDate(),
+				idUtente: null,
+				successMessage: ''
+			}
+		},
+		mounted() {
+			this.fetchMateriali();
+			this.uniqueMateriali();
+			this.fetchCategorieRichieste();
+			this.IdUtenteLoggato();
+		},
+		computed() {
+			this.fetchMateriali();
+			this.uniqueMateriali();
+			this.fetchCategorieRichieste();
+		},
 		methods: {
 			onReset() {
 				this.$refs.form.reset();
 				this.$router.push(`../${this.idUtente}`);
 			},
 			onSubmit() {
-				alert(`Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".`);
+				this.successMessage ='Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".';
+				this.$refs.succShower.toggle();
 				this.$refs.form.reset();
 				this.$router.push(`../${this.idUtente}`);
 			},
@@ -201,7 +233,7 @@
 							this.categorie.push({id: this.uniqueId, nome: ric.categoria.tipo});
 						});
 
-						console.log('Categorie caricate on successo!');
+						console.log('Categorie caricate con successo!');
 						console.log(this.categorie);
 					})
 					.catch(errore => {
@@ -223,30 +255,6 @@
 				const partiUrl = url.split('/');
 				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
-		},
-		data() {
-			return {
-				selectedCategoria: '',
-				selectedMateriale: '',
-				textValue: '',
-				listaRichieste: [],
-				listaMateriali: [],
-				categorie: [],
-				uniqueId: _.uniqueId(),
-				minDate: this.calculateMinDate(),
-				idUtente: null
-			}
-		},
-		mounted() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
-			this.fetchCategorieRichieste();
-			this.IdUtenteLoggato();
-		},
-		computed() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
-			this.fetchCategorieRichieste();
 		}
 	}
 </script>

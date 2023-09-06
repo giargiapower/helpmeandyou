@@ -170,7 +170,7 @@
 
 
 	<!-- visualizzaModal -->
-	<div class="modal fade" id="visualizzaModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizzaModalLabel" aria-hidden="true">
+	<div class="modal fade" id="visualizzaModal" data-bs-show="false" data-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizzaModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<form ref="form">
@@ -253,7 +253,7 @@
 	<div class="modal fade" id="segnalaModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="segnalaModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form @submit="onSubmit" ref="form">
+				<form @submit.prevent="onSubmit" ref="form">
 					<fieldset>
 						<div class="modal-body">
 							<legend class="custom-legend">
@@ -277,12 +277,7 @@
 		</div>
 	</div>
 
-
-
-
-
-
-
+	<SuccessShower ref="succShower" :message="successMessage"/>
 
 
 	<!--	<div class="mie-attivita">-->
@@ -321,18 +316,37 @@
 
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 
 	export default {
 		name: "MieAttivitaView",
-		components: {BachecaNavBar},
+		components: {
+			BachecaNavBar,
+			SuccessShower
+		},
+		data() {
+			return {
+				PrimoshowDropdown: false,
+				SecondoshowDropdown: false,
+				TerzoshowDropdown: false,
+				idUtente: null,
+				successMessage: '',
+				myModal: undefined
+			}
+		},
+		mounted() {
+			this.IdUtenteLoggato();
+		},
 		methods: {
 			async onSubmit() {
-				if (this.$refs.form.checkValidity()) {
-					await
-					alert(`Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.`);
-				} else {
-					alert('Form non valido')
-				}
+				this.successMessage ='Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.';
+				this.$refs.succShower.toggle();
+				this.$refs.form.reset();
+				const self = this;
+				setTimeout(function() {
+					self.idUtente;
+					window.location.href = `/accedi-registrati/bacheca/mie-attivita/${self.idUtente}`;
+				}, 3000);
 			},
 			// Funzione che salva l'ID dell'utente loggato
 			IdUtenteLoggato() {
@@ -340,17 +354,6 @@
 				const partiUrl = url.split('/');
 				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
-		},
-		data() {
-			return {
-				PrimoshowDropdown: false,
-				SecondoshowDropdown: false,
-				TerzoshowDropdown: false,
-				idUtente: null
-			}
-		},
-		mounted() {
-			this.IdUtenteLoggato();
 		}
 	}
 </script>

@@ -77,6 +77,8 @@
 		</div>
 	</div>
 
+	<SuccessShower ref="succShower" :message="successMessage"/>
+
 
 
 <!--	<div class="profilo">-->
@@ -124,10 +126,14 @@
 
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 
 	export default {
 		name: "ProfiloView",
-		components: {BachecaNavBar},
+		components: {
+			BachecaNavBar,
+			SuccessShower
+		},
 		data() {
 			return {
 				// 	imageUrl: 'C:/Users/serra/Desktop/ProgettoTAASS/helpmeandyou/frontend-vue/src/assets/logo.png'
@@ -145,17 +151,18 @@
 				editedIdentityDocument: 'Carta d\'identità',	// dato di tipo file
 				editedCurriculum: 'Curriculum',		// dato di tipo file
 				editing: false,
-				idUtente: null
+				idUtente: null,
+				successMessage: ''
 			};
 		},
 		methods: {
-			onSubmit() {
-				alert("Salvataggio dati profilo effettuato con successo!");
-				this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
-			},
-			gestisciReset() {
-				this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
-			},
+			// onSubmit() {
+			// 	alert("Salvataggio dati profilo effettuato con successo!");
+			// 	this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
+			// },
+			// gestisciReset() {
+			// 	this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
+			// },
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
 					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :) (solo in caso di eventuali modifiche)
@@ -164,6 +171,10 @@
 					this.domicile = this.editedDomicile;
 					this.identityDocument = this.editedIdentityDocument;
 					this.curriculum = this.editedCurriculum;
+
+					// se il salvataggio è tutto ok, allora:
+					this.successMessage ='Salvataggio dati profilo effettuato con successo!';
+					this.$refs.succShower.toggle();
 				}
 				else {
 					this.phoneNumberError = '';

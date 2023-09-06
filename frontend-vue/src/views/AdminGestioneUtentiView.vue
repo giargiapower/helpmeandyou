@@ -111,7 +111,7 @@
 
 <script>
 	import AdminNavBar from "@/components/AdminNavBar";
-	import {Modal} from "bootstrap";
+	import { Modal } from "bootstrap";
 
 	export default {
 		name: "AdminGestioneUtentiView",
