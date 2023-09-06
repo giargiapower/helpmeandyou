@@ -23,7 +23,7 @@
 						<div class="or-label">oppure</div>
 						<div class="line-separator"></div>
 					</div>
-					<button class="btn btn-block btn-primary" type="submit" id="google-button">
+					<button class="btn btn-block btn-primary" type="submit" id="google-button" @click="googleLogin">
 						<i class="bi bi-google"></i>
 						Continua con Google
 					</button>
@@ -130,6 +130,7 @@
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
+	import {googleTokenLogin} from "vue3-google-login";
 	import axios from "axios";
 
 	export default {
@@ -141,29 +142,75 @@
 			// Funione che verifica le credenziali del login
 			// per funzionare, da GET è diventata una POST
 			async onSubmitLogin() {
-        await axios.post('api/utenti/login', {email: this.email, password: this.password})
-            .then(response => {
-              console.log(response.data);
-              this.$refs.form.reset();
-              this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
-            })
-            .catch(error => {
-				// Handle the error
-				alert('Credenziali errate! Riprova o registrati.')
-				if (error.response) {
-					// The request was made and the server responded with a status code
-					console.error('Response Data:', error.response.data);
-					console.error('Response Status:', error.response.status);
-					console.error('Response Headers:', error.response.headers);
-				} else if (error.request) {
-					// The request was made but no response was received
-					console.error('No response received:', error.request);
-				} else {
-					// Something happened in setting up the request that triggered an error
-					console.error('Error:', error.message);
-				}
-			})
-      },
+				await axios.post('api/utenti/login', {email: this.email, password: this.password})
+					.then(response => {
+						console.log(response.data);
+						this.$refs.form.reset();
+						this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
+					})
+					.catch(error => {
+						// Handle the error
+						alert('Credenziali errate! Riprova o registrati.')
+						if (error.response) {
+							// The request was made and the server responded with a status code
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							// The request was made but no response was received
+							console.error('No response received:', error.request);
+						} else {
+							// Something happened in setting up the request that triggered an error
+							console.error('Error:', error.message);
+						}
+					})
+			},
+
+			googleLogin() {
+				googleTokenLogin()
+					.then(async (response) => {
+
+						const res = await fetch(
+							"https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + response.access_token, {
+								method: "GET"
+							}
+						);
+
+						const user = await res.json();
+						// console.log(user);
+						this.email = user.email.toString();
+						this.nome = user.given_name.toString();
+						this.cognome = user.family_name.toString();
+
+						await axios.post('api/utenti/google-login', {email: this.email})
+							.then(response => {
+								console.log(response.data);
+								this.$refs.form.reset();
+								this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
+							})
+							.catch(error => {
+								// Handle the error
+								alert('Credenziali errate! Riprova o registrati.')
+								if (error.response) {
+									// The request was made and the server responded with a status code
+									console.error('Response Data:', error.response.data);
+									console.error('Response Status:', error.response.status);
+									console.error('Response Headers:', error.response.headers);
+								} else if (error.request) {
+									// The request was made but no response was received
+									console.error('No response received:', error.request);
+								} else {
+									// Something happened in setting up the request that triggered an error
+									console.error('Error:', error.message);
+								}
+							})
+
+					})
+					.catch(error => {
+						console.log(error)
+					});
+			},
+
 			// Funziona che permette a un utente di registrarsi
 			// per funzionare si è dovuto aggiungere il dominio del frontend "http://localhost:8080" alle "origins" cel controller
 			// in AccountController
@@ -180,7 +227,7 @@
 						stato: 'da_approvare',
 						cv: this.cv,
 						documento_identita: this.documento_identita
-				},
+					},
 					{
 						headers: {
 							'Content-Type': "application/json",
@@ -188,14 +235,14 @@
 						}
 					})
 					.then(response => {
-					// TODO: fare l'alert più carino
-					alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
-					console.log(response.data);
-					// this.$refs.form.reset();
-					// this.$router.push('/');
-					// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
-					window.location.href = '/';
-				})
+						// TODO: fare l'alert più carino
+						alert("Registrazione completata!\nGrazie per esserti registrato. Entro qualche giorno un operatore approverà il tuo account così da poter iniziare ad usare il servizio HelpMe&You!");
+						console.log(response.data);
+						// this.$refs.form.reset();
+						// this.$router.push('/');
+						// TODO: vedi se riesci a migliorare, altrimenti lasciamo questo sotto
+						window.location.href = '/';
+					})
 					.catch(error => {
 						// Handle the error
 						if (error.response) {
@@ -234,7 +281,7 @@
 				email: '',
 				password: '',
 				nome: '',
-				cognome:'',
+				cognome: '',
 				telefono: null,
 				indirizzo: '',
 				cv: null,
@@ -251,7 +298,7 @@
 
 <style scoped>
 	.home-container {
-		animation: fadeInUp 1s ease both;	/* Applica l'animazione a tutta la pagina */
+		animation: fadeInUp 1s ease both; /* Applica l'animazione a tutta la pagina */
 	}
 
 	.hero-section {
@@ -364,7 +411,7 @@
 	}
 
 	/*Parte Registrazione*/
-	.modal-content{
+	.modal-content {
 		background-color: #ffffff;
 		border-radius: 45px;
 		padding: 1.5em 3em;
@@ -373,11 +420,11 @@
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
-	form{
-		background-color: #ffffff;	  /* Aggiunge stile di sfondo per tutta la pagina */
+	form {
+		background-color: #ffffff; /* Aggiunge stile di sfondo per tutta la pagina */
 	}
 
-	.custom-legend{
+	.custom-legend {
 		display: flex;
 		align-items: center;
 	}

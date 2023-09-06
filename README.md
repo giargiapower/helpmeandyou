@@ -116,6 +116,7 @@ Consentire il login di google con le porte 8085, 30000 e 9000
           
           docker push giargiapower/helpmeandyou:nome_immagine
 		  ```
+    - ***Per gli altri ricordarsi poi di fare le PULL delle nuove immagini docker (anche da Docker Desktop volendo)***
 
 ---
 

@@ -41,9 +41,11 @@ public class Account {
     @JoinColumn(name = "categoria_tipo")
     private Categoria categoria;
 
-    //vanno inseriti documento e curriculum... da capire come salvare
-
     public Account() {
+    }
+
+    public Account(String email) {
+        this.email = email;
     }
 
     public Account(String email, String password) {
@@ -65,7 +67,6 @@ public class Account {
         this.telefono = telefono;
         this.indirizzo = indirizzo;
         this.stato = stato;
-        this.categoria = categoria;
     }
 
     public Account(String email, String password, String nome, String cognome, String telefono, String indirizzo, String stato, String cv, String id, Categoria categoria) {

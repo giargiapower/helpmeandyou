@@ -68,7 +68,18 @@ public class AccountController {
         if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
             return ResponseEntity.ok(accountEsistente);
         } else {
-            // L'account non è presente o password errata
+            // L'account non è presente, la password è errata o lo stato non è approvato
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/google-login")
+    public ResponseEntity<Account> GoogleLogin(@RequestBody Account account){
+        Account accountEsistente = a_repository.findByEmail(account.getEmail());
+        if (accountEsistente != null && accountEsistente.getStato().equals("approvato")) {
+            return ResponseEntity.ok(accountEsistente);
+        } else {
+            // L'account non è presente o lo stato non è approvato
             return ResponseEntity.badRequest().body(null);
         }
     }

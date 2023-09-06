@@ -49,3 +49,9 @@ npm install bootstrap
 npm install vuex --save
 ```
 ma dovrebbero installarsi in automatico nel package.json con la "npm install" generale.
+
+---
+
+Per il problema di login con Google, è un issue aperto su GitHub
+
+https://github.com/devbaji/vue3-google-login/issues/40
