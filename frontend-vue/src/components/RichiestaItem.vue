@@ -68,7 +68,7 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Materiale:</span>
-											<span>...</span>
+											<span>{{ materialeRichiesta.nome }}</span>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
@@ -207,14 +207,34 @@
 						console.log(errors);
 					})
 			},
-			onAccetta() {
-				this.successMessage ='Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."';
-				this.$refs.succShower.toggle();
-				const self = this;
-				setTimeout(function() {
-					self.idUtenteLoggato;
-					window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
-				}, 3000);
+			// Funzione che permette di accettare una richiesta
+			async onAccetta() {
+				await axios.put(`/api/richiesteaiuto/richiesta/accetta/${this.id}/${this.idUtenteLoggato}`)
+					.then(response => {
+						console.log(response.data);
+						this.successMessage = 'Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."';
+						this.$refs.succShower.toggle();
+						const self = this;
+						setTimeout(function() {
+							self.idUtenteLoggato;
+							window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
+						}, 3000);
+					})
+					.catch(error => {
+						// alert('Impossibile accettare la richiesta.\nRiprova più tardi.');
+						if(error.response) {
+							// The request was made and the server responded with a status code
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if(error.request) {
+							// The request was made but no response was received
+							console.error('No response received:', error.request);
+						} else {
+							// Something happened in setting up the request that triggered an error
+							console.error('Error:', error.message);
+						}
+					})
 			}
 		},
 		mounted() {

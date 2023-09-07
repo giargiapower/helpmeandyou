@@ -62,9 +62,13 @@
 		<div class = "card-container">
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 				<div class="col" v-for="item in richieste" :key="item.id">
-					<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
-						<!-- TODO: chiarire data richiesta effettuata / data richiesta accettata / data richiesta completata -->
-					</richiesta-item>
+<!--					 questo v-if serve per non mostrare le richieste accettate -->
+					<div v-if="item.stato !== 'accettata'">
+						<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
+							<!-- TODO: chiarire data richiesta effettuata / data richiesta accettata / data richiesta completata -->
+						</richiesta-item>
+					</div>
+<!--					 <div v-else-if="richieste.length === 0">Non è attualmente presente alcuna richiesta!</div> servirebbe far sì che se non sono presenti richieste, si mandi a schermo un messaggio bisogna anche far sì che le richieste postate da un utente non vengano visualizzate nella sua bacheca -->
 				</div>
 			</div>
 		</div>

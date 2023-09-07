@@ -14,7 +14,7 @@ import requests.repository.RichiestaAiutoRepository;
 import java.util.*;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
 @RestController
 @RequestMapping("/api/richiesteaiuto")
 public class RichiestaAiutoController {

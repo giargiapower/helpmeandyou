@@ -3,7 +3,7 @@
 		<bacheca-nav-bar :id-utente="idUtente"/>
 		<div class="hero-section">
 			<div class="hero-content">
-				<form @submit="onSubmit" ref="form">
+				<form @submit.prevent="onSubmit" ref="form">
 					<fieldset>
 						<legend>Crea richiesta d'aiuto</legend>
 						<p class="text-muted">Nota: Cerca di essere il più possibile dettagliato nella richiesta</p>
@@ -13,19 +13,19 @@
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Regione</span>
-							<input type="text" class="form-control" aria-label="Regione" aria-describedby="Regione" required>
+							<input type="text" class="form-control" v-model="indirizzo.regione" aria-label="Regione" aria-describedby="Regione" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Provincia</span>
-							<input type="text" class="form-control" minlength="3" aria-label="Provincia" aria-describedby="Provincia" title="Inserisci il nome per esteso" required>
+							<input type="text" class="form-control" v-model="indirizzo.provincia" minlength="3" aria-label="Provincia" aria-describedby="Provincia" title="Inserisci il nome per esteso" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Città</span>
-							<input type="text" class="form-control" aria-label="Città" aria-describedby="Città" required>
+							<input type="text" class="form-control" v-model="indirizzo.citta" aria-label="Città" aria-describedby="Città" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Indirizzo</span>
-							<input type="text" class="form-control" aria-label="Indirizzo" aria-describedby="Indirizzo" id="indirizzo" required>
+							<input type="text" class="form-control" v-model="indirizzo.indirizzo" aria-label="Indirizzo" aria-describedby="Indirizzo" id="indirizzo" required>
 
 <!--							<span class="input-group-text ms-4" id="numeroCivico">N°</span>-->
 <!--							<input type="text" class="form-control" aria-label="NumeroCivico" aria-describedby="NumeroCivico" required>-->
@@ -35,7 +35,7 @@
 							<select class="form-select" aria-label="Categoria" required v-model="selectedCategoria">
 								<option disabled value="">Scegli una categoria...</option>
 								<option value="nessunaCategoria">Nessuna categoria</option>
-								<option v-for="cat in categorie" :key="cat.id">{{ cat.nome }}</option>
+								<option v-for="cat in categorie" :key="cat.id">{{ cat }}</option>
 							</select>
 							<span class="input-group-text text-muted custom-tooltip" id="infoCategoria">
 								<i class="bi bi-question-circle"></i>
@@ -57,7 +57,7 @@
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Descrizione</span>
-							<textarea rows="5" class="form-control" minlength="20" aria-label="Descrizione richiesta" aria-describedby="Descrizione richiesta" title="La descrizione deve avere almeno 20 caratteri" required></textarea>
+							<textarea rows="5" class="form-control" v-model="descrizione" minlength="20" aria-label="Descrizione richiesta" aria-describedby="Descrizione richiesta" title="La descrizione deve avere almeno 20 caratteri" required></textarea>
 						</div>
 
 						<div class="d-flex justify-content-center">
@@ -149,7 +149,7 @@
 	import BachecaNavBar from "@/components/BachecaNavBar";
 	import SuccessShower from "@/components/SuccessShower";
 	import axios from 'axios';
-	import _ from 'lodash';
+	// import _ from 'lodash';
 
 	export default {
 		name: "CreaRichiestaView",
@@ -159,39 +159,78 @@
 		},
 		data() {
 			return {
+				descrizione: '',
+				indirizzo: {regione: '', provincia: '', citta: '', indirizzo: ''},
+				idMateriale : null,
+				pubAccount : { id : null },
+				categoria : { tipo : '' },
 				selectedCategoria: '',
 				selectedMateriale: '',
 				textValue: '',
 				listaRichieste: [],
 				listaMateriali: [],
 				categorie: [],
-				uniqueId: _.uniqueId(),
+				// uniqueId: _.uniqueId(),
 				minDate: this.calculateMinDate(),
 				idUtente: null,
 				successMessage: ''
 			}
 		},
-		mounted() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
-			this.fetchCategorieRichieste();
-			this.IdUtenteLoggato();
-		},
-		computed() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
-			this.fetchCategorieRichieste();
-		},
 		methods: {
+			// Funzione che annulla la procedura di creazione della richiesta
 			onReset() {
 				this.$refs.form.reset();
 				this.$router.push(`../${this.idUtente}`);
 			},
-			onSubmit() {
-				this.successMessage ='Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".';
-				this.$refs.succShower.toggle();
-				this.$refs.form.reset();
-				this.$router.push(`../${this.idUtente}`);
+			// Funzione che crea la richiesta di aiuto
+			// TODO: la chiamata funziona, la richiesta viene accettata, compare nella bacheca,
+			// per sistemare bisogna: togliere un materiale dal magazzino (=> stato non disponibile)
+			// se ci sono più occorrenze di quel materiale nel magazzino
+			// l'utente non deve vedere in bacheca la propria richiesta, solo nella vista "Mie Attività"
+			// ultimo: aggiungere più categorie !!!
+			async onSubmit() {
+				let idSelectedMateriale;
+				this.listaMateriali.forEach(materiale => {
+					if(this.selectedMateriale === materiale.nome) {
+						idSelectedMateriale = materiale.id;
+					}
+				});
+				await axios.post('/api/richiesteaiuto/richiesta/crea',
+					{
+						descrizione: this.descrizione,
+						giorno: this.minDate,
+						indirizzo: {
+							regione: this.indirizzo.regione,
+							provincia: this.indirizzo.provincia,
+							citta: this.indirizzo.citta,
+							indirizzo: this.indirizzo.indirizzo
+						},
+						idMateriale : idSelectedMateriale,
+						pubAccount : { id : this.idUtente },
+						categoria : { tipo : this.selectedCategoria }
+					})
+					.then(response => {
+						console.log(response.data);
+						this.successMessage ='Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".';
+						this.$refs.succShower.toggle();
+						this.$refs.form.reset();
+						this.$router.push(`../${this.idUtente}`);
+					})
+					.catch(error => {
+						// TODO: servirebbe un alert anche qui
+						if(error.response) {
+							// The request was made and the server responded with a status code
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if(error.request) {
+							// The request was made but no response was received
+							console.error('No response received:', error.request);
+						} else {
+							// Something happened in setting up the request that triggered an error
+							console.error('Error:', error.message);
+						}
+					})
 			},
 			// Funzione che calcola la lista dei materiali non duplicati
 			uniqueMateriali() {
@@ -215,7 +254,7 @@
 			},
 			// Funzione che calcola lista dei materiali
 			async fetchMateriali() {
-				await axios.get('/api/magazzini/6/materiali')
+				await axios.get('/api/magazzini/1/materiali')
 					.then(response => {
 						this.listaMateriali = response.data;
 						console.log('Materiali caricati!');
@@ -224,23 +263,48 @@
 						console.log(errore);
 					})
 			},
-			// Funzione che calcola le categorie da assegnare a una richiesta in modo univoco
-			async fetchCategorieRichieste() {
-				await axios.get('/api/richiesteaiuto/richieste')
+			// Funzione per restituire tutte le categorie
+			async fetchCategorie() {
+				await axios.get('/api/amministratore/categorie')
 					.then(response => {
-						this.listaRichieste = response.data;
-						this.listaRichieste.forEach(ric => {
-							this.categorie.push({id: this.uniqueId, nome: ric.categoria.tipo});
-						});
-
-						console.log('Categorie caricate con successo!');
-						console.log(this.categorie);
+						const listaElem = response.data;
+						listaElem.forEach(elem => {
+							this.categorie.push(elem.tipo);
+						})
+						console.log('Categorie caricate con successo.')
 					})
-					.catch(errore => {
-						console.log(errore);
+					.catch(error => {
+						// TODO: servirebbe un alert anche qui
+						if(error.response) {
+							// The request was made and the server responded with a status code
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if(error.request) {
+							// The request was made but no response was received
+							console.error('No response received:', error.request);
+						} else {
+							// Something happened in setting up the request that triggered an error
+							console.error('Error:', error.message);
+						}
 					})
 			},
-
+			// Funzione che calcola le categorie da assegnare a una richiesta in modo univoco
+			// async fetchCategorieRichieste() {
+			// 	await axios.get('/api/richiesteaiuto/richieste')
+			// 		.then(response => {
+			// 			this.listaRichieste = response.data;
+			// 			this.listaRichieste.forEach(ric => {
+			// 				this.categorie.push({id: this.uniqueId, nome: ric.categoria.tipo});
+			// 			});
+			//
+			// 			console.log('Categorie caricate con successo!');
+			// 			console.log(this.categorie);
+			// 		})
+			// 		.catch(errore => {
+			// 			console.log(errore);
+			// 		})
+			// },
 			calculateMinDate() {
 				const currentDate = new Date();
 				const minYear = currentDate.getFullYear();
@@ -255,6 +319,18 @@
 				const partiUrl = url.split('/');
 				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
+		},
+		mounted() {
+			this.fetchMateriali();
+			this.uniqueMateriali();
+			this.fetchCategorie();
+			// this.fetchCategorieRichieste();
+			this.IdUtenteLoggato();
+		},
+		computed() {
+			this.fetchMateriali();
+			this.uniqueMateriali();
+			// this.fetchCategorieRichieste();
 		}
 	}
 </script>
