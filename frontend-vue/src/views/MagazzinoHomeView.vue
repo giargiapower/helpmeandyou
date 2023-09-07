@@ -18,11 +18,7 @@
 												<th scope="col">Nome materiale</th>
 												<th scope="col">Quantità</th>
 												<th scope="col">
-<!--													<button v-if="!editing" class="btn btn-primary btn-sm d-grid gap-2 col-6 mx-auto" type="button" @click="toggleEditing">Modifica quantità</button>-->
-<!--													<div v-else class="d-flex justify-content-center">-->
-<!--														<button class="btn btn-primary btn-sm mx-2 mx-md-3 mx-lg-5 flex-grow-1" type="button" @click="cancelEditing" id="annulla">Annulla</button>-->
-<!--														<button class="btn btn-primary btn-sm mx-2 mx-md-3 mx-lg-5 flex-grow-1" type="button" @click="toggleEditing">Salva</button>-->
-<!--													</div>												-->
+													<button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#aggiungiMaterialeModal">Aggiungi nuovo materiale</button>
 												</th>
 											</tr>
 										</thead>
@@ -39,7 +35,7 @@
 												<td>
 													<button v-if="!editingItems[item.nome]" class="btn btn-primary btn-block btn-sm" type="button" @click="toggleEditing(item)">Modifica quantità</button>
 													<div v-else class="d-flex justify-content-center">
-														<button class="btn btn-primary btn-sm flex-grow-1" type="button" @click="cancelEditing(item)" id="annulla">Annulla</button>
+														<button class="btn btn-primary btn-sm flex-grow-1" type="button" @click="cancelEditing(item)" id="chiaro-button">Annulla</button>
 														<button class="btn btn-primary btn-sm mx-1 flex-grow-1" type="button" @click="toggleEditing(item)">Salva</button>
 													</div>
 												</td>
@@ -55,6 +51,36 @@
 			<div class="bg-color"></div>
 		</section>
 	</div>
+
+	<!-- aggiungiMaterialeModal -->
+	<div class="modal fade" id="aggiungiMaterialeModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="aggiungiMaterialeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<form @submit.prevent="aggiungiNuovo" ref="form">
+					<fieldset>
+						<div class="modal-body">
+							<legend class="custom-legend">
+								<span class="legend-text">Aggiungi un nuovo materiale</span>
+								<button type="reset" class="btn-close btn-lg" data-bs-dismiss="modal" aria-label="Close"></button>
+							</legend>
+							<p class="text-muted">Nota: Il nome del materiale non deve essere già presente tra quelli attivi.</p>
+							<div class="divider"/>
+							<div class="input-group mb-3">
+								<span class="input-group-text">Nome materiale</span>
+								<input type="text" class="form-control" aria-label="NuovoMateriale" aria-describedby="NuovoMateriale" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary mx-4 flex-grow-1" data-bs-dismiss="modal" type="reset" id="chiaro-button">Annulla</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Conferma</button>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<SuccessShower ref="succShower" :message="successMessage"/>
 
 
 
@@ -170,12 +196,14 @@
 
 <script>
 	import MagazzinoNavBar from "@/components/MagazzinoNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 	import axios from "axios";
 
 	export default {
 		name: "MagazzinoHomeView",
 		components: {
-			MagazzinoNavBar
+			MagazzinoNavBar,
+			SuccessShower
 		},
 		methods: {
 			onClick(nome) {
@@ -245,6 +273,11 @@
 						console.error(errors);
 					})
 			},
+			async aggiungiNuovo() {
+				this.successMessage ='Nuovo materiale aggiunto!';
+				this.$refs.succShower.toggle();
+				this.$refs.form.reset();
+			},
 			toggleEditing(item) {
 				if (this.editingItems[item.nome]) {
 					this.quantita[item.nome] = item.editedQuantity;
@@ -266,6 +299,7 @@
 				saldoMagazzino: 0,
 				listaMateriali: [],
 				editingItems: {}, // Oggetto per tenere traccia della modalità di modifica per ciascun elemento
+				successMessage: ''
 			}
 		},
 		mounted() {
@@ -338,19 +372,61 @@
 		background-color: #0d17c4ff;
 	}
 
-	#annulla {
+	#chiaro-button {
 		background-color: #ffffff;
 		border: 0.1px solid rgba(13, 23, 196, 0.5);
 		color: #0d17c4ff;
 	}
 
-	#annulla:hover {
+	#chiaro-button:hover {
 		background-color: #0d17c419;
+	}
+
+	.btn-outline-success {
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		border-radius: 20px;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
 	p {
 		font-size: 1.2em;
 		margin-top: -20px;
 		margin-bottom: 30px;
+	}
+
+	/*Parte Modal*/
+	.modal-content{
+		background-color: #ffffff;
+		border-radius: 45px;
+		padding: 1.5em 3em;
+		display: inline-block;
+		height: fit-content;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
+	form{
+		background-color: #ffffff;
+	}
+
+	.custom-legend{
+		display: flex;
+		align-items: center;
+	}
+
+	.legend-text {
+		flex-grow: 1;
+		text-align: center;
+		font-size: 32px;
+		font-weight: bold;
+		color: black;
+	}
+
+	.btn-close {
+		align-self: flex-start;
+	}
+
+	.text-muted {
+		font-size: 16px;
 	}
 </style>
