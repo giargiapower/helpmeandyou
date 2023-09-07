@@ -40,7 +40,7 @@
 	}
 
 	.navbar {
-		background: linear-gradient(to left, #e60b09, #e9d022);
+		background: linear-gradient(to left, #e60b09, #ede342);
 	}
 
 	.navbar-nav {

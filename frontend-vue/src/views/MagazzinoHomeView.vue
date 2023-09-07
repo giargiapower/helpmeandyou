@@ -8,7 +8,8 @@
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Gestione magazzino</h1>
+<!--								TODO: Il luogo qui sotto dipenderà dalle credenziali dell'utente.-->
+								<h1 class="fw-bold mb-5">Gestione magazzino: Torino</h1>
 								<p>Denaro disponibile: {{ saldoMagazzino }}</p>
 								<div class="table-responsive">
 									<table class="table table-hover" v-if="listaMateriali.length !== 0">
@@ -317,7 +318,7 @@
 	.home-container {
 		min-height: 100%;
 		text-align: center;
-		background: linear-gradient(to top, #e60b09, #e9d022, #e9d022);
+		background: linear-gradient(to top, #e60b09, #ede342, #ede342);
 		animation: fadeInUp 1s ease;
 	}
 

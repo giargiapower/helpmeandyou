@@ -36,7 +36,7 @@
 	}
 
 	.hero-section {
-		background: linear-gradient(to bottom, #ea5459, #ede342);
+		background: linear-gradient(to bottom, #e60b09, #ede342);
 		height: 100vh;
 		display: flex;
 		align-items: center;
