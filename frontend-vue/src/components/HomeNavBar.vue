@@ -51,6 +51,6 @@
 		height: auto; /* L'altezza verrà ridimensionata in base all'aspetto originale */
 	}
 	.navbar {
-		background: linear-gradient(to right, rgba(118, 236, 183, 0.8), rgb(233, 250, 245));
+		background: linear-gradient(to right, #2feaa8, #e9faf5ff);
 	}
 </style>

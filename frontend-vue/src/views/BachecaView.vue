@@ -212,23 +212,15 @@
 	.hero-content {
 		text-align: center;
 		color: white;
-		margin-top: 50px;
+		margin-top: 60px;
 		margin-bottom: 30px;
-		padding: 1em 3em;
-		padding-top: 2em;
 		display: inline-block;
-		background-color: rgba(118, 236, 183, 0.6); /* colore #76ecb7 con opacità al 50% */
-		border-radius: 45px;
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* ombra al testo */
-		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-		/*clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);*/
+		text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5); /* ombra al testo */
 	}
 
 	.hero-title {
-		font-family: 'Great Vibes', cursive;
-		font-size: 36px;
+		font-size: 65px;
 		margin-bottom: 20px;
-		/*clip-path: polygon(0 0, 100% 0, 100% 50%, 75% 50%, 75% 70%, 50% 50%, 0 50%);*/
 	}
 
 	/* Stile per le scritte a schermo intero */

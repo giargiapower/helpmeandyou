@@ -109,7 +109,7 @@
 	.hero-content {
 		text-align: center;
 		color: #ffffff;
-		background-color: rgba(118, 236, 183, 0.6); /* colore #76ecb7 con opacità al 50% */
+		background-color: rgba(47, 234, 168, 0.6);
 		border-radius: 45px;
 		padding: 0.5em 3em;
 		display: inline-block;
