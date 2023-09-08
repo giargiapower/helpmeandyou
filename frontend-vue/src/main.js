@@ -28,7 +28,6 @@ const store = new Vuex.Store({
 
 export default createApp(App)
     .use(router)
-	.use(Vuex)
 	.use(store)
     .use(vue3GoogleLogin, {
 		clientId: '944204629673-grd6fhq4g1ehpmmkjpvl3rgn04gntoe8.apps.googleusercontent.com',
