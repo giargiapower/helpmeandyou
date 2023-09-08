@@ -64,7 +64,7 @@
 				<div class="col" v-for="item in richieste" :key="item.id">
 <!--					 questo v-if serve per non mostrare le richieste accettate -->
 					<div v-if="item.stato !== 'accettata'">
-						<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="new Date(item.giorno)" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
+						<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
 							<!-- TODO: chiarire data richiesta effettuata / data richiesta accettata / data richiesta completata -->
 						</richiesta-item>
 					</div>

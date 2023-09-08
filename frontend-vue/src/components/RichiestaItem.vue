@@ -153,7 +153,7 @@
 			descrizione: {required: true, type: String},
 			nome: {required: true, type: String},
 			cognome: {required: true, type: String},
-			giorno: {required: true, type: Date},
+			giorno: {required: true, type: String},
 			regione: {required: true, type: String},
 			provincia: {required: true, type: String},
 			citta: {required: true, type: String},
