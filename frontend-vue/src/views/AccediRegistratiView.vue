@@ -171,7 +171,8 @@
 						.then(response => {
 							console.log(response.data);
 							this.$refs.form.reset();
-							this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
+							this.$store.commit('setUserId', response.data.id);
+							this.$router.push('../accedi-registrati/bacheca');
 						})
 						.catch(error => {
 							// Handle the error
@@ -217,8 +218,8 @@
 							.then(response => {
 								console.log(response.data);
 								this.$refs.form.reset();
-								this.$router.push({name: 'bacheca', params: {idUtente: response.data.id}});
-							})
+								this.$store.commit('setUserId', response.data.id);
+								this.$router.push('../accedi-registrati/bacheca');							})
 							.catch(error => {
 								this.errorMessage = 'Credenziali errate! Riprova o registrati.';
 								this.$refs.errShower.toggle();

@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar :id-utente="idUtente"/>
+		<bacheca-nav-bar/>
 		<div class="hero-section">
 
 			<div class="hero-content row">
@@ -49,7 +49,7 @@
 						</div>
 
 						<div class="col-md-2">
-							<button class="btn btn-primary btn-block">Cerca</button>
+							<button class="btn btn-primary btn-block" type="button" @click="filterRequests">Cerca</button>
 						</div>
 					</fieldset>
 				</form>
@@ -137,6 +137,9 @@
 						console.log(error)
 					})
 			},
+			async filterRequests() {
+				// console.log(this.$store.state.userId);
+			},
 			startTypedEffects() {
 				this.typedTitle = new Typed('.typed-title', {
 					strings: ["Bacheca"],		//&amp; equivale a &
@@ -157,12 +160,6 @@
 				const minDay = currentDate.getDate();
 
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
-			},
-			// Funzione che salva l'ID dell'utente loggato
-			IdUtenteLoggato() {
-				const url = window.location.href;
-				const partiUrl = url.split('/');
-				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		},
 		data() {
@@ -173,7 +170,7 @@
 				minDate: this.calculateMinDate(),
 				maxDate: null,
 				startDate: this.calculateMinDate(),
-				idUtente: null
+				idUtente: this.$store.state.userId
 			}
 		},
 		beforeRouteEnter(to, from, next) {
@@ -182,15 +179,14 @@
 			});
 		},
 		beforeRouteLeave(to, from, next) {
-			this.stopTypedEffects(); // Interrompi gli effetti Typed all'uscita dalla pagina
+			this.stopTypedEffects(); // Interrompe gli effetti Typed all'uscita dalla pagina
 			next();
 		},
 		mounted() {
 			this.fetchRichieste();
-			this.IdUtenteLoggato();
 		},
 		unmounted() {
-			this.stopTypedEffects(); // Interrompi gli effetti Typed quando il componente viene distrutto
+			this.stopTypedEffects(); // Interrompe gli effetti Typed quando il componente viene distrutto
 		},
 		computed() {
 			this.fetchRichieste();

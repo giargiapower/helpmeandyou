@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar :id-utente="idUtente"/>
+		<bacheca-nav-bar/>
 		<div class="hero-section">
 			<div class="hero-content">
 				<form @submit.prevent="onSubmit" ref="form">
@@ -172,7 +172,7 @@
 				categorie: [],
 				// uniqueId: _.uniqueId(),
 				minDate: this.calculateMinDate(),
-				idUtente: null,
+				idUtente: this.$store.state.userId,
 				successMessage: ''
 			}
 		},
@@ -180,7 +180,7 @@
 			// Funzione che annulla la procedura di creazione della richiesta
 			onReset() {
 				this.$refs.form.reset();
-				this.$router.push(`../${this.idUtente}`);
+				this.$router.push('./');
 			},
 			// Funzione che crea la richiesta di aiuto
 			// TODO: la chiamata funziona, la richiesta viene accettata, compare nella bacheca,
@@ -214,7 +214,7 @@
 						this.successMessage ='Richiesta pubblicata!\nPuoi consultare le prenotazioni attive nella sezione "Le mie attività".';
 						this.$refs.succShower.toggle();
 						this.$refs.form.reset();
-						this.$router.push(`../${this.idUtente}`);
+						this.$router.push('./');
 					})
 					.catch(error => {
 						// TODO: servirebbe un alert anche qui
@@ -312,12 +312,6 @@
 				const minDay = currentDate.getDate();
 
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
-			},
-			// Funzione che salva l'ID dell'utente loggato
-			IdUtenteLoggato() {
-				const url = window.location.href;
-				const partiUrl = url.split('/');
-				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		},
 		mounted() {
@@ -325,7 +319,6 @@
 			this.uniqueMateriali();
 			this.fetchCategorie();
 			// this.fetchCategorieRichieste();
-			this.IdUtenteLoggato();
 		},
 		computed() {
 			this.fetchMateriali();

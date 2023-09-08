@@ -1,7 +1,7 @@
 <template>
 	<!-- Section: Design Block -->
 	<div class="home-container">
-		<bacheca-nav-bar :id-utente="idUtente"/>
+		<bacheca-nav-bar/>
 		<section class="text-center">
 			<!-- Background image -->
 			<div class="p-5 bg-image"/>
@@ -329,30 +329,18 @@
 				PrimoshowDropdown: false,
 				SecondoshowDropdown: false,
 				TerzoshowDropdown: false,
-				idUtente: null,
-				successMessage: '',
-				myModal: undefined
+				idUtente: this.$store.state.userId,
+				successMessage: ''
 			}
-		},
-		mounted() {
-			this.IdUtenteLoggato();
 		},
 		methods: {
 			async onSubmit() {
 				this.successMessage ='Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.';
 				this.$refs.succShower.toggle();
 				this.$refs.form.reset();
-				const self = this;
 				setTimeout(function() {
-					self.idUtente;
-					window.location.href = `/accedi-registrati/bacheca/mie-attivita/${self.idUtente}`;
+					window.location.href = '/accedi-registrati/bacheca/mie-attivita/';
 				}, 3000);
-			},
-			// Funzione che salva l'ID dell'utente loggato
-			IdUtenteLoggato() {
-				const url = window.location.href;
-				const partiUrl = url.split('/');
-				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
 		}
 	}

@@ -151,17 +151,17 @@
 				editedIdentityDocument: 'Carta d\'identità',	// dato di tipo file
 				editedCurriculum: 'Curriculum',		// dato di tipo file
 				editing: false,
-				idUtente: null,
+				idUtente: this.$store.state.userId,
 				successMessage: ''
 			};
 		},
 		methods: {
 			// onSubmit() {
 			// 	alert("Salvataggio dati profilo effettuato con successo!");
-			// 	this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
+			// 	this.$router.push('/accedi-registrati/bacheca');
 			// },
 			// gestisciReset() {
-			// 	this.$router.push(`/accedi-registrati/bacheca/${this.idUtente}`);
+			// 	this.$router.push('/accedi-registrati/bacheca');
 			// },
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
@@ -209,16 +209,7 @@
 				} else {
 					this.emailError = '';
 				}
-			},
-			// Funzione che salva l'ID dell'utente loggato
-			IdUtenteLoggato() {
-				const url = window.location.href;
-				const partiUrl = url.split('/');
-				this.idUtente = partiUrl[partiUrl.length - 1];
 			}
-		},
-		mounted() {
-			this.IdUtenteLoggato();
 		}
 	}
 </script>

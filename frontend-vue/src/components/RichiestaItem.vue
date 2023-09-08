@@ -196,11 +196,8 @@
 						console.log(response.data);
 						this.successMessage ='Grazie per la tua segnalazione!\nLa richiesta verrà presa in visione il prima possibile.';
 						this.$refs.succShower.toggle();
-						// Cattura il valore di 'this' in una variabile esterna (per evitare il problema di "undefined")
-						const self = this;
 						setTimeout(function() {
-							self.idUtenteLoggato;
-							window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
+							window.location.href = `/accedi-registrati/bacheca/`;
 						}, 3000);
 					})
 					.catch(errors => {
@@ -214,10 +211,8 @@
 						console.log(response.data);
 						this.successMessage = 'Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."';
 						this.$refs.succShower.toggle();
-						const self = this;
 						setTimeout(function() {
-							self.idUtenteLoggato;
-							window.location.href = `/accedi-registrati/bacheca/${self.idUtenteLoggato}`;
+							window.location.href = `/accedi-registrati/bacheca/`;
 						}, 3000);
 					})
 					.catch(error => {
