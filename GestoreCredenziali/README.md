@@ -73,6 +73,19 @@ Mettere su postman get e:
   - andare su Body -> form-data (alto sinistra)
   - scrivere come Key "fileName" e come Value il nome del file salvato (es. "prova@prova.pdf").
 
+- Per ritornare tutte le categorie: inserire l'indirizzo http://localhost:8085/api/amministratore/categorie (***NB!!! Le categorie devono essere le STESSE di requestshelp***)
+
+
+#### POST
+Mettere su postman post e:
+- Per creare una categoria: all'indirizzo http://localhost:8085/api/amministratore/crea_categoria
+andare su body, settare raw in formato json e inserire ad esempio:
+	```
+	{
+		"tipo": "medicina"
+	}
+	```
+
 
 #### PUT
 Mettere su postman put e:
@@ -102,7 +115,7 @@ andare su body, settare raw in formato json e inserire ad esempio:
 - Per bloccare un utente: inserire l'indirizzo http://localhost:8085/api/amministratore/blocca/INSERISCI_ID_ACCOUNT
 
 
----
+--- NO!!! Fatto poi da frontend, ma lasciarlo come spike
 - ### LoginController
 L'ho lasciato in un controller a parte perché mi sembra più ordinato così, ma la porta a cui si interfaccia è la stessa/simile ad AccountController.
 

@@ -1,8 +1,9 @@
-package com.GestoreCredenziali.GestoreCredenziali.Repository;
+package requests.repository;
 
-import com.GestoreCredenziali.GestoreCredenziali.Model.Categoria;
 import org.springframework.data.repository.CrudRepository;
+import requests.model.Categoria;
 
 public interface CategoriaRepository extends CrudRepository<Categoria, Long> {
+
 	Categoria findByTipo(String tipo);
 }

@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import requests.model.Account;
+import requests.model.Categoria;
 import requests.model.Indirizzo;
 import requests.model.RichiestaAiuto;
 import requests.repository.AccountRepository;
+import requests.repository.CategoriaRepository;
 import requests.repository.IndirizzoRepository;
 import requests.repository.RichiestaAiutoRepository;
 import java.util.*;
@@ -18,7 +20,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/richiesteaiuto")
 public class RichiestaAiutoController {
-
 	@Autowired
 	RichiestaAiutoRepository richiestaAiutoRepository;
 
@@ -27,6 +28,10 @@ public class RichiestaAiutoController {
 
 	@Autowired
 	AccountRepository accountRepository;
+
+	@Autowired
+	CategoriaRepository categoriaRepository;
+
 
 	@GetMapping("/richiesta/{id}")
 	public RichiestaAiuto getRichiestaById(@PathVariable(value = "id") long richiestaId) {
@@ -39,6 +44,13 @@ public class RichiestaAiutoController {
 		List <RichiestaAiuto> richieste = new ArrayList<>();
 		richiestaAiutoRepository.findAll().forEach(richieste::add);
 		return richieste;
+	}
+
+	@GetMapping("/categorie")
+	public List<Categoria> getAllCategorie() {
+		List<Categoria> categories = new ArrayList<>();
+		categoriaRepository.findAll().forEach(categories::add);
+		return categories;
 	}
 
 
@@ -85,9 +97,15 @@ public class RichiestaAiutoController {
 		}
 	}
 
+	@PostMapping("/categoria/crea")
+	public Categoria creaCategoria(@RequestBody Categoria categoria){
+		Categoria fin = new Categoria(categoria.getTipo());
+		return categoriaRepository.save(fin);
+	}
+
 	// Serve nel caso in cui venga bloccato un utente a fronte di segnalazione
 	@DeleteMapping("/richiesta/elimina/{id}")
-	public Map<String, Boolean> eliminaRichiesta(@PathVariable(value = "id") long richiestaId) throws Exception {
+	public Map<String, Boolean> eliminaRichiesta(@PathVariable(value = "id") long richiestaId){
 		RichiestaAiuto richiesta = richiestaAiutoRepository.findById(richiestaId).orElseThrow(() -> new ResourceNotFoundException("Richiesta non trovata con id: " + richiestaId));
 		// quando elimino una richiesta elimino anche l'indirizzo a lui associato
 		Indirizzo indirizzo = indirizzoRepository.findById(richiesta.getIndirizzo().getId()).orElseThrow(() -> new ResourceNotFoundException("Richiesta non trovata con id: " + richiesta.getIndirizzo().getId()));
@@ -96,5 +114,12 @@ public class RichiestaAiutoController {
 		Map<String, Boolean> risposta = new HashMap<>();
 		risposta.put("deleted", Boolean.TRUE);
 		return risposta;
+	}
+
+	@DeleteMapping("/categoria/elimina")
+	public ResponseEntity<Categoria> eliminaCategoria (@RequestBody Categoria categoria){
+		Categoria cat = categoriaRepository.findByTipo(categoria.getTipo());
+		categoriaRepository.delete(cat);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

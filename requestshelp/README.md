@@ -21,14 +21,14 @@ Mettere su postman get e:
 
 - Per prendere una singola richiesta di aiuto inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/richiesta/1 (1 è l'id della richiesta, ma dipende dal vostro db, guardate il vostro caso)
 
-- ***TODO:*** Per prendere tutte le categorie inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/categorie
+- Per prendere tutte le categorie inserire l'indirizzo: http://localhost:8080/api/richiesteaiuto/categorie (***NB!!! Le categorie devono essere le STESSE di GestoreCredenziali***)
 
 #### POST
 In un primo momento assicurarsi che ci siano almeno un account e una categoria nel database:
 - Per creare una categoria mettere su postman POST e all'indirizzo: http://localhost:8080/api/richiesteaiuto/categoria/crea andare su body, settare raw in formato json e inserire ad esempio:
 ```
 {
-	"tipo" : "infermieristica"
+	"tipo" : "medicina"
 }
 ```
 - Per l'account invece farlo dall'amministratore_controller
