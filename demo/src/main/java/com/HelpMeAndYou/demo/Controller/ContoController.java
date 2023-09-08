@@ -1,13 +1,11 @@
 package com.HelpMeAndYou.demo.Controller;
 
-
 import com.HelpMeAndYou.demo.Repository.ContRepository;
 import com.HelpMeAndYou.demo.Model.Conto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +15,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1")
 public class ContoController {
-
     @Autowired
     ContRepository repository;
 
@@ -35,7 +32,7 @@ public class ContoController {
 
     @GetMapping("/conti")
     public List<Conto> getAllConti() {
-        System.out.println("Get all Conti...");
+//        System.out.println("Get all Conti...");
 
         List<Conto> conti = new ArrayList<>();
         repository.findAll().forEach(conti::add);
@@ -50,7 +47,7 @@ public class ContoController {
     }
     @PutMapping("/conto/add/{id}")
     public ResponseEntity<Conto> updateConto(@PathVariable("id") long id, @RequestBody Conto conto) {
-        System.out.println("Update com.example.Spring2.Conto with ID = " + id + "...");
+//        System.out.println("Update com.example.Spring2.Conto with ID = " + id + "...");
 
         Optional<Conto> c = repository.findById(id);
 

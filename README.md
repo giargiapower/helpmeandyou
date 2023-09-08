@@ -17,12 +17,6 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 
 ---
 
-## per anna
-
-Consentire il login di google con le porte 8085, 30000 e 9000
-
----
-
 ## Esecuzione con Kubernetes
 
 - Installare kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -32,6 +26,11 @@ Consentire il login di google con le porte 8085, 30000 e 9000
 - **Lanciare lo script** col comando:
   ```
   kubectl apply -f .\deployment.yaml
+  ```
+- Aprire il terminare ed entrare nella directory /helpmeandyou/demo
+- **Lanciare lo script** col comando:
+  ```
+  kubectl apply -f .\kubernetes-manifests.yaml
   ```
 - Verranno fatti partire tutti i pod e i servizi necessari.
 	- Per verificare che i pod siano partiti correttamente lanciare il comando:

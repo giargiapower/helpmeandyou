@@ -10,10 +10,12 @@ metadata:
     io.kompose.service: banca
   name: banca
 spec:
+  type: NodePort # Aggiunta della definizione del tipo del servizio
   ports:
     - name: "8088"
       port: 8088
       targetPort: 8088
+      nodePort: 32000 # Porta aperta sulla macchina host
   selector:
     io.kompose.service: banca
 status:
@@ -146,12 +148,12 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-data
+              name: db-data-persistent-storage-banca
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: db-data-persistent-storage-banca
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: db-data-banca
 status: {}
 
 ---
@@ -160,8 +162,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: db-data
-  name: db-data
+    io.kompose.service: db-data-banca
+  name: db-data-banca
 spec:
   accessModes:
     - ReadWriteOnce
