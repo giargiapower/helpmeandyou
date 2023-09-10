@@ -13,7 +13,8 @@
 							<div class="col-lg-10">
 								<h1 class="fw-bold mb-5">Le mie attività</h1>
 								<div class="accordion mb-3" id="accordionExample">
-									<div class="accordion-item">
+<!--									TODO: capire dove va messo questo v-for con il @click="", perché se ho più richieste la visualizzazione si bugga -->
+									<div class="accordion-item" v-for="(ric, index) in this.listaRichiesteAccettate" :key="ric.id" @click="mostraMateriale(richiesta = ric)">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 												Richieste accettate
@@ -33,26 +34,17 @@
 																<th scope="col"></th>
 															</tr>
 														</thead>
+<!--														TODO: sistemare la visualizzazione e verificare se le modifiche avvengono in tempo reale -->
 														<tbody class="table-group-divider">
 															<tr>
-																<th scope="row">1</th>
-																<td>data1</td>
-																<td>ric1</td>
-																<td>Nessuna categoria</td>
-																<td>Nessun materiale</td>
+																<th scope="row">{{ index + 1}}</th>
+																<td>{{ ric.giorno }}</td>
+																<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
+																<td>{{ ric.categoria.tipo }}</td>
+																<td>{{ materialeSelezionato }}</td>
 																<td>
-																	<!-- Button trigger modal -->
-																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
-																</td>
-															</tr>
-															<tr>
-																<th scope="row">2</th>
-																<td>data2</td>
-																<td>ric2</td>
-																<td>cat2</td>
-																<td>mat2</td>
-																<td>
-																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
+<!--																	TODO: in teoria la prendiRichiesta va chiamata quando clicco il bottone, ma finché dà errore non si sa se vada qui o no -->
+																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="prendiRichiesta(ricId = ric.id)">Visualizza</button>
 																</td>
 															</tr>
 														</tbody>
@@ -61,7 +53,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="accordion-item">
+<!--									TODO: da completare quando le richieste accettate funzionano -->
+									<div class="accordion-item" v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id" @click="mostraMateriale(ric)">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
 												Richieste pubblicate
@@ -82,21 +75,11 @@
 													</thead>
 													<tbody class="table-group-divider">
 													<tr>
-														<th scope="row">1</th>
-														<td>data1</td>
-														<td>ric1</td>
-														<td>Nessuna categoria</td>
-														<td>Nessun materiale</td>
-														<td>
-															<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
-														</td>
-													</tr>
-													<tr>
-														<th scope="row">2</th>
-														<td>data2</td>
-														<td>ric2</td>
-														<td>cat2</td>
-														<td>mat2</td>
+														<th scope="row">{{ index + 1}}</th>
+														<td>{{ ric.giorno }}</td>
+														<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
+														<td>{{ ric.categoria.tipo }}</td>
+														<td>{{ materialeSelezionato }}</td>
 														<td>
 															<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
 														</td>
@@ -106,7 +89,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="accordion-item">
+<!--									TODO: da completare quando le richieste accettate funzionano -->
+									<div class="accordion-item" v-for="(ric, index) in this.listaRichiesteConcluse" :key="ric.id" @click="mostraMateriale(ric)">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
 												Richieste concluse
@@ -128,29 +112,16 @@
 													</thead>
 													<tbody class="table-group-divider">
 														<tr>
-															<th scope="row">1</th>
-															<td>data1</td>
-															<td>ric1</td>
-															<td>Nessuna categoria</td>
-															<td>Nessun materiale</td>
+															<th scope="row">{{ index + 1}}</th>
+															<td>{{ ric.giorno }}</td>
+															<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
+															<td>{{ ric.categoria.tipo }}</td>
+															<td>{{ materialeSelezionato }}</td>
 															<td>
 																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
 															</td>
 															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal">Segnala</button>
-															</td>
-														</tr>
-														<tr>
-															<th scope="row">2</th>
-															<td>data2</td>
-															<td>ric2</td>
-															<td>cat2</td>
-															<td>mat2</td>
-															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
-															</td>
-															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal">Segnala</button>
+																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal" @click="prendiRichiesta(ric.id)">Segnala</button>
 															</td>
 														</tr>
 													</tbody>
@@ -168,7 +139,7 @@
 		</section>
 	</div>
 
-
+<!-- TODO: sistemare la visualizzazione della richiesta, non va perché mi dà che richiestaSelezionata è undefined, solo lui sa perché però -->
 	<!-- visualizzaModal -->
 	<div class="modal fade" id="visualizzaModal" data-bs-show="false" data-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizzaModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -188,55 +159,55 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Nome:</span>
-											<span>Maria</span>
+											<span>{{ richiestaSelezionata.pubAccount.nome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Cognome:</span>
-											<span>Rossi</span>
+											<span>{{ richiestaSelezionata.pubAccount.cognome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Regione:</span>
-											<span>Piemonte</span>
+											<span>{{ richiestaSelezionata.indirizzo.regione }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Provincia:</span>
-											<span>Torino</span>
+											<span>{{ richiestaSelezionata.indirizzo.provincia }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Città:</span>
-											<span>Venaria Reale</span>
+											<span>{{ richiestaSelezionata.indirizzo.citta }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Indirizzo:</span>
-											<span>Via Rossi 15/2</span>
+											<span>{{ richiesta.indirizzo.indirizzo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Categoria:</span>
-											<span>Nessuna categoria</span>
+											<span>{{ richiestaSelezionata.categoria.tipo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Materiale:</span>
-											<span>Tagliaerba</span>
+											<span>{{ materialeSelezionato }}</span>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Descrizione:</span>
-											<span>Ciao sono una descrizione blablabla blablabla blablabla blablabla blablabla blablabla blablabla blablabla blablabla</span>
+											<span>{{ richiestaSelezionata.descrizione }}</span>
 										</div>
 									</div>
 								</div>
@@ -264,7 +235,7 @@
 							<div class="divider"/>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Descrizione del problema</span>
-								<textarea rows="5" class="form-control" minlength="20" aria-label="Descrizione richiesta" aria-describedby="Descrizione richiesta" title="La descrizione deve avere almeno 20 caratteri" required></textarea>
+								<textarea rows="5" class="form-control" v-model="descrizione" minlength="20" aria-label="Descrizione richiesta" aria-describedby="Descrizione richiesta" title="La descrizione deve avere almeno 20 caratteri" required></textarea>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -317,6 +288,7 @@
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
 	import SuccessShower from "@/components/SuccessShower";
+	import axios from "axios";
 
 	export default {
 		name: "MieAttivitaView",
@@ -330,18 +302,223 @@
 				SecondoshowDropdown: false,
 				TerzoshowDropdown: false,
 				idUtente: this.$store.state.userId,
-				successMessage: ''
+				successMessage: '',
+				listaRichiesteAccettate: [],
+				listaRichiestePubblicate: [],
+				listaRichiesteConcluse: [],
+				listaMateriali: [],
+				materialeSelezionato: null,
+				ricId: 0,
+				richiesta: {
+					id: 0,
+					descrizione: '',
+					giorno: '',
+					indirizzo: {
+						id: 0,
+						regione: '',
+						provincia: '',
+						citta: '',
+						indirizzo: ''
+					},
+					stato: '',
+					accAccount: {
+						id: 0,
+						email: '',
+						password: '',
+						nome: '',
+						cognome: '',
+						telefono: '',
+						indirizzo: '',
+						stato: '',
+						path_curriculum: '',
+						path_documento: '',
+						categoria: null
+					},
+					pubAccount: {
+						id: 0,
+						email: '',
+						password: '',
+						nome: '',
+						cognome: '',
+						telefono: '',
+						indirizzo: '',
+						stato: '',
+						path_curriculum: '',
+						path_documento: '',
+						categoria: null
+					},
+					categoria: {
+						tipo: ''
+					},
+					idMateriale: 0
+				},
+				richiestaSelezionata: {
+					id: 0,
+					descrizione: '',
+					giorno: '',
+					indirizzo: {
+						id: 0,
+						regione: '',
+						provincia: '',
+						citta: '',
+						indirizzo: ''
+					},
+					stato: '',
+					accAccount: {
+						id: 0,
+						email: '',
+						password: '',
+						nome: '',
+						cognome: '',
+						telefono: '',
+						indirizzo: '',
+						stato: '',
+						path_curriculum: '',
+						path_documento: '',
+						categoria: null
+					},
+					pubAccount: {
+						id: 0,
+						email: '',
+						password: '',
+						nome: '',
+						cognome: '',
+						telefono: '',
+						indirizzo: '',
+						stato: '',
+						path_curriculum: '',
+						path_documento: '',
+						categoria: null
+					},
+					categoria: {
+						tipo: ''
+					},
+					idMateriale: 0
+				},
+				descrizione: ''
 			}
 		},
 		methods: {
+			// TODO: bisogna anche implementare il termina richiesta accettata
+			// Funzione che seleziona una richiesta precisa
+			// questa ritorna correttamente la richiesta ma sembra che non la salvi o che questo calcolo avvenga durante il mount della pagina
+			async prendiRichiesta(ricId) {
+				await axios.get(`/api/richiesteaiuto/richiesta/${ricId}`)
+					.then(response => {
+						this.richiestaSelezionata = response.data;
+						console.log(this.richiestaSelezionata);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione per mostrare nel template il materiale scelto, se presente, all'interno di una richiesta
+			async mostraMateriale(richiesta) {
+				await axios.get('/api/magazzini/materiali/Torino/2023-12-22')
+					.then(response => {
+						this.listaMateriali = response.data;
+							this.listaMateriali.forEach(mat => {
+								if(richiesta.idMateriale === mat.id) {
+									this.materialeSelezionato = mat.nome;
+								} else {
+									this.materialeSelezionato = '-';
+								}
+							});
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che restituisce tutte le richieste "accettate"/"pubblicate"/"concluse" dall'utente loggato
+			async fetchRichiesteAccettatePubblicateConcluse() {
+				let listaRichieste;
+				await axios.get('/api/richiesteaiuto/richieste')
+					.then(response => {
+						listaRichieste = response.data;
+						listaRichieste.forEach(req => {
+							if(req.stato === 'accettata' && req.accAccount.id === this.idUtente) {
+								this.listaRichiesteAccettate.push(req);
+							}
+							if((req.stato === 'pubblicata' || req.stato === 'accettata') && req.pubAccount.id === this.idUtente) {
+								this.listaRichiestePubblicate.push(req);
+							}
+							else if(req.stato === 'terminata' && (req.accAccount.id === this.idUtente || req.pubAccount.id === this.idUtente)) {
+								this.listaRichiesteConcluse.push(req);
+							}
+						});
+						console.log('accettate: ', this.listaRichiesteAccettate);
+						console.log('pubblicate: ', this.listaRichiestePubblicate);
+						console.log('concluse: ', this.listaRichiesteConcluse);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// TODO: funzione ancora da testare !!!
 			async onSubmit() {
-				this.successMessage ='Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.';
-				this.$refs.succShower.toggle();
-				this.$refs.form.reset();
-				setTimeout(function() {
-					window.location.href = '/accedi-registrati/bacheca/mie-attivita/';
-				}, 3000);
+				await axios.post('/api/segnalazioni/segnalazione/create',
+					{
+						titolo: '',
+						descrizione: this.descrizione,
+						tipologia: 'segnalazione utente',
+						creatore : this.idUtente,
+						segnalato  : this.richiestaSelezionata.pubAccount.id
+					})
+					.then(response => {
+						console.log(response.data);
+						this.successMessage ='Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.';
+						this.$refs.succShower.toggle();
+						this.$refs.form.reset();
+						setTimeout(function() {
+							window.location.href = '/accedi-registrati/bacheca/mie-attivita/';
+						}, 3000);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
 			}
+		},
+		mounted() {
+			this.fetchRichiesteAccettatePubblicateConcluse();
+			this.mostraMateriale(this.richiesta);
+			this.prendiRichiesta(this.ricId);
+		},
+		computed() {
+			this.fetchRichiesteAccettatePubblicateConcluse();
+			this.mostraMateriale(this.richiesta);
+			this.prendiRichiesta(this.ricId);
 		}
 	}
 </script>

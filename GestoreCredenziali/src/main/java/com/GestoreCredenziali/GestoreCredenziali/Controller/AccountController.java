@@ -83,4 +83,15 @@ public class AccountController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("/utente/{id}")
+    public ResponseEntity<Account> getUtenteInfoById(@PathVariable(value = "id") long idUtente) {
+        Account accountEsistente = a_repository.findById(idUtente);
+
+        if (accountEsistente != null) {
+            return ResponseEntity.ok(accountEsistente);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

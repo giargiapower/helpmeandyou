@@ -9,5 +9,7 @@ import java.util.List;
 public interface AccountRepository extends CrudRepository<Account, Long> {
     Account findByEmail(String email);
 
+    Account findById(long id);
+
     List<Account> findAllByStato(String stato);
 }

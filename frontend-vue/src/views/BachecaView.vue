@@ -59,7 +59,8 @@
 
 
 <!--		TODO> questo v-for sotto ha qualche problema. Se crei più richieste te ne accorgi. Inoltre bisognerebbe filtrare le richieste affinché un utente loggato non possa vedere le sue.-->
-		<div class = "card-container">
+<!--		TODO: il problema qui è l'utilizzo sbagliato della classe "card-container" di Bootstrap, bisogna vedere meglio come si utilizza -->
+		<div class="card-container">
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 				<div class="col" v-for="item in richieste" :key="item.id">
 <!--					 questo v-if serve per non mostrare le richieste accettate -->

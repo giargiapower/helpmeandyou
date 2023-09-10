@@ -13,8 +13,8 @@
 											<img src="@/assets/user1.png" class="img-fluid rounded-circle" alt="User-Profile-Default-Image">
 										</div>
 										<div id="ombra">
-											<h3 class="f-w-600">Nome Cognome</h3>
-											<h5>Categoria se c'è (?)</h5>
+											<h3 class="f-w-600">{{ this.nome + ' ' + this.cognome}}</h3>
+											<h5>{{ this.categoria }}</h5>
 										</div>
 									</div>
 								</div>
@@ -24,7 +24,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Data di nascita</p>
-												<h6 class="text-muted f-w-400">....data....</h6>
+												<h6 class="text-muted f-w-400">NON C'è E NON SI PUò SETTARE, VA TOLTA</h6>
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Numero di telefono</p>
@@ -127,6 +127,7 @@
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
 	import SuccessShower from "@/components/SuccessShower";
+	import axios from "axios";
 
 	export default {
 		name: "ProfiloView",
@@ -138,18 +139,21 @@
 			return {
 				// 	imageUrl: 'C:/Users/serra/Desktop/ProgettoTAASS/helpmeandyou/frontend-vue/src/assets/logo.png'
 				// TODO: questi dati sotto vanno presi con le get dal backend
-				phoneNumber: '1234567890',
+				nome: '',
+				cognome: '',
+				categoria: '',
+				phoneNumber: '',
 				phoneNumberError: '',
-				email: 'ciccio@pasticcio.com',
+				email: '',
 				emailError: '',
-				domicile: 'Via delle vie, 1',
-				identityDocument: 'Carta d\'identità',
-				curriculum: 'Curriculum',
-				editedPhoneNumber: '1234567890',
-				editedEmail: 'ciccio@pasticcio.com',
-				editedDomicile: 'Via delle vie, 1',
-				editedIdentityDocument: 'Carta d\'identità',	// dato di tipo file
-				editedCurriculum: 'Curriculum',		// dato di tipo file
+				domicile: '',
+				identityDocument: '',
+				curriculum: '',
+				editedPhoneNumber: '',
+				editedEmail: '',
+				editedDomicile: '',
+				editedIdentityDocument: '',	// dato di tipo file
+				editedCurriculum: '',		// dato di tipo file
 				editing: false,
 				idUtente: this.$store.state.userId,
 				successMessage: ''
@@ -163,6 +167,31 @@
 			// gestisciReset() {
 			// 	this.$router.push('/accedi-registrati/bacheca');
 			// },
+			// Funzione che restituisce le info di un utente per id
+			async fetchInfoUtente() {
+				await axios.get(`/api/utenti/utente/${this.idUtente}`)
+					.then(response => {
+						this.nome = response.data.nome;
+						this.cognome = response.data.cognome;
+						this.categoria = response.data.categoria;
+						this.phoneNumber = response.data.telefono;
+						this.email = response.data.email;
+						this.domicile = response.data.indirizzo;
+						this.identityDocument = response.data.path_documento;
+						this.curriculum = response.data.path_curriculum;
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
 					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :) (solo in caso di eventuali modifiche)
@@ -210,6 +239,9 @@
 					this.emailError = '';
 				}
 			}
+		},
+		mounted() {
+			this.fetchInfoUtente();
 		}
 	}
 </script>
