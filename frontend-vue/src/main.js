@@ -13,8 +13,8 @@ window.bootstrap = bootstrap;
 const store = new Vuex.Store({
 	state: {
 		userId: localStorage.getItem('userId') || null,
-		magLoggedIn: false,
-		adminLoggedIn: false
+		magLoggedIn: localStorage.getItem('magLoggedIn') || false,
+		adminLoggedIn: localStorage.getItem('adminLoggedIn') || false
 	},
 	mutations: {
 		setUserId(state, userId) {
@@ -27,15 +27,19 @@ const store = new Vuex.Store({
 		},
 		setMagLoggedIn(state) {
 			state.magLoggedIn = true;
+			localStorage.setItem('magLoggedIn', true);
 		},
 		logoutMag(state) {
 			state.magLoggedIn = false;
+			localStorage.removeItem('magLoggedIn');
 		},
 		setAdminLoggedIn(state) {
 			state.adminLoggedIn = true;
+			localStorage.setItem('adminLoggedIn', true);
 		},
 		logoutAdmin(state) {
 			state.adminLoggedIn = false;
+			localStorage.removeItem('adminLoggedIn');
 		}
 	}
 });
