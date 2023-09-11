@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
 @RestController
 @RequestMapping("/api/v1")
 public class ContoController {
@@ -23,8 +23,8 @@ public class ContoController {
         Optional<Conto> c = repository.findById(id);
 
         if (c.isPresent()) {
-            Conto _conto = c.get();
-            return _conto;
+            Conto conto = c.get();
+            return conto;
         } else {
             return null;
         }
@@ -52,10 +52,10 @@ public class ContoController {
         Optional<Conto> c = repository.findById(id);
 
         if (c.isPresent()) {
-            Conto _conto = c.get();
-            _conto.addSaldo(conto.getSaldo());
+            Conto contoGet = c.get();
+            contoGet.addSaldo(conto.getSaldo());
 
-            return new ResponseEntity<>(repository.save(_conto), HttpStatus.OK);
+            return new ResponseEntity<>(repository.save(contoGet), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

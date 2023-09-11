@@ -14,7 +14,7 @@
 											<h4 class="mt-1 mb-3 pb-1">Effettua una donazione</h4>
 										</div>
 
-										<form ref="form" @reset="gestisciReset" @submit="onSubmit">
+										<form ref="form" @submit.prevent="onSubmit">
 											<fieldset>
 												<legend>Inserisci i dati della tua carta di credito</legend>
 												<div class="input-group mb-3">
@@ -39,16 +39,15 @@
 													<span class="input-group-text ms-4" id="cvv">CVV</span>
 													<input type="text" minlength="3" maxlength="3" class="form-control" aria-label="CVV" aria-describedby="CVV" required>
 												</div>
+												<p v-if="expiryDateError" class="text-danger" id="danger">{{ expiryDateError }}</p>
 												<div class="input-group mb-3">
 													<span class="input-group-text">Importo</span>
-													<input type="number" class="form-control" aria-label="Importo" aria-describedby="Importo"  min="0" step="1" required>
+													<input type="number" class="form-control" v-model="importo" aria-label="Importo" aria-describedby="Importo"  min="0" step="1" required>
 													<span class="input-group-text">€</span>
 												</div>
 
 												<div class="d-flex justify-content-center">
-													<button class="btn btn-primary mx-2 flex-grow-1" type="reset" id="annulla">Annulla</button>
-													<!-- Button trigger modal -->
-<!--													<button class="btn btn-primary mx-2 flex-grow-1" type="submit" data-bs-toggle="modal" data-bs-target="#inviaDenaro">Invia denaro</button>-->
+													<button class="btn btn-primary mx-2 flex-grow-1" type="button" id="annulla" @click = "gestisciReset">Annulla</button>
 													<button class="btn btn-primary mx-2 flex-grow-1" type="submit">Invia denaro</button>
 												</div>
 											</fieldset>
@@ -76,64 +75,12 @@
 
 	<SuccessShower ref="succShower" :message="successMessage"/>
 
-<!--	TODO: da sistemare: vogliamo che compaia solo se lo status della chiamata al backend "Invia Denaro" va a buon fine :)-->
-	<!-- Modal -->
-<!--	<div class="modal fade" id="inviaDenaro" tabindex="-1" aria-labelledby="inviaDenaroLabel" aria-hidden="true">-->
-<!--		<div class="modal-dialog">-->
-<!--			<div class="modal-content">-->
-<!--				<div class="modal-header">-->
-<!--					<h1 class="modal-title fs-5" id="inviaDenaroLabel">Grazie per la tua donazione!</h1>-->
-<!--					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--				</div>-->
-<!--				<div class="modal-body">-->
-<!--					I tuoi fondi contribuiranno all'acquisto di materiali per il progetto HelpMe&You.-->
-<!--				</div>-->
-<!--				<div class="modal-footer">-->
-<!--					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--					<button type="button" class="btn btn-primary">Save changes</button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-
-
-
-<!--	<div class="donazioni">-->
-<!--		<home-nav-bar />-->
-<!--		<h1>Donazioni</h1>-->
-<!--		<form @reset="gestisciReset" @submit="onSubmit">-->
-<!--			<table>-->
-<!--				<h2>Inserisci i dati della tua carta di credito</h2>-->
-<!--				<tbody>-->
-<!--				<tr>-->
-<!--					<td><label for="nome">Nome:</label></td>-->
-<!--					<td><input type="text" id="nome" name="nome" required></td>-->
-<!--					<td><label for="cognome">Cognome:</label></td>-->
-<!--					<td><input type="text" id="cognome" name="cognome" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="numcarta">Numero carta:</label></td>-->
-<!--					<td><input type="text" id="numcarta" name="numcarta" required></td>-->
-<!--					<td><label for="cvv">CVV:</label></td>-->
-<!--					<td><input type="text" id="cvv" name="cvv" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="datascadenza">Data di scandenza:</label></td>-->
-<!--					<td><input type="date" id="datascadenza" name="datascadenza" required></td>-->
-<!--					<td><label for="importo">Importo donazione:</label></td>-->
-<!--					<td><input type="text" id="importo" name="importo" required></td>-->
-<!--				</tr>-->
-<!--				</tbody>-->
-<!--			</table>-->
-<!--			<input type="reset" value="Annulla"> |-->
-<!--			<input type="submit" value="Invia denaro">-->
-<!--		</form>-->
-<!--	</div>-->
 </template>
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
 	import SuccessShower from "@/components/SuccessShower";
+	import axios from "axios";
 
 	export default {
 		name: "DonazioniView",
@@ -143,7 +90,9 @@
 		},
 		data() {
 			return {
-				successMessage: ''
+				importo: '',
+				successMessage: '',
+				expiryDateError: ''
 			}
 		},
 		methods: {
@@ -151,11 +100,73 @@
 				this.$refs.form.reset();
 				this.$router.push('/');
 			},
-			onSubmit() {
-				this.successMessage ='Grazie per la tua donazione!\n I tuoi fondi contribuiranno all\'acquisto di materiali per il progetto HelpMe&You.';
-				this.$refs.succShower.toggle();
-				this.$refs.form.reset();
-				this.$router.push('/');
+			verificaDataScadenza() {
+				// Si ottiene il mese e l'anno correnti
+				const oggi = new Date();
+				const annoCorrente = oggi.getFullYear().toString();
+				const meseCorrente = oggi.getMonth() + 1; // Nota: getMonth restituisce un valore da 0 a 11
+
+				// Si estrae il mese e l'anno inseriti dall'utente
+				const inputData = document.getElementById('datascadenza').value;
+
+				const regex = /^(0[1-9]|1[0-2])\/\d{2}$/; // Regex per il formato MM/YY
+
+				if (!regex.test(inputData)) {
+					this.expiryDateError = 'Il formato della data deve essere MM/YY';
+					return false;
+				}
+
+				const [inputMese, inputAnno] = inputData.split('/');
+				const meseInserito = parseInt(inputMese, 10);
+				const annoInserito = "20" + parseInt(inputAnno, 10);
+
+				if (meseInserito < 1 || meseInserito > 12) {
+					this.expiryDateError = 'Il formato della data deve essere MM/YY';
+					return false;
+				}
+
+				// Confronta il mese e l'anno
+				if (annoInserito < annoCorrente || (annoInserito === annoCorrente && meseInserito <= meseCorrente)) {
+					this.expiryDateError = 'La data di scadenza della carta è scaduta';
+					return false;
+				} else {
+					// La data è valida
+					// console.log('La data è valida.');
+					return true;
+				}
+			},
+			async onSubmit() {
+				if (this.verificaDataScadenza()){
+					// console.log('Importo: ' + this.importo)
+					await axios.put('http://localhost:32000/api/v1/conto/add/1',
+						{
+							saldo: this.importo
+						},
+						{
+							headers: {
+								'Content-Type': "application/json",
+								'responseType': 'json'
+							}
+						})
+						.then(response => {
+							console.log(response.data);
+							this.successMessage ='Grazie per la tua donazione!\n I tuoi fondi contribuiranno all\'acquisto di materiali per il progetto HelpMe&You.';
+							this.$refs.succShower.toggle();
+							this.$refs.form.reset();
+							this.$router.push('/');
+						})
+						.catch(error => {
+							if(error.response) {
+								console.error('Response Data:', error.response.data);
+								console.error('Response Status:', error.response.status);
+								console.error('Response Headers:', error.response.headers);
+							} else if(error.request) {
+								console.error('No response received:', error.request);
+							} else {
+								console.error('Error:', error.message);
+							}
+						})
+				}
 			}
 		}
 	}
@@ -171,10 +182,6 @@
 
 	.hero-section {
 		background: url("@/assets/home-background.jpg") center/cover no-repeat;
-		/*height: 100vh;*/
-		/*display: flex;*/
-		/*align-items: center;*/
-		/*justify-content: center;*/
 	}
 
 	.rounded-5{
@@ -273,7 +280,7 @@
 		}
 	}
 
-	/* Nascondi le frecce nell'input di tipo "number" */
+	/* Nasconde le frecce nell'input di tipo "number" */
 	input[type="number"]::-webkit-inner-spin-button,
 	input[type="number"]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
