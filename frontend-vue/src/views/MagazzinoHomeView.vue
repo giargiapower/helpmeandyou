@@ -10,7 +10,14 @@
 							<div class="col-lg-10">
 <!--								TODO: Il luogo qui sotto dipenderà dalle credenziali dell'utente.-->
 								<h1 class="fw-bold mb-5">Gestione magazzino: Torino</h1>
-								<p>Denaro disponibile: {{ saldoMagazzino }}</p>
+								<p>
+									Denaro disponibile: {{ saldoMagazzino }}
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="calcSaldoMagazzino">
+								</p>
+
+								<p v-if="listaMateriali.length === 0">Magazzino vuoto!</p>
+								<button v-if="listaMateriali.length === 0" class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#aggiungiMaterialeModal">Aggiungi nuovo materiale</button>
+
 								<div class="table-responsive">
 									<table class="table table-hover" v-if="listaMateriali.length !== 0">
 										<thead>
@@ -242,15 +249,27 @@
 
 				return uniqueMateriali;
 			},
+			async calcSaldoMagazzino() {
+				await axios.get('http://localhost:32000/api/v1/conto/1')
+					.then(response => {
+						console.log(response.data);
+						this.saldoMagazzino = response.data.saldo;
+					})
+					.catch(error => {
+						console.log(error);
+					})
+			},
 			// Funzione che carica dal server i materiali presenti nel magazzino
 			async fetchMaterialiMagazzino() {
 				await axios.get('/api/magazzini/1/materiali')
 					.then(response => {
 						this.listaMateriali = response.data;
 						this.fetchQuantitaMateriale();
-						// Inizializza editingItems per ogni elemento nella lista
+						// Inizializza editingItems a false per ogni elemento nella lista (non null)
 						this.listaMateriali.forEach(item => {
-							this.$set(this.editingItems, item.nome, false);
+							if (this && this.$set) {
+								this.$set(this.editingItems, item.nome, false);
+							}
 						});
 						console.log('Materiali caricati con successo.');
 					})
@@ -261,8 +280,7 @@
 			// Funzione che aggiunge un materiale al magazzino e lo salva sul server
 			// TODO: NON FUNZIONA! MA NON SEMBRA SBAGLIATA !!!
 			async addMateriale(nome, num) {
-				const idMagazzino = 6;
-				const url = `/api/magazzini/create/${idMagazzino}/${nome}`;
+				const url = `/api/magazzini/create/1/${nome}`;
 				await axios.put(url, {idMagazzino: 6, nome: nome})
 					.then(response => {
 						this.listaMateriali.push(response.data);
@@ -306,6 +324,7 @@
 		mounted() {
 			this.fetchMaterialiMagazzino();
 			this.uniqueMateriali();
+			this.calcSaldoMagazzino();
 		},
 		computed() {
 			this.fetchMaterialiMagazzino();
@@ -390,6 +409,13 @@
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
+	.btn-success {
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		border-radius: 20px;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
 	p {
 		font-size: 1.2em;
 		margin-top: -20px;
@@ -429,5 +455,13 @@
 
 	.text-muted {
 		font-size: 16px;
+	}
+
+	#reload {
+		width: 25px;
+		height: 25px;
+		margin-left: 20px;
+		margin-top: -5px;
+		cursor: pointer;
 	}
 </style>
