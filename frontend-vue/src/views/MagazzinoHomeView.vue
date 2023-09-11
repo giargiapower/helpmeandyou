@@ -272,7 +272,7 @@
 			async calcSaldoMagazzino() {
 				await axios.get('http://localhost:32000/api/v1/conto/1')
 					.then(response => {
-						console.log(response.data);
+						// console.log(response.data);
 						this.saldoMagazzino = response.data.saldo;
 					})
 					.catch(error => {
@@ -291,7 +291,7 @@
 								this.$set(this.editingItems, item.nome, false);
 							}
 						});
-						console.log('Materiali caricati con successo.');
+						// console.log('Materiali caricati con successo.');
 					})
 					.catch(error => {
 						console.log(error);
@@ -352,7 +352,7 @@
 				const url = `/api/magazzini/elimina/nome/1/${nomeItem}`;
 				await axios.delete(url, {materiale_nome: nomeItem})
 					.then(response => {
-						console.log(response.data);
+						// console.log(response.data);
 						this.listaMateriali = response.data.materiali;
 						this.fetchQuantitaMateriale();
 					})
