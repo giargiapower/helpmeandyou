@@ -28,10 +28,10 @@ const routes = [
 		name: 'magazzino-home',
 		component: MagazzinoHomeView,
 		beforeEnter(to, from, next) {
-			if (app.$store.state.magLoggedIn === true)
-				next();
-			else
+			if (app.$store.state.mapLoggedIn === false)
 				next({name: 'magazzino'});
+			else
+				next();
 		}
 	},
 	{
