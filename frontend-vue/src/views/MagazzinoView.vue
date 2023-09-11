@@ -39,6 +39,7 @@
 		methods: {
 			onSubmit() {
 				if(this.email === 'mag@mag.it' && this.password === 'mag') {
+					this.$refs.form.reset();
 					this.$store.commit('setMagLoggedIn');
 					this.$router.push('/magazzino/magazzino-home');
 				}

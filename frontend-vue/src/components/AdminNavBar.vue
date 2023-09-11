@@ -19,7 +19,7 @@
 						<router-link to="/admin/admin-gestione-utenti" class="nav-link">Gestione utenti</router-link>
 					</li>
 					<li class="nav-item">
-						<router-link to="/admin" class="nav-link">Logout</router-link>
+						<router-link to="/admin" class="nav-link" @click="logout">Logout</router-link>
 					</li>
 				</ul>
 			</div>
@@ -38,6 +38,9 @@
 		methods: {
 			toggleNav() {
 				this.isNavOpen = !this.isNavOpen;
+			},
+			logout() {
+				this.$store.commit('logoutAdmin');
 			}
 		}
 	}

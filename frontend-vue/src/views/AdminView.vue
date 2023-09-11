@@ -2,7 +2,7 @@
 	<div class="home-container">
 		<div class="hero-section">
 			<div class="hero-content">
-				<form @submit="onSubmit" ref="form">
+				<form @submit.prevent="onSubmit" ref="form">
 					<fieldset>
 						<legend>Login Amministratore</legend>
 						<div class="mb-3">
@@ -17,15 +17,36 @@
 			</div>
 		</div>
 	</div>
+
+	<ErrorShower ref="errShower" :message="errorMessage" />
 </template>
 
 <script>
+	import ErrorShower from "@/components/ErrorShower.vue";
+
 	export default {
 		name: "AdminView",
+		components: {
+			ErrorShower
+		},
+		data() {
+			return {
+				email: '',
+				password: '',
+				errorMessage: '',
+			}
+		},
 		methods: {
 			onSubmit() {
-				this.$refs.form.reset();
-				this.$router.push('/admin/admin-home');
+				if(this.email === 'admin@admin.it' && this.password === 'admin') {
+					this.$refs.form.reset();
+					this.$store.commit('setAdminLoggedIn');
+					this.$router.push('/admin/admin-home');
+				}
+				else {
+					this.errorMessage = 'Credenziali errate';
+					this.$refs.errShower.toggle();
+				}
 			}
 		}
 	}

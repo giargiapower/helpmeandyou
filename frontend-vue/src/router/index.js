@@ -37,17 +37,35 @@ const routes = [
 	{
 		path: '/admin/admin-home',
 		name: 'admin-home',
-		component: AdminHomeView
+		component: AdminHomeView,
+		beforeEnter(to, from, next) {
+			if (app.$store.state.adminLoggedIn === false)
+				next({name: 'admin'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/admin/admin-segnalazioni',
 		name: 'admin-segnalazioni',
-		component: () => import('../views/AdminSegnalazioniView.vue')
+		component: () => import('../views/AdminSegnalazioniView.vue'),
+		beforeEnter(to, from, next) {
+			if (app.$store.state.adminLoggedIn === false)
+				next({name: 'admin'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/admin/admin-gestione-utenti',
 		name: 'admin-gestione-utenti',
-		component: () => import('../views/AdminGestioneUtentiView.vue')
+		component: () => import('../views/AdminGestioneUtentiView.vue'),
+		beforeEnter(to, from, next) {
+			if (app.$store.state.adminLoggedIn === false)
+				next({name: 'admin'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/accedi-registrati',
