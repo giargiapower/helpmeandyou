@@ -6,7 +6,7 @@
 			</router-link>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<router-link to="/magazzino" class="nav-link">Logout</router-link>
+					<router-link to="/magazzino" class="nav-link" @click="logout">Logout</router-link>
 				</li>
 			</ul>
 		</div>
@@ -24,6 +24,9 @@
 		methods: {
 			toggleNav() {
 				this.isNavOpen = !this.isNavOpen;
+			},
+			logout() {
+				this.$store.commit('logoutMag');
 			}
 		}
 	}

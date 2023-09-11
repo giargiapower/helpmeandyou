@@ -2,7 +2,7 @@
 	<div class="home-container">
 		<div class="hero-section">
 			<div class="hero-content">
-				<form @submit="onSubmit" ref="form">
+				<form @submit.prevent="onSubmit" ref="form">
 					<fieldset>
 						<legend>Login Magazzino</legend>
 						<div class="mb-3">
@@ -17,14 +17,35 @@
 			</div>
 		</div>
 	</div>
+
+	<ErrorShower ref="errShower" :message="errorMessage" />
 </template>
 
 <script>
+	import ErrorShower from "@/components/ErrorShower.vue";
+
 	export default {
 		name: "MagazzinoView",
+		components: {
+			ErrorShower
+		},
+		data() {
+			return {
+				email: '',
+				password: '',
+				errorMessage: '',
+			}
+		},
 		methods: {
 			onSubmit() {
-				this.$router.push('/magazzino/magazzino-home');
+				if(this.email === 'mag@mag.it' && this.password === 'mag') {
+					this.$store.commit('setMagLoggedIn');
+					this.$router.push('/magazzino/magazzino-home');
+				}
+				else {
+					this.errorMessage = 'Credenziali errate';
+					this.$refs.errShower.toggle();
+				}
 			}
 		}
 	}

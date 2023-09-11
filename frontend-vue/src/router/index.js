@@ -26,7 +26,13 @@ const routes = [
 	{
 		path: '/magazzino/magazzino-home',
 		name: 'magazzino-home',
-		component: MagazzinoHomeView
+		component: MagazzinoHomeView,
+		beforeEnter(to, from, next) {
+			if (app.$store.state.magLoggedIn === true)
+				next();
+			else
+				next({name: 'magazzino'});
+		}
 	},
 	{
 		path: '/admin/admin-home',
