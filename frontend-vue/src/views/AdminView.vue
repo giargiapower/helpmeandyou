@@ -23,6 +23,7 @@
 
 <script>
 	import ErrorShower from "@/components/ErrorShower.vue";
+	import axios from "axios";
 
 	export default {
 		name: "AdminView",
@@ -37,13 +38,31 @@
 			}
 		},
 		methods: {
-			onSubmit() {
+			async onSubmit() {
 				if(this.email === 'admin@admin.it' && this.password === 'admin') {
-					this.$refs.form.reset();
-					this.$store.commit('setAdminLoggedIn');
-					this.$router.push('/admin/admin-home');
-				}
-				else {
+					await axios.post('/api/amministratore/login',
+						{
+								email: this.email,
+								password: this.password
+						})
+						.then(response => {
+							console.log(response.data);
+							this.$refs.form.reset();
+							this.$store.commit('setAdminLoggedIn');
+							this.$router.push('/admin/admin-home');
+						})
+						.catch(error => {
+							if (error.response) {
+								console.error('Response Data:', error.response.data);
+								console.error('Response Status:', error.response.status);
+								console.error('Response Headers:', error.response.headers);
+							} else if (error.request) {
+								console.error('No response received:', error.request);
+							} else {
+								console.error('Error:', error.message);
+							}
+						})
+				} else {
 					this.errorMessage = 'Credenziali errate';
 					this.$refs.errShower.toggle();
 				}

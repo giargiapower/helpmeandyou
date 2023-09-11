@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
 @RestController
 @RequestMapping("/api/amministratore")
 public class AmministatoreController {
@@ -41,6 +41,12 @@ public class AmministatoreController {
 	@Autowired
 	RabbitSender rabbitSender = new RabbitSender();
 
+	@GetMapping("/allUtenti")
+	public List<Account> getAllUtenti() {
+		List<Account> accounts = new ArrayList<>();
+		repository.findAllByStato("approvato").forEach(accounts::add);
+		return accounts;
+	}
 
 	// metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)
 	// va aggiunta la parte di invio dei documenti e curriculum all'amministratore per la verifica
@@ -100,7 +106,7 @@ public class AmministatoreController {
 				.body(resource);
 	}
 
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<Amministratore> login(@RequestBody Amministratore amministratore) {
 		Account accountEsistente = repository.findByEmail(amministratore.getEmail());
 		if (accountEsistente != null && accountEsistente.getPassword().equals(amministratore.getPassword()) && accountEsistente.getStato().equals("approvato")) {

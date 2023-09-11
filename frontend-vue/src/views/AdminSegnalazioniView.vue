@@ -22,7 +22,7 @@
 										<tbody class="table-group-divider">
 											<tr v-for="(segnalazione, index) in listaSegnalazioni" :key="segnalazione.id">
 												<th scope="row">{{ index + 1 }}</th>
-												<td>{{ segnalazione.segnalato }}</td>
+												<td>{{ nomeUtenteSegnalato }}</td>
 												<td>{{ segnalazione.tipologia }}</td>
 												<td>
 													<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal(segnalazione)">Apri</button>
@@ -79,9 +79,9 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal">Elimina segnalazione</button>
+					<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" @click="eliminaSegnalazione(currentSegnalazione.id)">Elimina segnalazione</button>
 					<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
-					<button class="btn btn-danger mx-4 flex-grow-1" type="button" data-bs-dismiss="modal">Blocca utente</button>
+					<button class="btn btn-danger mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" @click="bloccaUtente(currentSegnalazione.segnalato)">Blocca utente</button>
 				</div>
 			</div>
 		</div>
@@ -151,6 +151,7 @@
 			}
 		},
 		methods: {
+			// Funzione che carica la lista delle segnalazioni
 			async fetchSegnalazioni() {
 				await axios.get('/api/segnalazioni/segnalazione/list')
 					.then(response => {
@@ -158,7 +159,55 @@
 						console.log('Segnalazioni caricate con successo.');
 					})
 					.catch(error => {
-						console.log(error);
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Restituisce il nome dell'utente segnalato
+			// TODO: stampare il nome dell'utente segnalato, per il momento mostra un campo vuoto
+			async infoUtenteSegnalato(segnalato) {
+				await axios.get(`/api/utenti/utente/${segnalato}`)
+					.then(response => {
+						console.log(response.data.nome);
+						this.nomeUtenteSegnalato = response.data.nome;
+						console.log(this.nomeUtenteSegnalato);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che blocca un utente
+			async bloccaUtente(segnalatoId) {
+				await axios.put(`/api/amministratore/blocca/${segnalatoId}`)
+					.then(response => {
+						// TODO: un messaggio che mostri che l'utente x sia bloccato
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
 					})
 			},
 			openModal(segnalazione) {
@@ -166,16 +215,39 @@
 				// Apri il modal
 				const modal = new Modal(document.getElementById("verificaModal"));
 				modal.show();
+			},
+			// Funzione che elimina le segnalazione arrivate
+			async eliminaSegnalazione(segnalazioneId) {
+				await axios.delete(`/api/segnalazioni/segnalazione/delete/${segnalazioneId}`)
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
 			}
 		},
 		data() {
 			return {
 				listaSegnalazioni: [],
-				currentSegnalazione: {}
+				currentSegnalazione: {},
+				nomeUtenteSegnalato: ''
 			}
 		},
 		mounted() {
-			this.fetchSegnalazioni()
+			this.fetchSegnalazioni();
+		},
+		computed() {
+			this.infoUtenteSegnalato(this.currentSegnalazione.segnalato);
+			this.eliminaSegnalazione(this.currentSegnalazione.id);
 		}
 	}
 </script>

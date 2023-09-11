@@ -2,7 +2,7 @@
 	<div class="modal fade" :id="'btn-verifica-' + utente.id" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="btn-verificaLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form ref="form">
+				<form ref="form" @submit.prevent="approvaUtente">
 					<fieldset>
 						<div class="modal-header">
 							<legend class="custom-legend">
@@ -44,7 +44,7 @@
 										</div>
 									</div>
 									<div class="col">
-										<div class="list-group-item d-flex">
+										<div class="list-group-item d-flex" v-for="(cat, index) in listaCategorie" :key="index">
 											<span class="fw-bold me-3">Categoria:</span>
 
 											<span v-if="editing"></span>
@@ -53,8 +53,7 @@
 <!--										TODO: da sistemare. Se non si riesce a schermo piuttosto si toglie il toggle a Modifica categoria e lo si fa scomparire una volta cliccato-->
 											<select v-if="editing" class="form-select" aria-label="Categoria" v-model="editedCategory">
 												<option>Nessuna categoria</option>
-												<option>cat1</option>
-												<option>cat2</option>
+												<option>{{ cat.tipo }}</option>
 <!--												<option v-for="cat in categorie" :key="cat.id">{{ cat.nome }}</option>-->
 											</select>
 										</div>
@@ -84,7 +83,7 @@
 						<div class="modal-footer">
 							<button class="btn btn-outline-success mx-4 flex-grow-1" type="button" @click="editCategory"> {{ editing ? "Salva" : "Modifica categoria" }}</button>
 							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="cancelEditing" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
-							<button class="btn btn-primary mx-4 flex-grow-1">Approva</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Approva</button>
 						</div>
 					</fieldset>
 				</form>
@@ -228,9 +227,73 @@ export default {
 					console.error(errors);
 				})
 		},
+		// Funzione che aggiorna lo stato dell'account di un utente da "da_approvare" a "approvato"
+		async approvaUtente() {
+			await axios.put(`/api/amministratore/da_approvare/valuta/${this.utente.id}`,
+				{
+					decisione: 'approvato'
+				})
+				.then(response => {
+					console.log(response.data);
+					// TODO: impostare un alert o qualcosa che faccia capire che l'utente è stato approvato
+				})
+				.catch(error => {
+					if (error.response) {
+						console.error('Response Data:', error.response.data);
+						console.error('Response Status:', error.response.status);
+						console.error('Response Headers:', error.response.headers);
+					} else if (error.request) {
+						console.error('No response received:', error.request);
+					} else {
+						console.error('Error:', error.message);
+					}
+				})
+		},
+		// Funzione che recupera le categorie per l'utente
+		async prendiCategorie() {
+			await axios.get('/api/amministratore/categorie')
+				.then(response => {
+					this.listaCategorie = response.data;
+					console.log(response.data);
+				})
+				.catch(error => {
+					if (error.response) {
+						console.error('Response Data:', error.response.data);
+						console.error('Response Status:', error.response.status);
+						console.error('Response Headers:', error.response.headers);
+					} else if (error.request) {
+						console.error('No response received:', error.request);
+					} else {
+						console.error('Error:', error.message);
+					}
+				})
+		},
+		// Funzione che aggiorna la categoria di un utente
+		// TODO: sistemare perché `/api/amministratore/aggiorna_categoria/${this.utente.id}` non va
+		async aggiornaCategoria() {
+			await axios.put(`/api/amministratore/aggiorna_categoria/${this.utente.id}`,
+				{
+					categoria: this.editedCategory
+				})
+				.then(response => {
+					console.log(response.data);
+				})
+				.catch(error => {
+					if (error.response) {
+						console.error('Response Data:', error.response.data);
+						console.error('Response Status:', error.response.status);
+						console.error('Response Headers:', error.response.headers);
+					} else if (error.request) {
+						console.error('No response received:', error.request);
+					} else {
+						console.error('Error:', error.message);
+					}
+				})
+		},
 		editCategory() {
 			if (this.editing) {
 				this.categoryCopy = this.editedCategory;
+				this.aggiornaCategoria();
 			} else {
 				this.editedCategory = this.categoryCopy;
 			}
@@ -247,12 +310,18 @@ export default {
 			file: '',
 			editing: false,
 			editedCategory: '',
-			categoryCopy: this.utente.categoria
+			categoryCopy: this.utente.categoria,
+			listaCategorie: []
 		}
+	},
+	mounted() {
+		this.prendiCategorie();
 	},
 	computed() {
 		this.cvPath(this.file);
 		this.idDocPath(this.file);
+		this.approvaUtente();
+		this.aggiornaCategoria();
 	}
 }
 </script>

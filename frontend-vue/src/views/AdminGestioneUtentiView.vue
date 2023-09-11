@@ -18,12 +18,12 @@
 											<th scope="col"></th>
 										</tr>
 										</thead>
-										<tbody class="table-group-divider">
+										<tbody class="table-group-divider" v-for="(user, index) in listaUtentiApprovati" :key="user.id">
 										<tr>
-											<th scope="row">1</th>
-											<td>ciccio pasticcio</td>
+											<th scope="row">{{index + 1}}</th>
+											<td>{{ user.nome + ' ' + user.cognome }}</td>
 											<td class="text-end">
-												<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal()">Visualizza</button>
+												<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal(user)">Visualizza</button>
 											</td>
 										</tr>
 										</tbody>
@@ -44,7 +44,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<legend class="custom-legend">
-						<span class="legend-text">Utente: ciccio pasticcio</span>
+						<span class="legend-text">Utente: {{ currentUser.nome + ' ' + currentUser.cognome }}</span>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</legend>
 				</div>
@@ -53,17 +53,18 @@
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Nome:</span>
-								<span>...</span>
+								<span>{{currentUser.nome}}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Cognome:</span>
-								<span>...</span>
+								<span>{{ currentUser.cognome }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
+<!--								TODO: togliere perché non esiste-->
 								<span class="fw-bold me-3">Data di nascita:</span>
 								<span>...</span>
 							</div>
@@ -71,38 +72,38 @@
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Numero di telefono:</span>
-								<span>...</span>
+								<span>{{ currentUser.telefono }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Email:</span>
-								<span>...</span>
+								<span>{{ currentUser.email }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Domicilio(?):</span>
-								<span>...</span>
+								<span>{{ currentUser.indirizzo }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Documento d'identità:</span>
-								<span>...</span>
+								<span>{{ currentUser.path_documento }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Curriculum:</span>
-								<span>...</span>
+								<span>{{ currentUser.path_curriculum }}</span>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Chiudi</button>
-					<button class="btn btn-danger mx-4 flex-grow-1" type="button" data-bs-dismiss="modal">Blocca utente</button>
+					<button class="btn btn-danger mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" @click="bloccaUtente(currentUser.id)">Blocca utente</button>
 				</div>
 			</div>
 		</div>
@@ -112,23 +113,70 @@
 <script>
 	import AdminNavBar from "@/components/AdminNavBar";
 	import { Modal } from "bootstrap";
+	import axios from "axios";
 
 	export default {
 		name: "AdminGestioneUtentiView",
 		components: {AdminNavBar},
 		methods: {
-			openModal() {
-				this.currentUser = null;
+			openModal(user) {
+				this.currentUser = user;
 				// Apri il modal
 				const modal = new Modal(document.getElementById("verificaModal"));
 				modal.show();
+			},
+			// Funzione che ritorna tutti gli utenti approvati
+			async fetchUtenti() {
+				await axios.get('/api/amministratore/allUtenti')
+					.then(response => {
+						this.listaUtentiApprovati = response.data;
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che blocca un utente
+			// TODO: funziona ma bisogna sistemare il fatto che il currentUser risulti null
+			// errore presente anche in un altro file
+			async bloccaUtente(segnalatoId) {
+				await axios.put(`/api/amministratore/blocca/${segnalatoId}`)
+					.then(response => {
+						// TODO: un messaggio che mostri che l'utente x sia bloccato
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
 			}
 		},
 		data() {
 			return {
 				listaNomiUtenti: [],
-				currentUser: null
+				currentUser: null,
+				listaUtentiApprovati: []
 			}
+		},
+		mounted() {
+			this.fetchUtenti();
+		},
+		computed() {
+			this.bloccaUtente();
 		}
 	}
 </script>
