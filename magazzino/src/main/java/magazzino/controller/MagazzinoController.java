@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
 @RestController
 @RequestMapping("/api/magazzini")
 public class MagazzinoController {
@@ -101,7 +101,7 @@ public class MagazzinoController {
 	public ResponseEntity<Magazzino> postMaterialeInMagazzino(@PathVariable("magazzino_id") long magazzinoId, @PathVariable("materiale_nome") String nomeMateriale) {
 		// Controllo se il magazzino esiste
 		Optional<Magazzino> magazzino = magRepository.findById(magazzinoId);
-		if(magazzino.isPresent()) {
+		if (magazzino.isPresent()) {
 			Materiale nuovoMateriale = new Materiale(nomeMateriale, magazzino.get());
 			// Aggiungo il materiale al magazzino
 			magazzino.get().aggiungiMateriale(nuovoMateriale);
@@ -110,6 +110,35 @@ public class MagazzinoController {
 			// Salvo le modifiche al magazzino sul database
 			magRepository.save(magazzino.get());
 			return new ResponseEntity<>(magazzino.get(), HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	// Aggiorna la quantità di un materiale dato il nome del materiale e il magazzino in cui ci si trova
+	@PutMapping("/aggiorna/{magazzino_id}/{materiale_nome}/{quantita}")
+	public ResponseEntity<Magazzino> aggiornaQuantitaMateriale(@PathVariable("magazzino_id") long magId, @PathVariable("materiale_nome") String nomeMateriale, @PathVariable("quantita") int quantita) {
+		Optional<Magazzino> magazzino = magRepository.findById(magId);
+		if (magazzino.isPresent()) {
+			Magazzino mag = magazzino.get();
+			// Cerca tutti i materiali con quel nome
+			long numMateriali = mag.getMateriali().stream().filter(materiale -> materiale.getNome().equals(nomeMateriale)).count();
+			if (numMateriali > quantita) {
+				// Elimina i materiali in eccesso...TODO: check materiali presenti in richieste (?) meglio eliminare quelli liberi (?)
+				for (int i = 0; i < numMateriali - quantita; i++) {
+					if (mag != null) {
+						Optional<Materiale> matId = mag.getMateriali().stream().filter(materiale -> materiale.getNome().equals(nomeMateriale)).findFirst();
+						if (matId.isPresent())
+							mag = eliminaMaterialeInMagazzino(magId, matId.get().getId()).getBody();
+					}
+				}
+			}
+			else {
+				// Aggiunge i materiali mancanti
+				for (int i = 0; i < quantita - numMateriali; i++) {
+					mag = postMaterialeInMagazzino(magId, nomeMateriale).getBody();
+				}
+			}
+			return new ResponseEntity<>(mag, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
@@ -135,7 +164,7 @@ public class MagazzinoController {
 	@DeleteMapping("/elimina")
 	public ResponseEntity<String> eliminaMagazzini() {
 		List<Magazzino> magazzini = (List<Magazzino>) magRepository.findAll();
-		for (Magazzino magazzino: magazzini)
+		for (Magazzino magazzino : magazzini)
 			eliminaMagazzino(magazzino.getId());
 		return new ResponseEntity<>("Tutti i magazzini sono stati rimossi!", HttpStatus.OK);
 	}
@@ -150,8 +179,7 @@ public class MagazzinoController {
 				eliminaMaterialeInMagazzino(magId, materiale.getId());
 			magRepository.deleteById(magId);
 			return new ResponseEntity<>("Magazzino è stato rimosso!", HttpStatus.OK);
-		}
-		else
+		} else
 			return new ResponseEntity<>("Magazzino non trovato!", HttpStatus.NOT_FOUND);
 	}
 
@@ -161,13 +189,13 @@ public class MagazzinoController {
 	public ResponseEntity<Magazzino> eliminaMaterialeInMagazzino(@PathVariable("magazzino_id") long magId, @PathVariable("materiale_id") long matId) {
 		Optional<Magazzino> magazzino = magRepository.findById(magId);
 		// Controllo se esiste il magazzino
-		if(magazzino.isPresent()){
+		if (magazzino.isPresent()) {
 			Magazzino mag = magazzino.get();
 			// Elimino il materiale dal magazzino
 			Optional<Materiale> materiale = matRepository.findById(matId);
 			if (materiale.isPresent() && mag.getMateriali().contains(materiale.get())) {
 				// Se il materiale è in uso elimino le richieste di aiuto a cui è associato
-				if (materiale.get().inUso()){
+				if (materiale.get().inUso()) {
 					// TODO: invia messaggio a tutte le richieste che utilizzano quel materiale
 					ricRepository.deleteAll(materiale.get().getRichieste());
 				}
@@ -188,8 +216,24 @@ public class MagazzinoController {
 		if (richiesta.isPresent()) {
 			ricRepository.deleteById(ricId);
 			return new ResponseEntity<>("Richiesta di aiuto rimossa!", HttpStatus.OK);
-		}
-		else
+		} else
 			return new ResponseEntity<>("Richiesta di aiuto non trovata!", HttpStatus.NOT_FOUND);
+	}
+
+	// Elimina tutti i materiali di un magazzino dato il nome del materiale
+	@DeleteMapping("/elimina/nome/{magazzino_id}/{materiale_nome}")
+	public ResponseEntity<Magazzino> eliminaMaterialiInMagazzino(@PathVariable("magazzino_id") long magId, @PathVariable("materiale_nome") String nomeMateriale) {
+		Optional<Magazzino> magazzino = magRepository.findById(magId);
+		if (magazzino.isPresent()) {
+			Magazzino mag = magazzino.get();
+			// Elimino tutti i materiali con quel nome
+			for (Materiale materiale : mag.getMateriali()) {
+				if (materiale.getNome().equals(nomeMateriale)) {
+					mag = eliminaMaterialeInMagazzino(magId, materiale.getId()).getBody();
+				}
+			}
+			return new ResponseEntity<>(mag, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

@@ -64,7 +64,7 @@
 	<div class="modal fade" id="aggiungiMaterialeModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="aggiungiMaterialeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form @submit.prevent="aggiungiNuovo" ref="form">
+				<form @submit.prevent="aggiungiNuovoMateriale" ref="form">
 					<fieldset>
 						<div class="modal-body">
 							<legend class="custom-legend">
@@ -75,7 +75,7 @@
 							<div class="divider"/>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Nome materiale</span>
-								<input type="text" class="form-control" aria-label="NuovoMateriale" aria-describedby="NuovoMateriale" required>
+								<input type="text" v-model="nome" class="form-control" aria-label="NuovoMateriale" aria-describedby="NuovoMateriale" required>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -90,7 +90,7 @@
 
 	<SuccessShower ref="succShower" :message="successMessage"/>
 
-
+	<ErrorShower ref="errShower" :message="errorMessage"/>
 
 <!--	<div class="magazzino-home">-->
 <!--		<nav>-->
@@ -205,18 +205,38 @@
 <script>
 	import MagazzinoNavBar from "@/components/MagazzinoNavBar";
 	import SuccessShower from "@/components/SuccessShower";
+	import ErrorShower from "@/components/ErrorShower";
 	import axios from "axios";
 
 	export default {
 		name: "MagazzinoHomeView",
 		components: {
 			MagazzinoNavBar,
-			SuccessShower
+			SuccessShower,
+			ErrorShower
+		},
+		data() {
+			return {
+				nome: '',
+				quantita: {},
+				tot: 0,
+				saldoMagazzino: 0,
+				listaMateriali: [],
+				editingItems: {}, // Oggetto per tenere traccia della modalità di modifica per ciascun elemento
+				successMessage: '',
+				errorMessage: ''
+			}
+		},
+		mounted() {
+			this.fetchMaterialiMagazzino();
+			this.uniqueMateriali();
+			this.calcSaldoMagazzino();
+		},
+		computed() {
+			this.fetchMaterialiMagazzino();
+			this.uniqueMateriali();
 		},
 		methods: {
-			onClick(nome) {
-				this.nome = nome;
-			},
 			// Funzione che calcola la quantità di un materiale per nome
 			fetchQuantitaMateriale() {
 				this.quantita = this.listaMateriali.reduce((acc, materiale) => {
@@ -277,29 +297,46 @@
 						console.log(error);
 					})
 			},
-			// Funzione che aggiunge un materiale al magazzino e lo salva sul server
-			// TODO: NON FUNZIONA! MA NON SEMBRA SBAGLIATA !!!
-			async addMateriale(nome, num) {
-				const url = `/api/magazzini/create/1/${nome}`;
-				await axios.put(url, {idMagazzino: 6, nome: nome})
+			async aggiungiNuovoMateriale() {
+				// controlla se in listaMateriali c'è già un materiale con lo stesso nome
+				if (this.listaMateriali.some(item => item.nome === this.nome)) {
+					this.errorMessage = 'Materiale già presente!';
+					this.$refs.errShower.toggle();
+					this.$refs.form.reset();
+					return;
+				}
+				// console.log(this.nome)
+				const url = `/api/magazzini/create/1/${this.nome}`;
+				await axios.put(url, {nome: this.nome})
 					.then(response => {
-						this.listaMateriali.push(response.data);
-						console.log('Materiale aggiunto al magazzino');
-						this.quantita[nome] += num;
-						console.log('Quantità materiale aggiornata');
+						this.listaMateriali = response.data.materiali;
+						this.fetchQuantitaMateriale();
+						// Inizializza editingItems a false per ogni elemento nella lista (non null)
+						this.listaMateriali.forEach(item => {
+							if (this && this.$set) {
+								this.$set(this.editingItems, item.nome, false);
+							}
+						});
+						this.successMessage ='Nuovo materiale aggiunto!';
+						this.$refs.succShower.toggle();
+						this.$refs.form.reset();
 					})
 					.catch(errors => {
 						console.error(errors);
 					})
 			},
-			async aggiungiNuovo() {
-				this.successMessage ='Nuovo materiale aggiunto!';
-				this.$refs.succShower.toggle();
-				this.$refs.form.reset();
-			},
 			toggleEditing(item) {
 				if (this.editingItems[item.nome]) {
-					this.quantita[item.nome] = item.editedQuantity;
+					// Si procede solo nel caso in cui la quantità venga cambiata
+					if (this.quantita[item.nome] !== item.editedQuantity) {
+						this.quantita[item.nome] = item.editedQuantity;
+						// Salvataggio delle nuove quantità. Se la quantità è 0 elimina il materiale, altrimenti ne aggiorna la quantità
+						if (item.editedQuantity === 0) {
+							this.eliminaMateriale(item.nome);
+						} else {
+							this.aggiornaQuantitaMateriale(item.nome, item.editedQuantity);
+						}
+					}
 				} else {
 					item.editedQuantity = this.quantita[item.nome];
 				}
@@ -308,27 +345,32 @@
 			cancelEditing(item) {
 				this.editingItems[item.nome] = false;
 				item.editedQuantity = this.quantita[item.nome];
+				this.$refs.form.reset();
+			},
+			async eliminaMateriale(nomeItem) {
+				// console.log("Sto eliminando: " + nomeItem)
+				const url = `/api/magazzini/elimina/nome/1/${nomeItem}`;
+				await axios.delete(url, {materiale_nome: nomeItem})
+					.then(response => {
+						console.log(response.data);
+						this.listaMateriali = response.data.materiali;
+						this.fetchQuantitaMateriale();
+					})
+					.catch(errors => {
+						console.error(errors);
+					})
+			},
+			async aggiornaQuantitaMateriale(nomeItem, editedQuantity) {
+				// console.log("Sto aggiornando la quantità di: " + nomeItem + " con " + editedQuantity)
+				const url = `/api/magazzini/aggiorna/1/${nomeItem}/${editedQuantity}`;
+				await axios.put(url, { materiale_nome: nomeItem, quantita: editedQuantity })
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(errors => {
+						console.error(errors);
+					})
 			}
-		},
-		data() {
-			return {
-				nome: '',
-				quantita: {},
-				tot: 0,
-				saldoMagazzino: 0,
-				listaMateriali: [],
-				editingItems: {}, // Oggetto per tenere traccia della modalità di modifica per ciascun elemento
-				successMessage: ''
-			}
-		},
-		mounted() {
-			this.fetchMaterialiMagazzino();
-			this.uniqueMateriali();
-			this.calcSaldoMagazzino();
-		},
-		computed() {
-			this.fetchMaterialiMagazzino();
-			this.uniqueMateriali();
 		}
 	}
 </script>
