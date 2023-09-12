@@ -39,7 +39,6 @@ const routes = [
 		name: 'admin-home',
 		component: AdminHomeView,
 		beforeEnter(to, from, next) {
-			console.log(app.$store.state.adminLoggedIn);
 			if (app.$store.state.adminLoggedIn === false)
 				next({name: 'admin'});
 			else

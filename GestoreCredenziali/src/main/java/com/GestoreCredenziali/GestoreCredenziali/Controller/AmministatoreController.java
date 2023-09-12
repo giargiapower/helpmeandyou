@@ -134,19 +134,19 @@ public class AmministatoreController {
 	// da valutare se aggiungere fattori di sicurezza tipo controllare se chi richiama il microservizio è un amministratore valido
 	@PutMapping("/da_approvare/valuta/{id}")
 	public ResponseEntity<Account> valutaAccount(@PathVariable("id") long id, @RequestBody String decisione) {
-		Account _account = repository.findById(id);
-		if (_account!=null){
+		Account account = repository.findById(id);
+		if (account!=null){
 			if (decisione.contains("approva")) {
-				_account.setStato("approvato");
+				account.setStato("approvato");
 				// manda l'account approvato al miscorsevizio di richieste di aiuto
-				rabbitSender.send(_account);
+				rabbitSender.send(account);
 			} else {
-				_account.setStato("bloccato");
+				account.setStato("bloccato");
 				//elimino i file caricati
-				fileStorageService.deleteFile(_account.getPath_curriculum());
-				fileStorageService.deleteFile(_account.getPath_documento());
+				fileStorageService.deleteFile(account.getPath_curriculum());
+				fileStorageService.deleteFile(account.getPath_documento());
 			}
-			return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+			return new ResponseEntity<>(repository.save(account), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -154,11 +154,12 @@ public class AmministatoreController {
 
 	@PutMapping("/aggiorna_categoria/{id}")
 	public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Categoria categoria) {
-		Account _account = repository.findById(id);
+		Account account = repository.findById(id);
+		Categoria cat = categoriaRepository.findByTipo(categoria.getTipo());
 
-		if (_account!=null){
-			_account.setCategoria(categoria);
-			return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+		if (account!=null && cat!=null){
+			account.setCategoria(cat);
+			return new ResponseEntity<>(repository.save(account), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -166,11 +167,11 @@ public class AmministatoreController {
 
 	@PutMapping("/blocca/{id}")
 	public ResponseEntity<Account> bloccaAccount(@PathVariable("id") long id) {
-		Account _account = repository.findById(id);
+		Account account = repository.findById(id);
 
-		if (_account!=null){
-			_account.setStato("bloccato");
-			return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
+		if (account!=null){
+			account.setStato("bloccato");
+			return new ResponseEntity<>(repository.save(account), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

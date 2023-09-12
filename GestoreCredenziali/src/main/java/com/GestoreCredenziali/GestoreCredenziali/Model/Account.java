@@ -37,7 +37,7 @@ public class Account {
     @Column(name = "documento_identita")
     private String path_documento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_tipo")
     private Categoria categoria;
 
