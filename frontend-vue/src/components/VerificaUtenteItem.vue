@@ -44,17 +44,16 @@
 										</div>
 									</div>
 									<div class="col">
-										<div class="list-group-item d-flex" v-for="(cat, index) in listaCategorie" :key="index">
+										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Categoria:</span>
 
 											<span v-if="editing"></span>
 											<span v-else>{{ categoryCopy }}</span>
 
-<!--										TODO: da sistemare. Se non si riesce a schermo piuttosto si toglie il toggle a Modifica categoria e lo si fa scomparire una volta cliccato-->
 											<select v-if="editing" class="form-select" aria-label="Categoria" v-model="editedCategory">
-												<option>Nessuna categoria</option>
-												<option>{{ cat.tipo }}</option>
-<!--												<option v-for="cat in categorie" :key="cat.id">{{ cat.nome }}</option>-->
+												<option v-for="categoria in listaCategorie" :value="categoria.tipo" :key="categoria.tipo">
+													{{ categoria.tipo }}
+												</option>
 											</select>
 										</div>
 									</div>
@@ -82,7 +81,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-outline-success mx-4 flex-grow-1" type="button" @click="editCategory"> {{ editing ? "Salva" : "Modifica categoria" }}</button>
-							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="cancelEditing" data-bs-dismiss="modal" id="chiaro-button">Annulla</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="cancelEditing" data-bs-dismiss="modal" id="chiaro-button">Annulla modifiche</button>
 							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Approva</button>
 						</div>
 					</fieldset>
@@ -91,239 +90,166 @@
 		</div>
 	</div>
 
-
-
-
-<!--	<div :id="'btn-verifica-' + utente.id" class="modal fade" data-bs-keyboard="false" tabindex="-1" aria-labelledby="btn-verificaLabel" aria-hidden="true">-->
-<!--		<div class="modal-dialog modal-lg model-dialog-centered">-->
-<!--			<div class="modal-content">-->
-<!--				<div class="modal-header">-->
-<!--					<h1 class="modal-title fs-5" id="btn-verificaLabel">-->
-<!--						Utente: {{ utente.nome + ' ' + utente.cognome }}-->
-<!--					</h1>-->
-<!--					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>-->
-<!--				</div>-->
-<!--				<div class="modal-body">-->
-<!--					<form>-->
-<!--						<table>-->
-<!--							<tbody>-->
-<!--							<tr>-->
-<!--								<td>-->
-<!--									<p>Nome: {{ utente.nome }}</p>-->
-<!--									<p>Cognome: {{ utente.cognome }}</p>-->
-<!--									<p>N° Telefono: {{ utente.telefono }}</p>-->
-<!--									<p>Indirizzo: {{ utente.indirizzo }}</p>-->
-<!--									<p v-if="utente.categoria === null">Categoria: Nessuna categoria</p>-->
-<!--									<p v-else>Categoria: {{ utente.categoria }}</p>-->
-<!--									<button type="button" class="btn btn-secondary" data-bs-target="#aggiornaCat" data-bs-toggle="modal">Aggiorna categoria-->
-<!--									</button>-->
-<!--								</td>-->
-<!--								<td>-->
-<!--									<p>Documento d'identità</p>-->
-<!--									<p v-if="utente.path_documento === utente.email + '.pdf'">Documento d'identità non caricato</p>-->
-<!--									&lt;!&ndash;                  <a v-else href="#" @click="idDocPath(utente.email + '.pdf')">Download Doc.Identità</a>&ndash;&gt;-->
-<!--									<a v-else href="#">Download Doc.Identità</a>-->
-<!--								</td>-->
-<!--								<td>-->
-<!--									<p>CV</p><br>-->
-<!--									<p v-if="utente.path_curriculum === utente.email + '.pdf'">CV non caricato</p>-->
-<!--									&lt;!&ndash;                  <a v-else href="#" @click="cvPath(utente.email + '.pdf')">Download CV</a>&ndash;&gt;-->
-<!--									<a v-else href="#">Download CV</a>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!--							</tbody>-->
-<!--						</table>-->
-<!--					</form>-->
-<!--				</div>-->
-<!--				<div class="modal-footer">-->
-<!--					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>-->
-<!--					<button type="button" class="btn btn-primary">Approva</button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--	<div class="modal fade" id="aggiornaCat" aria-hidden="true" aria-labelledby="aggiornaCatLabel" tabindex="-1">-->
-<!--		<div class="modal-dialog modal-dialog-centered">-->
-<!--			<div class="modal-content">-->
-<!--				<div class="modal-header">-->
-<!--					<h1 class="modal-title fs-5" id="aggiornaCatLabel">Categorie Utenti</h1>-->
-<!--					&lt;!&ndash;         Questo bottone ha qualcosa che non va ancora, vedo di sistemarlo io tranqui&ndash;&gt;-->
-<!--					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--				</div>-->
-<!--				<div class="modal-body">-->
-<!--					<p>Scegli una o più categorie da assegnare ad un utente:</p>-->
-<!--				</div>-->
-<!--				&lt;!&ndash;		  Al momento questi due pulsanti non vanno. Vedo di sistemarli io tranqui, fai pure le chiamate&ndash;&gt;-->
-<!--				&lt;!&ndash;        <div class="modal-footer">&ndash;&gt;-->
-<!--				&lt;!&ndash;          <button class="btn btn-secondary" data-bs-target="#btn-verifica" data-bs-toggle="modal">Annulla</button>&ndash;&gt;-->
-<!--				&lt;!&ndash;          <button class="btn btn-primary" data-bs-target="#btn-verifica" data-bs-toggle="modal">Conferma</button>&ndash;&gt;-->
-<!--				&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-
 </template>
 
 <script>
-import axios from "axios";
+	import axios from "axios";
 
-export default {
-	name: "VerificaUtenteItem",
-	props: {
-		utente: {required: true, type: Object}
-	},
-	methods: {
-		// Funzione che ritorna il CV di un utente
-		/*
-		PER FARLO FUNZIONARE è STATA CAMBIATA L'ANNOTAZIONE DA @RequestPart a @RequestParam,
-		perchè si chiama una GET e non una POST
-		 */
-		async cvPath(file) {
-			await axios.get(`/api/amministratore/cv?fileName=${file}`,
-				{
-					responseType: "blob",
-					headers: {
-						Accept: 'application/pdf'
-					}
-				})
-				.then(response => {
-					// Create a URL for the blob response and open it in a new window for download
-					const pdfURL = URL.createObjectURL(response.data);
-					console.log(pdfURL);
-					const downloadLink = document.createElement('a');
-					console.log(downloadLink);
-					downloadLink.href = pdfURL;
-					downloadLink.download = file;
-					downloadLink.click();
-					// Clean up the URL object after the download
-					URL.revokeObjectURL(pdfURL);
-				})
-				.catch(errors => {
-					console.log(errors);
-				})
+	export default {
+		name: "VerificaUtenteItem",
+		props: {
+			utente: {required: true, type: Object}
 		},
-		// Funzione che ritorna il documento d'identità di un utente
-		async idDocPath(file) {
-			await axios.get(`/api/amministratore/id?fileName=${file}`,
-				{
-					responseType: "blob",
-					headers: {
-						Accept: 'application/pdf'
-					}
-				})
-				.then(response => {
-					// Create a URL for the blob response and open it in a new window for download
-					const pdfURL = URL.createObjectURL(response.data);
-					console.log(pdfURL);
-					const downloadLink = document.createElement('a');
-					console.log(downloadLink);
-					downloadLink.href = pdfURL;
-					downloadLink.download = file;
-					downloadLink.click();
-					// Clean up the URL object after the download
-					URL.revokeObjectURL(pdfURL);
-				})
-				.catch(errors => {
-					console.error(errors);
-				})
-		},
-		// Funzione che aggiorna lo stato dell'account di un utente da "da_approvare" a "approvato"
-		async approvaUtente() {
-			await axios.put(`/api/amministratore/da_approvare/valuta/${this.utente.id}`,
-				{
-					decisione: 'approvato'
-				})
-				.then(response => {
-					console.log(response.data);
-					// TODO: impostare un alert o qualcosa che faccia capire che l'utente è stato approvato
-				})
-				.catch(error => {
-					if (error.response) {
-						console.error('Response Data:', error.response.data);
-						console.error('Response Status:', error.response.status);
-						console.error('Response Headers:', error.response.headers);
-					} else if (error.request) {
-						console.error('No response received:', error.request);
-					} else {
-						console.error('Error:', error.message);
-					}
-				})
-		},
-		// Funzione che recupera le categorie per l'utente
-		async prendiCategorie() {
-			await axios.get('/api/amministratore/categorie')
-				.then(response => {
-					this.listaCategorie = response.data;
-					console.log(response.data);
-				})
-				.catch(error => {
-					if (error.response) {
-						console.error('Response Data:', error.response.data);
-						console.error('Response Status:', error.response.status);
-						console.error('Response Headers:', error.response.headers);
-					} else if (error.request) {
-						console.error('No response received:', error.request);
-					} else {
-						console.error('Error:', error.message);
-					}
-				})
-		},
-		// Funzione che aggiorna la categoria di un utente
-		// TODO: sistemare perché `/api/amministratore/aggiorna_categoria/${this.utente.id}` non va
-		async aggiornaCategoria() {
-			await axios.put(`/api/amministratore/aggiorna_categoria/${this.utente.id}`,
-				{
-					categoria: this.editedCategory
-				})
-				.then(response => {
-					console.log(response.data);
-				})
-				.catch(error => {
-					if (error.response) {
-						console.error('Response Data:', error.response.data);
-						console.error('Response Status:', error.response.status);
-						console.error('Response Headers:', error.response.headers);
-					} else if (error.request) {
-						console.error('No response received:', error.request);
-					} else {
-						console.error('Error:', error.message);
-					}
-				})
-		},
-		editCategory() {
-			if (this.editing) {
-				this.categoryCopy = this.editedCategory;
-				this.aggiornaCategoria();
-			} else {
-				this.editedCategory = this.categoryCopy;
+		data() {
+			return {
+				file: '',
+				editing: false,
+				editedCategory: this.utente.categoria,
+				categoryCopy: this.utente.categoria,
+				listaCategorie: []
 			}
-			this.editing = !this.editing;
 		},
-		cancelEditing() {
-			this.editing = false;
-			this.editedCategory = '';
-			this.categoryCopy = this.utente.categoria;
+		computed() {
+			this.cvPath(this.file);
+			this.idDocPath(this.file);
+			this.approvaUtente();
+		},
+		methods: {
+			// Funzione che ritorna il CV di un utente
+			/*
+			PER FARLO FUNZIONARE è STATA CAMBIATA L'ANNOTAZIONE DA @RequestPart a @RequestParam,
+			perchè si chiama una GET e non una POST
+			 */
+			async cvPath(file) {
+				await axios.get(`/api/amministratore/cv?fileName=${file}`,
+					{
+						responseType: "blob",
+						headers: {
+							Accept: 'application/pdf'
+						}
+					})
+					.then(response => {
+						// Create a URL for the blob response and open it in a new window for download
+						const pdfURL = URL.createObjectURL(response.data);
+						console.log(pdfURL);
+						const downloadLink = document.createElement('a');
+						console.log(downloadLink);
+						downloadLink.href = pdfURL;
+						downloadLink.download = file;
+						downloadLink.click();
+						// Clean up the URL object after the download
+						URL.revokeObjectURL(pdfURL);
+					})
+					.catch(errors => {
+						console.log(errors);
+					})
+			},
+			// Funzione che ritorna il documento d'identità di un utente
+			async idDocPath(file) {
+				await axios.get(`/api/amministratore/id?fileName=${file}`,
+					{
+						responseType: "blob",
+						headers: {
+							Accept: 'application/pdf'
+						}
+					})
+					.then(response => {
+						// Create a URL for the blob response and open it in a new window for download
+						const pdfURL = URL.createObjectURL(response.data);
+						console.log(pdfURL);
+						const downloadLink = document.createElement('a');
+						console.log(downloadLink);
+						downloadLink.href = pdfURL;
+						downloadLink.download = file;
+						downloadLink.click();
+						// Clean up the URL object after the download
+						URL.revokeObjectURL(pdfURL);
+					})
+					.catch(errors => {
+						console.error(errors);
+					})
+			},
+			// Funzione che aggiorna lo stato dell'account di un utente da "da_approvare" a "approvato"
+			async approvaUtente() {
+				if (this.utente.categoria !== this.editedCategory)
+					await this.aggiornaCategoria();
+
+				await axios.put(`/api/amministratore/da_approvare/valuta/${this.utente.id}`,
+					{
+						decisione: 'approvato'
+					})
+					.then(response => {
+						console.log(response.data);
+						this.$emit('rimuovi-figlio', this.utente.id);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che recupera le categorie per l'utente
+			async prendiCategorie() {
+				await axios.get('/api/amministratore/categorie')
+					.then(response => {
+						this.listaCategorie = response.data;
+						console.log(this.listaCategorie);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che aggiorna la categoria di un utente
+			async aggiornaCategoria() {
+				await axios.put(`/api/amministratore/aggiorna_categoria/${this.utente.id}`,
+					{
+						tipo: this.editedCategory
+					})
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			editCategory() {
+				this.prendiCategorie();
+				if (this.editing) {
+					this.categoryCopy = this.editedCategory;
+				} else {
+					this.editedCategory = this.categoryCopy;
+				}
+				this.editing = !this.editing;
+			},
+			cancelEditing() {
+				this.editing = false;
+				this.editedCategory = this.utente.categoria;
+				this.categoryCopy = this.utente.categoria;
+			}
 		}
-	},
-	data() {
-		return {
-			file: '',
-			editing: false,
-			editedCategory: '',
-			categoryCopy: this.utente.categoria,
-			listaCategorie: []
-		}
-	},
-	mounted() {
-		this.prendiCategorie();
-	},
-	computed() {
-		this.cvPath(this.file);
-		this.idDocPath(this.file);
-		this.approvaUtente();
-		this.aggiornaCategoria();
 	}
-}
 </script>
 
 <style scoped>

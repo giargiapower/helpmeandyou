@@ -8,7 +8,10 @@
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Approvazione utenti</h1>
+								<h1 class="fw-bold mb-5">
+									Approvazione utenti
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="fetchUtentiDaApprovare">
+								</h1>
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
@@ -30,7 +33,7 @@
 												</td>
 											</tr>
 										</tbody>
-										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente"/>
+										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente" @rimuovi-figlio="rimuoviFiglio"/>
 									</table>
 								</div>
 							</div>
@@ -42,18 +45,34 @@
 		</section>
 	</div>
 
+	<SuccessShower ref="succShower" :message="successMessage"/>
+
 </template>
 
 <script>
-	import AdminNavBar from "@/components/AdminNavBar";
 	import axios from "axios";
+	import AdminNavBar from "@/components/AdminNavBar";
+	import SuccessShower from "@/components/SuccessShower";
 	import VerificaUtenteItem from "@/components/VerificaUtenteItem";
 
 	export default {
 		name: "AdminHomeView",
 		components: {
 			VerificaUtenteItem,
-			AdminNavBar
+			AdminNavBar,
+			SuccessShower
+		},
+		data() {
+			return {
+				listaUtentiDaApprovare: [],
+				successMessage: ''
+			}
+		},
+		computed() {
+			this.fetchUtentiDaApprovare();
+		},
+		mounted() {
+			this.fetchUtentiDaApprovare();
 		},
 		methods: {
 			// Funzione che calcola la lista di utenti da approvare
@@ -64,6 +83,8 @@
 							if (utente.categoria === null) {
 								utente.categoria = "Nessuna categoria";
 							}
+							else
+								utente.categoria = utente.categoria.tipo;
 							return utente;
 						});
 						console.log('Lista utenti caricata con successo.')
@@ -72,18 +93,17 @@
 					.catch(errors => {
 						console.error(errors)
 					})
+			},
+			// Funzione che rimuove un utente dalla lista di utenti da approvare
+			async rimuoviFiglio (userID) {
+				console.log('Rimuovo utente con id ' + userID + ' dalla lista di utenti da approvare.')
+				this.successMessage ='Utente approvato!\nPuoi consultare la lista di tutti gli utenti nella sezione "Gestione utenti".';
+				this.$refs.succShower.toggle();
+				// this.listaUtentiDaApprovare = this.listaUtentiDaApprovare.filter(utente => utente.id !== userID);
+				setTimeout(function() {
+					window.location.href = '/admin/admin-home/';
+				}, 3000);
 			}
-		},
-		data() {
-			return {
-				listaUtentiDaApprovare: []
-			}
-		},
-		computed() {
-			this.fetchUtentiDaApprovare();
-		},
-		mounted() {
-			this.fetchUtentiDaApprovare();
 		}
 	}
 </script>
@@ -145,5 +165,13 @@
 
 	.btn-primary:hover {
 		background-color: #0d17c4ff;
+	}
+
+	#reload {
+		width: 25px;
+		height: 25px;
+		margin-left: 20px;
+		margin-top: -5px;
+		cursor: pointer;
 	}
 </style>
