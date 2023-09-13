@@ -7,13 +7,11 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 
 ---
 
-## COSE CHE NON MI FUNZIONANO:
+## TODO:
 
-- gestore_cred_amministratore_controller:
-	- aggiorna categoria account
-- magazzino, da sistemare:
-	- richiedi singolo magazzino
-	- prendi tutti i materiali dato un magazzino
+- disponibilità materiali / richieste da sistemare
+- blocca utente + notifica in tempo reale da sistemare
+- errore strambo in console per google + parte admin
 
 ---
 
