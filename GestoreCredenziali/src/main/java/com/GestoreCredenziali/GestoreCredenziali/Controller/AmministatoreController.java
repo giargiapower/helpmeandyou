@@ -41,11 +41,22 @@ public class AmministatoreController {
 	@Autowired
 	RabbitSender rabbitSender = new RabbitSender();
 
-	@GetMapping("/allUtenti")
+	@GetMapping("/utenti")
 	public List<Account> getAllUtenti() {
 		List<Account> accounts = new ArrayList<>();
 		repository.findAllByStato("approvato").forEach(accounts::add);
 		return accounts;
+	}
+
+	// Prende le informazioni di un account dato il suo id
+	@GetMapping("/utente/{id}")
+	public ResponseEntity<Account> getInfoUtente(@PathVariable("id") long idUtente) {
+		Account account = repository.findById(idUtente);
+		if (account != null) {
+			return new ResponseEntity<>(account, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	// metodo per amministratore, ritorna tutti gli account in stato di apertura (da approvare)

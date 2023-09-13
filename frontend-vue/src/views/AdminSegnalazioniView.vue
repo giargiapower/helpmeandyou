@@ -8,7 +8,10 @@
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Segnalazioni utenti</h1>
+								<h1 class="fw-bold mb-5">
+									Segnalazioni utenti
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="fetchSegnalazioni">
+								</h1>
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
@@ -19,10 +22,10 @@
 												<th scope="col"></th>
 											</tr>
 										</thead>
-										<tbody class="table-group-divider">
+										<tbody v-if="!loading" class="table-group-divider">
 											<tr v-for="(segnalazione, index) in listaSegnalazioni" :key="segnalazione.id">
 												<th scope="row">{{ index + 1 }}</th>
-												<td>{{ nomeUtenteSegnalato }}</td>
+												<td>{{ segnalazione.nomeSegnalato }}</td>
 												<td>{{ segnalazione.tipologia }}</td>
 												<td>
 													<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal(segnalazione)">Apri</button>
@@ -30,6 +33,11 @@
 											</tr>
 										</tbody>
 									</table>
+								</div>
+								<div v-if="loading" class="d-flex justify-content-center">
+									<div class="spinner-border text-primary" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -55,13 +63,13 @@
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Dati creatore:</span>
-								<span>{{ currentSegnalazione.creatore }}</span>
+								<span>{{ currentSegnalazione.nomeCreatore }}</span>
 							</div>
 						</div>
 						<div class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Dati segnalato:</span>
-								<span>{{ currentSegnalazione.segnalato }}</span>
+								<span>{{ currentSegnalazione.nomeSegnalato }}</span>
 							</div>
 						</div>
 						<div class="col">
@@ -87,49 +95,6 @@
 		</div>
 	</div>
 
-
-
-<!--	<div class="segnalazioni">-->
-<!--		<admin-nav-bar></admin-nav-bar>-->
-<!--		<h2>Segnalazioni</h2>-->
-<!--		<table>-->
-<!--			<thead>-->
-<!--			<tr>-->
-<!--				<th>Utente Segnalato</th>-->
-<!--				<th>Tipologia segnalazione</th>-->
-<!--			</tr>-->
-<!--			</thead>-->
-<!--			<tbody>-->
-<!--			<tr v-for="segnalazione in listaSegnalazioni" :key="segnalazione.id">-->
-<!--				<td>{{ segnalazione.segnalato }}</td>-->
-<!--				<td>{{ segnalazione.tipologia }}</td>-->
-<!--				<td>-->
-<!--					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#btn-visualizza">-->
-<!--						Visualizza-->
-<!--					</button>-->
-<!--					<div class="modal fade" id="btn-visualizza" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="btn-visualizzaLabel" aria-hidden="true">-->
-<!--						<div class="modal-dialog modal-dialog-centered">-->
-<!--							<div class="modal-content">-->
-<!--								<div class="modal-header">-->
-<!--									<h1 class="modal-title fs-5" id="btn-visualizzaLabel">Segnalazione della richiesta-->
-<!--										{{ segnalazione.titolo }} da parte dell'utente {{ segnalazione.creatore }} </h1>-->
-<!--								</div>-->
-<!--								<div class="modal-body">-->
-<!--									{{ segnalazione.descrizione }}-->
-<!--								</div>-->
-<!--								<div class="modal-footer">-->
-<!--									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>-->
-<!--									<button type="button" class="btn btn-primary">Segnala utente</button>-->
-<!--								</div>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</td>-->
-<!--			</tr>-->
-<!--			</tbody>-->
-<!--		</table>-->
-<!--	</div>-->
-
 </template>
 
 <script>
@@ -150,13 +115,29 @@
 				segnalato: {required: true, type: Number}
 			}
 		},
+		data() {
+			return {
+				listaSegnalazioni: [],
+				currentSegnalazione: {},
+				loading: true
+			}
+		},
+		mounted() {
+			this.fetchSegnalazioni();
+		},
 		methods: {
 			// Funzione che carica la lista delle segnalazioni
 			async fetchSegnalazioni() {
+				this.loading = true;
 				await axios.get('/api/segnalazioni/segnalazione/list')
-					.then(response => {
+					.then(async response => {
 						this.listaSegnalazioni = response.data;
+						for (let i = 0; i < this.listaSegnalazioni.length; i++) {
+							this.listaSegnalazioni[i].nomeCreatore = await this.infoUtente(this.listaSegnalazioni[i].creatore);
+							this.listaSegnalazioni[i].nomeSegnalato = await this.infoUtente(this.listaSegnalazioni[i].segnalato);
+						}
 						console.log('Segnalazioni caricate con successo.');
+						this.loading = false;
 					})
 					.catch(error => {
 						if (error.response) {
@@ -171,13 +152,12 @@
 					})
 			},
 			// Restituisce il nome dell'utente segnalato
-			// TODO: stampare il nome dell'utente segnalato, per il momento mostra un campo vuoto
-			async infoUtenteSegnalato(segnalato) {
-				await axios.get(`/api/utenti/utente/${segnalato}`)
+			async infoUtente(idUtente) {
+				// console.log("Vorrei le info dell'utente con id: " + idUtente);
+				let utenteDaRestituire = "";
+				await axios.get(`/api/amministratore/utente/${idUtente}`)
 					.then(response => {
-						console.log(response.data.nome);
-						this.nomeUtenteSegnalato = response.data.nome;
-						console.log(this.nomeUtenteSegnalato);
+						utenteDaRestituire = response.data.nome + " " + response.data.cognome;
 					})
 					.catch(error => {
 						if (error.response) {
@@ -190,13 +170,21 @@
 							console.error('Error:', error.message);
 						}
 					})
+				return utenteDaRestituire;
 			},
 			// Funzione che blocca un utente
 			async bloccaUtente(segnalatoId) {
 				await axios.put(`/api/amministratore/blocca/${segnalatoId}`)
 					.then(response => {
 						// TODO: un messaggio che mostri che l'utente x sia bloccato
-						console.log(response.data);
+
+						// Elimina tutte le segnalazioni dell'utente bloccato
+						for (let i = 0; i < this.listaSegnalazioni.length; i++) {
+							if (this.listaSegnalazioni[i].segnalato === segnalatoId) {
+								this.eliminaSegnalazione(this.listaSegnalazioni[i].id);
+								this.listaSegnalazioni = this.listaSegnalazioni.filter(segnalato => segnalato !== segnalatoId);
+							}
+						}
 					})
 					.catch(error => {
 						if (error.response) {
@@ -220,7 +208,7 @@
 			async eliminaSegnalazione(segnalazioneId) {
 				await axios.delete(`/api/segnalazioni/segnalazione/delete/${segnalazioneId}`)
 					.then(response => {
-						console.log(response.data);
+						this.listaSegnalazioni = this.listaSegnalazioni.filter(segnalazione => segnalazione.id !== segnalazioneId);
 					})
 					.catch(error => {
 						if (error.response) {
@@ -234,20 +222,6 @@
 						}
 					})
 			}
-		},
-		data() {
-			return {
-				listaSegnalazioni: [],
-				currentSegnalazione: {},
-				nomeUtenteSegnalato: ''
-			}
-		},
-		mounted() {
-			this.fetchSegnalazioni();
-		},
-		computed() {
-			this.infoUtenteSegnalato(this.currentSegnalazione.segnalato);
-			this.eliminaSegnalazione(this.currentSegnalazione.id);
 		}
 	}
 </script>
@@ -380,5 +354,18 @@
 		padding: 10px;
 		color: black;
 		font-size: 16px;
+	}
+
+	tbody {
+		text-align: center;
+
+	}
+
+	#reload {
+		width: 25px;
+		height: 25px;
+		margin-left: 20px;
+		margin-top: -5px;
+		cursor: pointer;
 	}
 </style>
