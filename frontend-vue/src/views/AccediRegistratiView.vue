@@ -88,12 +88,12 @@
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Documento d'identità</span>
-								<input type="file" class="form-control" v-on="documento_identita" aria-label="Documento d'identità" aria-describedby="Documento d'identità">
+								<input type="file" class="form-control" ref="documento_identita" @change="handleFileChangeDoc" aria-label="Documento d'identità" aria-describedby="Documento d'identità" required>
 <!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">Curriculum</span>
-								<input type="file" class="form-control" v-on="cv" aria-label="Curriculum" aria-describedby="Curriculum">
+								<input type="file" class="form-control" ref="cv" @change="handleFileChangeCv" aria-label="Curriculum" aria-describedby="Curriculum" required>
 <!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
 							</div>
 						</div>
@@ -164,6 +164,12 @@
 			this.onSubmitRegistrazione();
 		},
 		methods: {
+			handleFileChangeDoc(event) {
+				this.documento_identita = event.target.files[0];
+			},
+			handleFileChangeCv(event) {
+				this.cv = event.target.files[0];
+			},
 			// Funione che verifica le credenziali del login. Per funzionare, da GET è diventata una POST
 			async onSubmitLogin() {
 				try {
@@ -263,6 +269,35 @@
 						headers: {
 							'Content-Type': "application/json",
 							'responseType': 'json'
+						}
+					})
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							this.errorMessage = error.toString() || 'Errore inatteso';
+							this.$refs.errShower.toggle();
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					});
+
+				// Chiamata dei set dei documenti
+				const formData = new FormData();
+				formData.append('email', this.email);
+				formData.append('doc', this.documento_identita);
+				formData.append('cv', this.cv);
+
+				await axios.post('/api/utenti/registrazione/create/Documents', formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
 						}
 					})
 					.then(response => {
