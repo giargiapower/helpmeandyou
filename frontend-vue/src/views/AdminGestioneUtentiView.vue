@@ -3,30 +3,36 @@
 		<admin-nav-bar></admin-nav-bar>
 		<section class="text-center">
 			<div class="p-5 bg-image"/>
-			<div class="col-lg-6 mx-auto">
+			<div class="col-lg-10 mx-auto">
 				<div class="card mx-4 shadow-5-strong">
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Gestione utenti</h1>
+								<h1 class="fw-bold mb-5">
+									Gestione utenti
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="fetchUtenti">
+								</h1>
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
-										<tr>
-											<th scope="col">#</th>
-											<th scope="col">Utente</th>
-											<th scope="col"></th>
-										</tr>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Utente</th>
+												<th scope="col">Stato</th>
+												<th scope="col"></th>
+											</tr>
 										</thead>
-										<tbody class="table-group-divider" v-for="(user, index) in listaUtentiApprovati" :key="user.id">
-										<tr>
-											<th scope="row">{{index + 1}}</th>
-											<td>{{ user.nome + ' ' + user.cognome }}</td>
-											<td class="text-end">
-												<button class="btn btn-block btn-primary btn-sm" type="button" @click="openModal(user)">Visualizza</button>
-											</td>
-										</tr>
+										<tbody class="table-group-divider" v-for="(user, index) in listaTuttiUtenti" :key="user.id">
+											<tr>
+												<th scope="row">{{index + 1}}</th>
+												<td>{{ user.nome + ' ' + user.cognome }}</td>
+												<td>{{ user.stato }}</td>
+												<td class="text-end">
+													<button class="btn btn-block btn-primary btn-sm max-width-button" type="button" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + user.id">Visualizza</button>
+												</td>
+											</tr>
 										</tbody>
+										<verifica-utente-item v-for="utente in listaTuttiUtenti" :key="'modal-' + utente.id" :utente="utente" :fromParent=2 @blocca-utente="bloccaUtente"/>
 									</table>
 								</div>
 							</div>
@@ -38,138 +44,22 @@
 		</section>
 	</div>
 
-	<!--	Modal-->
-	<div class="modal fade" id="verificaModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="verificaModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<legend class="custom-legend">
-						<span class="legend-text">Utente: {{ currentUser.nome + ' ' + currentUser.cognome }}</span>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</legend>
-				</div>
-				<div class="modal-body">
-					<div class="row row-cols-1 row-cols-md-2">
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Nome:</span>
-								<span>{{currentUser.nome}}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Cognome:</span>
-								<span>{{ currentUser.cognome }}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-<!--								TODO: togliere perché non esiste-->
-								<span class="fw-bold me-3">Data di nascita:</span>
-								<span>...</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Numero di telefono:</span>
-								<span>{{ currentUser.telefono }}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Email:</span>
-								<span>{{ currentUser.email }}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Domicilio(?):</span>
-								<span>{{ currentUser.indirizzo }}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Documento d'identità:</span>
-								<span>{{ currentUser.path_documento }}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Curriculum:</span>
-								<span>{{ currentUser.path_curriculum }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Chiudi</button>
-					<button class="btn btn-danger mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" @click="bloccaUtente(currentUser.id)">Blocca utente</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </template>
 
 <script>
 	import AdminNavBar from "@/components/AdminNavBar";
-	import { Modal } from "bootstrap";
+	import VerificaUtenteItem from "@/components/VerificaUtenteItem";
 	import axios from "axios";
 
 	export default {
 		name: "AdminGestioneUtentiView",
-		components: {AdminNavBar},
-		methods: {
-			openModal(user) {
-				this.currentUser = user;
-				// Apri il modal
-				const modal = new Modal(document.getElementById("verificaModal"));
-				modal.show();
-			},
-			// Funzione che ritorna tutti gli utenti approvati
-			async fetchUtenti() {
-				await axios.get('/api/amministratore/allUtenti')
-					.then(response => {
-						this.listaUtentiApprovati = response.data;
-					})
-					.catch(error => {
-						if (error.response) {
-							console.error('Response Data:', error.response.data);
-							console.error('Response Status:', error.response.status);
-							console.error('Response Headers:', error.response.headers);
-						} else if (error.request) {
-							console.error('No response received:', error.request);
-						} else {
-							console.error('Error:', error.message);
-						}
-					})
-			},
-			// Funzione che blocca un utente
-			// TODO: funziona ma bisogna sistemare il fatto che il currentUser risulti null
-			// errore presente anche in un altro file
-			async bloccaUtente(segnalatoId) {
-				await axios.put(`/api/amministratore/blocca/${segnalatoId}`)
-					.then(response => {
-						// TODO: un messaggio che mostri che l'utente x sia bloccato
-						console.log(response.data);
-					})
-					.catch(error => {
-						if (error.response) {
-							console.error('Response Data:', error.response.data);
-							console.error('Response Status:', error.response.status);
-							console.error('Response Headers:', error.response.headers);
-						} else if (error.request) {
-							console.error('No response received:', error.request);
-						} else {
-							console.error('Error:', error.message);
-						}
-					})
-			}
+		components: {
+			AdminNavBar,
+			VerificaUtenteItem
 		},
 		data() {
 			return {
-				listaNomiUtenti: [],
-				currentUser: null,
-				listaUtentiApprovati: []
+				listaTuttiUtenti: []
 			}
 		},
 		mounted() {
@@ -177,6 +67,44 @@
 		},
 		computed() {
 			this.bloccaUtente();
+		},
+		methods: {
+			// Funzione che ritorna tutti gli utenti approvati
+			async fetchUtenti() {
+				await axios.get('/api/amministratore/utenti')
+					.then(response => {
+						this.listaTuttiUtenti = response.data.map(utente => {
+							if (utente.categoria === null) {
+								utente.categoria = "Nessuna categoria";
+							}
+							else
+								utente.categoria = utente.categoria.tipo;
+							return utente;
+						});
+						console.log('Lista utenti caricata con successo.')
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che modifica lo stato di un utente dalla lista di utenti in "bloccato"
+			async bloccaUtente (userID) {
+				console.log("Ho bloccato l'utente con id " + userID + " dalla lista di utenti.");
+				for (let i = 0; i < this.listaTuttiUtenti.length; i++) {
+					if (this.listaTuttiUtenti[i].id === userID) {
+						this.listaTuttiUtenti[i].stato = "bloccato";
+						return;
+					}
+				}
+			}
 		}
 	}
 </script>
@@ -309,5 +237,18 @@
 		padding: 10px;
 		color: black;
 		font-size: 16px;
+	}
+
+	.max-width-button {
+		max-width: 200px;
+		margin-right: 100px;
+	}
+
+	#reload {
+		width: 25px;
+		height: 25px;
+		margin-left: 20px;
+		margin-top: -5px;
+		cursor: pointer;
 	}
 </style>

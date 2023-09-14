@@ -79,10 +79,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<button class="btn btn-outline-success mx-4 flex-grow-1" type="button" @click="editCategory"> {{ editing ? "Salva" : "Modifica categoria" }}</button>
-							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="cancelEditing" data-bs-dismiss="modal" id="chiaro-button">Annulla modifiche</button>
+						<div v-if="this.fromParent === 1" class="modal-footer">
+							<button v-if="!editing" class="btn btn-outline-success mx-4 flex-grow-1" type="button" @click="editCategory">Modifica categoria</button>
+							<div v-else class="d-flex justify-content-center">
+								<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="cancelEditing" id="chiaro-button">Annulla modifiche</button>
+								<button class="btn btn-outline-success mx-4 flex-grow-1" type="button" @click="editCategory">Salva</button>
+							</div>
+							<button class="btn btn-danger mx-4 flex-grow-1" type="button" @click="bloccaUtente" data-bs-dismiss="modal">Blocca utente</button>
 							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Approva</button>
+						</div>
+						<div v-else-if="utente.stato !== 'bloccato'" class="modal-footer">
+							<button class="btn btn-primary mx-4 flex-grow-1" type="button" data-bs-dismiss="modal" id="chiaro-button">Chiudi</button>
+							<button class="btn btn-danger mx-4 flex-grow-1" type="button" @click="bloccaUtente">Blocca utente</button>
 						</div>
 					</fieldset>
 				</form>
@@ -98,7 +106,8 @@
 	export default {
 		name: "VerificaUtenteItem",
 		props: {
-			utente: {required: true, type: Object}
+			utente: {required: true, type: Object},
+			fromParent: {required: true, type: Number}
 		},
 		data() {
 			return {
@@ -234,6 +243,29 @@
 						}
 					})
 			},
+			// Funzione che blocca un utente
+			async bloccaUtente() {
+				await axios.put(`/api/amministratore/blocca/${this.utente.id}`)
+					.then(response => {
+						// TODO: un messaggio che mostri che l'utente x sia bloccato
+						console.log(response.data);
+						if (this.fromParent === 1)
+							this.$emit('rimuovi-figlio', this.utente.id);
+						else
+							this.$emit('blocca-utente', this.utente.id);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
 			editCategory() {
 				this.prendiCategorie();
 				if (this.editing) {
@@ -292,6 +324,20 @@
 
 	.btn-close {
 		align-self: flex-start;
+	}
+
+	.btn-danger {
+		margin: 5px 0;
+		padding: 5px 20px;
+		font-size: 17px;
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		border-radius: 20px;
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
+	.btn-danger:hover {
+		background-color: #a90000;
 	}
 
 	/*Parte Modal*/

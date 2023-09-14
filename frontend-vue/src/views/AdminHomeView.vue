@@ -33,7 +33,7 @@
 												</td>
 											</tr>
 										</tbody>
-										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente" @rimuovi-figlio="rimuoviFiglio"/>
+										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente" :fromParent=1 @rimuovi-figlio="rimuoviFiglio"/>
 									</table>
 								</div>
 							</div>
@@ -88,7 +88,6 @@
 							return utente;
 						});
 						console.log('Lista utenti caricata con successo.')
-						console.log(this.listaUtentiDaApprovare)
 					})
 					.catch(errors => {
 						console.error(errors)
