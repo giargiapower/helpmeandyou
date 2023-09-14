@@ -178,6 +178,8 @@
 					.then(response => {
 						// TODO: un messaggio che mostri che l'utente x sia bloccato
 
+						console.log(response.data);
+
 						// Elimina tutte le segnalazioni dell'utente bloccato
 						for (let i = 0; i < this.listaSegnalazioni.length; i++) {
 							if (this.listaSegnalazioni[i].segnalato === segnalatoId) {
@@ -208,6 +210,7 @@
 			async eliminaSegnalazione(segnalazioneId) {
 				await axios.delete(`/api/segnalazioni/segnalazione/delete/${segnalazioneId}`)
 					.then(response => {
+						console.log(response.data);
 						this.listaSegnalazioni = this.listaSegnalazioni.filter(segnalazione => segnalazione.id !== segnalazioneId);
 					})
 					.catch(error => {
