@@ -51,6 +51,15 @@
 		height: auto; /* L'altezza verrà ridimensionata in base all'aspetto originale */
 	}
 	.navbar {
-		background: linear-gradient(to right, #2feaa8, #e9faf5ff);
+		background: linear-gradient(to left, #0f971c, #07f49e, #60efff);
+
+	}
+	.navbar-nav {
+		--bs-nav-link-color: white;
+		--bs-nav-link-hover-color: #07f49e;
+	}
+
+	nav a.router-link-exact-active {
+		color: black;
 	}
 </style>

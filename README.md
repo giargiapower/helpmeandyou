@@ -10,8 +10,8 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 ## TODO:
 
 - disponibilità materiali / richieste da sistemare
-- blocca utente + notifica in tempo reale da sistemare
-- errore strambo in console per google + parte admin
++ blocca utente + notifica in tempo reale da sistemare
++ errore strambo in console per google + parte admin
 
 ---
 

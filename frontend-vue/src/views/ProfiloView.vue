@@ -14,7 +14,7 @@
 										</div>
 										<div id="ombra">
 											<h3 class="f-w-600">{{ this.nome + ' ' + this.cognome}}</h3>
-											<h5>{{ this.categoria.tipo }}</h5>
+											<h5>{{ this.categoria }}</h5>
 										</div>
 									</div>
 								</div>

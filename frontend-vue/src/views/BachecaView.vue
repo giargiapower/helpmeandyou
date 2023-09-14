@@ -56,49 +56,16 @@
 			</div>
 		</div>
 
-
-
-<!--		TODO> questo v-for sotto ha qualche problema. Se crei più richieste te ne accorgi. Inoltre bisognerebbe filtrare le richieste affinché un utente loggato non possa vedere le sue.-->
-<!--		TODO: il problema qui è l'utilizzo sbagliato della classe "card-container" di Bootstrap, bisogna vedere meglio come si utilizza -->
-		<div class = "card-container">
+		<div v-if="richieste.length !== 0" class = "card-container">
 			<div class="row row-cols-1 row-cols-md-3 g-4">
-				<div class="col" v-for="item in richieste" :key="item.id">
-<!--					 questo v-if serve per non mostrare le richieste accettate -->
-					<div v-if="item.stato !== 'accettata'">
-						<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id" :id="item.id" :id-utente-richiesta="nominativo.idUtenteRichiesta" :nome="nominativo.nome" :cognome="nominativo.cognome" :descrizione="item.descrizione" :giorno="item.giorno" :regione="nominativo.regione" :provincia="nominativo.provincia" :citta="nominativo.citta" :indirizzo="nominativo.indirizzo" :categoria="item.categoria.tipo" :id-materiale="item.idMateriale" :id-utente-loggato="idUtente">
-							<!-- TODO: chiarire data richiesta effettuata / data richiesta accettata / data richiesta completata -->
-						</richiesta-item>
-					</div>
-<!--					 <div v-else-if="richieste.length === 0">Non è attualmente presente alcuna richiesta!</div> servirebbe far sì che se non sono presenti richieste, si mandi a schermo un messaggio bisogna anche far sì che le richieste postate da un utente non vengano visualizzate nella sua bacheca -->
-				</div>
+				<richiesta-item v-for="ric in richieste" :key="ric.id" :richiesta="ric"></richiesta-item>
 			</div>
+		</div>
+		<div v-else>
+			<p>Non è attualmente presente alcuna richiesta!</p>
 		</div>
 	</div>
 
-
-
-
-
-<!--	<div class="bacheca">-->
-<!--		<bacheca-nav-bar></bacheca-nav-bar>-->
-<!--		<h1>Bacheca</h1>-->
-<!--		<div class="lista-richieste">-->
-<!--			<div class="row row-cols-1 row-cols-md-3 g-4">-->
-<!--				<div class="col" v-for="item in richieste" :key="item.id">-->
-<!--					<richiesta-item v-for="nominativo in nominativi" :key="nominativo.id"-->
-<!--									:id="item.id"-->
-<!--									:nome="nominativo.nome"-->
-<!--									:cognome="nominativo.cognome"-->
-<!--									:descrizione="item.descrizione"-->
-<!--									:data="item.giorno"-->
-<!--									:id-materiale="item.idMateriale"> &lt;!&ndash; TODO: chiarire data richiesta effettuata /-->
-<!--                                                       data richiesta accettata /-->
-<!--                                                       data richiesta completata &ndash;&gt;-->
-<!--					</richiesta-item>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
 </template>
 
 <script>
@@ -113,26 +80,23 @@
 			RichiestaItem,
 			BachecaNavBar
 		},
+		data() {
+			return {
+				richieste: [],
+				typedTitle: null,
+				minDate: this.calculateMinDate(),
+				maxDate: null,
+				startDate: this.calculateMinDate(),
+				idUtente: parseInt(this.$store.state.userId)
+			}
+		},
 		methods: {
 			async fetchRichieste() {
 				await axios.get('/api/richiesteaiuto/richieste')
 					.then(response => {
 						this.richieste = response.data;
-
-						// Assegnazione dei nomi, cognomi e i componenti dell'indirizzo alla proprietà "nominativi"
-						this.nominativi = this.richieste.map(richiesta => ({
-							id: richiesta.id,
-							idUtenteRichiesta: richiesta.pubAccount.id,
-							nome: richiesta.pubAccount.nome,
-							cognome: richiesta.pubAccount.cognome,
-							regione: richiesta.indirizzo.regione,
-							provincia: richiesta.indirizzo.provincia,
-							citta: richiesta.indirizzo.citta,
-							indirizzo: richiesta.indirizzo.indirizzo
-						}));
-
 						console.log('Richieste aggiungete con successo');
-						console.log(this.richieste)
+						console.log(this.richieste);
 					})
 					.catch(error => {
 						console.log(error)
@@ -163,17 +127,6 @@
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
 			}
 		},
-		data() {
-			return {
-				richieste: [],
-				nominativi: [],
-				typedTitle: null,
-				minDate: this.calculateMinDate(),
-				maxDate: null,
-				startDate: this.calculateMinDate(),
-				idUtente: parseInt(this.$store.state.userId)
-			}
-		},
 		beforeRouteEnter(to, from, next) {
 			next(vm => {
 				vm.startTypedEffects(); // Avvia gli effetti Typed all'ingresso nella pagina
@@ -200,7 +153,7 @@
 		min-height: 100%;
 		text-align: center;
 		animation: fadeInUp 1s ease;
-		background: linear-gradient(to bottom, #a7fada, #ccfaee, #e9faf5, rgba(13, 23, 196, 0.15));
+		background: linear-gradient(to bottom, #0f971c, #0f971c, #07f49e, #60efff);
 	}
 
 	.hero-section {

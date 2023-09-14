@@ -1,10 +1,12 @@
 <template>
-	<div class="card">
-		<div class="card-body">
-			<h5 class="card-title">{{ giorno }}</h5>
-			<hr class="line-separator">
-			<p class="card-text">{{ descrizione }}</p>
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Aiuta</button>
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">{{ richiesta.giorno }}</h5>
+				<hr class="line-separator">
+				<p class="card-text">{{ richiesta.descrizione }}</p>
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Aiuta</button>
+			</div>
 		</div>
 	</div>
 
@@ -26,55 +28,55 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Nome:</span>
-											<span>{{ nome }}</span>
+											<span>{{ richiesta.pubAccount.nome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Cognome:</span>
-											<span>{{ cognome }}</span>
+											<span>{{ richiesta.pubAccount.cognome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Regione:</span>
-											<span>{{ regione }}</span>
+											<span>{{ richiesta.indirizzo.regione }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Provincia:</span>
-											<span>{{ provincia }}</span>
+											<span>{{ richiesta.indirizzo.provincia }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Città:</span>
-											<span>{{ citta }}</span>
+											<span>{{ richiesta.indirizzo.citta }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Indirizzo:</span>
-											<span>{{ indirizzo }}</span>
+											<span>{{ richiesta.indirizzo.indirizzo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Categoria:</span>
-											<span>{{ categoria }}</span>
+											<span>{{ richiesta.categoria.tipo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Materiale:</span>
-											<span>{{ materialeRichiesta.nome }}</span>
+											<span>{{ richiesta.idMateriale }}</span>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Descrizione:</span>
-											<span>{{ descrizione }}</span>
+											<span>{{ richiesta.descrizione }}</span>
 										</div>
 									</div>
 								</div>
@@ -90,51 +92,6 @@
 		</div>
 	</div>
 
-
-
-
-<!--	<div class="modal fade" id="aiuto" data-bs-backdrop="static" tabindex="-1" aria-labelledby="aiutoLabel" aria-hidden="true">-->
-<!--		<div class="modal-dialog">-->
-<!--			<div class="modal-content">-->
-<!--				<div class="modal-header">-->
-<!--					<h1 class="modal-title fs-5" id="aiutoLabel">Dai il tuo aiuto!</h1>-->
-<!--					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annulla"></button>-->
-<!--				</div>-->
-<!--				<div class="modal-body">-->
-<!--					<table>-->
-<!--						<tbody>-->
-<!--						<tr>-->
-<!--							<td>-->
-<!--								<p>Richiedente: {{ nome }} {{ cognome }}</p>-->
-<!--								<hr>-->
-<!--							</td>-->
-<!--						</tr>-->
-<!--						<tr>-->
-<!--							<td>-->
-<!--								<p>Descrizione: {{ descrizione }}</p>-->
-<!--								<hr>-->
-<!--							</td>-->
-<!--						</tr>-->
-<!--						</tbody>-->
-<!--					</table>-->
-<!--					<p>Seleziona i materiali che ti servono per il giorno {{ data }}:</p>-->
-<!--					<ul>-->
-<!--						<li>-->
-<!--							<div>Materiale utilizzati per completare la richiesta:-->
-<!--								{{ this.materialeRichiesta.nome }}-->
-<!--							</div>-->
-<!--						</li>-->
-<!--					</ul>-->
-<!--				</div>-->
-<!--				<div class="modal-footer d-flex mb-3">-->
-<!--					<button type="button" class="btn btn-primary me-auto" @click="onSegnala">Segnala</button>-->
-<!--					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>-->
-<!--					<button type="button" class="btn btn-primary" @click="onAccetta">Accetta</button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-
 	<SuccessShower ref="succShower" :message="successMessage"/>
 </template>
 
@@ -148,19 +105,20 @@
 			SuccessShower
 		},
 		props: {
-			id: {required: true, type: Number},
-			idUtenteRichiesta: {required: true, type: Number},
-			descrizione: {required: true, type: String},
-			nome: {required: true, type: String},
-			cognome: {required: true, type: String},
-			giorno: {required: true, type: String},
-			regione: {required: true, type: String},
-			provincia: {required: true, type: String},
-			citta: {required: true, type: String},
-			categoria: {required: true, type: String},
-			indirizzo: {required: true, type: String},
-			idMateriale: {required: true, type: Number},
-			idUtenteLoggato: {required: true, type: Number}
+			richiesta: {required: true, type: Object},
+			// id: {required: true, type: Number},
+			// idUtenteRichiesta: {required: true, type: Number},
+			// descrizione: {required: true, type: String},
+			// nome: {required: true, type: String},
+			// cognome: {required: true, type: String},
+			// giorno: {required: true, type: String},
+			// regione: {required: true, type: String},
+			// provincia: {required: true, type: String},
+			// citta: {required: true, type: String},
+			// categoria: {required: true, type: String},
+			// indirizzo: {required: true, type: String},
+			// idMateriale: {required: true, type: Number},
+			// idUtenteLoggato: {required: true, type: Number}
 		},
 		data() {
 			return {

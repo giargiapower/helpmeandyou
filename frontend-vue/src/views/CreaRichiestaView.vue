@@ -9,7 +9,7 @@
 						<p class="text-muted">Nota: Cerca di essere il più possibile dettagliato nella richiesta</p>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Data</span>
-							<input type="date" class="form-control" :min="minDate" aria-label="Data" aria-describedby="Data" required>
+							<input type="date" class="form-control" v-model="selectedData" :min="minDate" aria-label="Data" aria-describedby="Data" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Regione</span>
@@ -26,15 +26,11 @@
 						<div class="input-group mb-3">
 							<span class="input-group-text">Indirizzo</span>
 							<input type="text" class="form-control" v-model="indirizzo.indirizzo" aria-label="Indirizzo" aria-describedby="Indirizzo" id="indirizzo" required>
-
-<!--							<span class="input-group-text ms-4" id="numeroCivico">N°</span>-->
-<!--							<input type="text" class="form-control" aria-label="NumeroCivico" aria-describedby="NumeroCivico" required>-->
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Categoria</span>
 							<select class="form-select" aria-label="Categoria" required v-model="selectedCategoria">
 								<option disabled value="">Scegli una categoria...</option>
-								<option value="nessunaCategoria">Nessuna categoria</option>
 								<option v-for="cat in categorie" :key="cat.id">{{ cat }}</option>
 							</select>
 							<span class="input-group-text text-muted custom-tooltip" id="infoCategoria">
@@ -72,84 +68,12 @@
 
 	<SuccessShower ref="succShower" :message="successMessage"/>
 
-
-
-<!--	<div class="crea-richiesta">-->
-<!--		<bacheca-nav-bar></bacheca-nav-bar>-->
-<!--		<form @submit="onSubmit" ref="form">-->
-<!--			<h2>Crea Richiesta d'Aiuto</h2>-->
-<!--			<table>-->
-<!--				<tbody>-->
-<!--				<tr>-->
-<!--					<td>-->
-<!--						<label>Data:</label>-->
-<!--						<input type="date" required>-->
-<!--					</td>-->
-<!--					<td>-->
-<!--						<input type="checkbox">-->
-<!--						<label>Mattina</label>-->
-<!--					</td>-->
-<!--					<td>-->
-<!--						<input type="checkbox">-->
-<!--						<label>Pomeriggio</label>-->
-<!--					</td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td>-->
-<!--						<label>Regione:</label>-->
-<!--						<input type="text" required>-->
-<!--					</td>-->
-<!--					<td>-->
-<!--						<label>Provincia:</label>-->
-<!--						<input type="text" required>-->
-<!--					</td>-->
-<!--					<td>-->
-<!--						<label>Città:</label>-->
-<!--						<input type="text" required>-->
-<!--					</td>-->
-<!--					<td>-->
-<!--						<label>Indirizzo:</label>-->
-<!--						<input type="text" required>-->
-<!--					</td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td>-->
-<!--						<label>Categoria Richiesta:</label>-->
-<!--						<select v-model="selectedCategoria">-->
-<!--							<option disabled value="">Seleziona un'opzione</option>-->
-<!--							<option v-for="cat in categorie" :key="cat.id">{{ cat.nome }}</option>-->
-<!--						</select>-->
-<!--					</td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<label for="text-input">Descrizione Richiesta:</label>-->
-<!--					<input type="text" id="text-input" v-model="textValue" required>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td>-->
-<!--						<label>Seleziona il materiale che ti serve:</label>-->
-<!--						<select v-model="selectedMateriale">-->
-<!--							<option disabled value="">-</option>-->
-<!--							<option v-for="materiale in this.uniqueMateriali()" :key="materiale.id">{{-->
-<!--									materiale.nome-->
-<!--								}}-->
-<!--							</option>-->
-<!--						</select>-->
-<!--					</td>-->
-<!--				</tr>-->
-<!--				</tbody>-->
-<!--			</table>-->
-<!--			<input type="reset" value="Annulla" @click="onReset"> |-->
-<!--			<input type="submit" value="Pubblica">-->
-<!--		</form>-->
-<!--	</div>-->
 </template>
 
 <script>
 	import BachecaNavBar from "@/components/BachecaNavBar";
 	import SuccessShower from "@/components/SuccessShower";
 	import axios from 'axios';
-	// import _ from 'lodash';
 
 	export default {
 		name: "CreaRichiestaView",
@@ -166,11 +90,11 @@
 				categoria : { tipo : '' },
 				selectedCategoria: '',
 				selectedMateriale: '',
+				selectedData: '',
 				textValue: '',
 				listaRichieste: [],
 				listaMateriali: [],
 				categorie: [],
-				// uniqueId: _.uniqueId(),
 				minDate: this.calculateMinDate(),
 				idUtente: this.$store.state.userId,
 				successMessage: ''
@@ -198,7 +122,7 @@
 				await axios.post('/api/richiesteaiuto/richiesta/crea',
 					{
 						descrizione: this.descrizione,
-						giorno: this.minDate,
+						giorno: this.selectedData,
 						indirizzo: {
 							regione: this.indirizzo.regione,
 							provincia: this.indirizzo.provincia,

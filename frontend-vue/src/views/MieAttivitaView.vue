@@ -13,8 +13,7 @@
 							<div class="col-lg-10">
 								<h1 class="fw-bold mb-5">Le mie attività</h1>
 								<div class="accordion mb-3" id="accordionExample">
-<!--									TODO: capire dove va messo questo v-for con il @click="", perché se ho più richieste la visualizzazione si bugga -->
-									<div class="accordion-item" v-for="(ric, index) in this.listaRichiesteAccettate" :key="ric.id" @click="mostraMateriale(richiesta = ric)">
+									<div class="accordion-item">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 												Richieste accettate
@@ -34,16 +33,14 @@
 																<th scope="col"></th>
 															</tr>
 														</thead>
-<!--														TODO: sistemare la visualizzazione e verificare se le modifiche avvengono in tempo reale -->
 														<tbody class="table-group-divider">
-															<tr>
+															<tr v-for="(ric, index) in this.listaRichiesteAccettate" :key="ric.id" @click="mostraMateriale(richiesta = ric)">
 																<th scope="row">{{ index + 1}}</th>
 																<td>{{ ric.giorno }}</td>
 																<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
 																<td>{{ ric.categoria.tipo }}</td>
 																<td>{{ materialeSelezionato }}</td>
 																<td>
-<!--																	TODO: in teoria la prendiRichiesta va chiamata quando clicco il bottone, ma finché dà errore non si sa se vada qui o no -->
 																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="prendiRichiesta(ricId = ric.id)">Visualizza</button>
 																</td>
 															</tr>
@@ -53,8 +50,8 @@
 											</div>
 										</div>
 									</div>
-<!--									TODO: da completare quando le richieste accettate funzionano -->
-									<div class="accordion-item" v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id" @click="mostraMateriale(ric)">
+
+									<div class="accordion-item">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
 												Richieste pubblicate
@@ -74,7 +71,7 @@
 													</tr>
 													</thead>
 													<tbody class="table-group-divider">
-													<tr>
+													<tr v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id" @click="mostraMateriale(ric)">
 														<th scope="row">{{ index + 1}}</th>
 														<td>{{ ric.giorno }}</td>
 														<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
@@ -89,8 +86,8 @@
 											</div>
 										</div>
 									</div>
-<!--									TODO: da completare quando le richieste accettate funzionano -->
-									<div class="accordion-item" v-for="(ric, index) in this.listaRichiesteConcluse" :key="ric.id" @click="mostraMateriale(ric)">
+
+									<div class="accordion-item">
 										<h2 class="accordion-header">
 											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
 												Richieste concluse
@@ -111,7 +108,7 @@
 														</tr>
 													</thead>
 													<tbody class="table-group-divider">
-														<tr>
+														<tr  v-for="(ric, index) in this.listaRichiesteConcluse" :key="ric.id" @click="mostraMateriale(ric)">
 															<th scope="row">{{ index + 1}}</th>
 															<td>{{ ric.giorno }}</td>
 															<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
@@ -139,7 +136,6 @@
 		</section>
 	</div>
 
-<!-- TODO: sistemare la visualizzazione della richiesta, non va perché mi dà che richiestaSelezionata è undefined, solo lui sa perché però -->
 	<!-- visualizzaModal -->
 	<div class="modal fade" id="visualizzaModal" data-bs-show="false" data-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizzaModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -159,43 +155,43 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Nome:</span>
-											<span>{{ richiestaSelezionata.pubAccount.nome }}</span>
+<!--											<span>{{ richiestaSelezionata.pubAccount.nome }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Cognome:</span>
-											<span>{{ richiestaSelezionata.pubAccount.cognome }}</span>
+<!--											<span>{{ richiestaSelezionata.pubAccount.cognome }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Regione:</span>
-											<span>{{ richiestaSelezionata.indirizzo.regione }}</span>
+<!--											<span>{{ richiestaSelezionata.indirizzo.regione }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Provincia:</span>
-											<span>{{ richiestaSelezionata.indirizzo.provincia }}</span>
+<!--											<span>{{ richiestaSelezionata.indirizzo.provincia }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Città:</span>
-											<span>{{ richiestaSelezionata.indirizzo.citta }}</span>
+<!--											<span>{{ richiestaSelezionata.indirizzo.citta }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Indirizzo:</span>
-											<span>{{ richiesta.indirizzo.indirizzo }}</span>
+<!--											<span>{{ richiesta.indirizzo.indirizzo }}</span>-->
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Categoria:</span>
-											<span>{{ richiestaSelezionata.categoria.tipo }}</span>
+<!--											<span>{{ richiestaSelezionata.categoria.tipo }}</span>-->
 										</div>
 									</div>
 									<div class="col">
@@ -207,7 +203,7 @@
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Descrizione:</span>
-											<span>{{ richiestaSelezionata.descrizione }}</span>
+<!--											<span>{{ richiestaSelezionata.descrizione }}</span>-->
 										</div>
 									</div>
 								</div>
