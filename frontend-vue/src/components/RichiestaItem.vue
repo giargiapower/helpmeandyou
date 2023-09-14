@@ -187,7 +187,7 @@
 				await axios.post('/api/segnalazioni/segnalazione/create',
 					{
 						titolo: '',
-						descrizione: '',
+						descrizione: this.descrizione,
 						tipologia: 'segnalazione richiesta',
 						creatore: this.idUtenteLoggato,
 						segnalato: this.idUtenteRichiesta

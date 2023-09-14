@@ -72,7 +72,7 @@
 								<span>{{ currentSegnalazione.nomeSegnalato }}</span>
 							</div>
 						</div>
-						<div class="col">
+						<div v-if="currentSegnalazione.tipologia !== 'segnalazione richiesta'" class="col">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Titolo:</span>
 								<span>{{ currentSegnalazione.titolo }}</span>
