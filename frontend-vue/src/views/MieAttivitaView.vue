@@ -246,39 +246,6 @@
 
 	<SuccessShower ref="succShower" :message="successMessage"/>
 
-
-	<!--	<div class="mie-attivita">-->
-<!--		<bacheca-nav-bar></bacheca-nav-bar>-->
-<!--		<table>-->
-<!--			<tr>-->
-<!--				<td>-->
-<!--					&lt;!&ndash; TODO aggiungere le tabelle al posto delle liste-->
-<!--						  con le informazioni delle varie richieste &ndash;&gt;-->
-<!--					<button @click="PrimoshowDropdown = !PrimoshowDropdown">Mostra tendina</button>-->
-<!--					<ul v-show="PrimoshowDropdown">-->
-<!--						<li>Opzione 1</li>-->
-<!--						<li>Opzione 2</li>-->
-<!--						<li>Opzione 3</li>-->
-<!--					</ul>-->
-<!--					<br>-->
-<!--					<button @click="SecondoshowDropdown = !SecondoshowDropdown">Mostra tendina</button>-->
-<!--					<ul v-show="SecondoshowDropdown">-->
-<!--						<li>Opzione 1</li>-->
-<!--						<li>Opzione 2</li>-->
-<!--						<li>Opzione 3</li>-->
-<!--					</ul>-->
-<!--					<br>-->
-<!--					<button @click="TerzoshowDropdown = !TerzoshowDropdown">Mostra tendina</button>-->
-<!--					<ul v-show="TerzoshowDropdown">-->
-<!--						<li>Opzione 1</li>-->
-<!--						<li>Opzione 2</li>-->
-<!--						<li>Opzione 3</li>-->
-<!--					</ul>-->
-<!--					<br>-->
-<!--				</td>-->
-<!--			</tr>-->
-<!--		</table>-->
-<!--	</div>-->
 </template>
 
 <script>
@@ -523,7 +490,7 @@
 	.home-container {
 		min-height: 100%;
 		text-align: center;
-		background: linear-gradient(to bottom, #a7fada, #ccfaee, #e9faf5, rgba(13, 23, 196, 0.15));
+		background: linear-gradient(to top, #0f971c, #07f49e, #60efff, #60efff);
 		/*background: linear-gradient(to top, #ccfaee, #e9faf5, rgba(13, 23, 196, 0.15), rgba(92, 109, 248, 0.49), #5c6df8);*/
 		animation: fadeInUp 1s ease both;
 	}
@@ -568,7 +535,7 @@
 
 	.accordion {
 		border-radius: 8px;
-		--bs-accordion-active-bg: rgba(13, 23, 196, 0.15);
+		--bs-accordion-active-bg: rgba(7, 244, 158, 0.33);
 		--bs-accordion-active-color: black;
 	}
 

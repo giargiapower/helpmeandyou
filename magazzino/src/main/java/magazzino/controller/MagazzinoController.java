@@ -59,6 +59,17 @@ public class MagazzinoController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
+	// Restituisce il nome di un materiale dato il suo id e l'id del magazzino in cui si trova
+	@GetMapping("/nome/{id_magazzino}/{id_materiale}")
+	public ResponseEntity<String> getNomeMateriale(@PathVariable("id_magazzino") long magId, @PathVariable("id_materiale") long matId) {
+		Optional<Magazzino> magazzino = magRepository.findById(magId);
+		if (magazzino.isPresent()) {
+			Optional<Materiale> materiale = matRepository.findById(matId);
+			return materiale.map(value -> new ResponseEntity<>(value.getNome(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>("Nessun materiale", HttpStatus.OK));
+		} else
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
 	// Fornita una data e una provincia mi restituisce tutti i materiali disponibili in quella provincia e in quel giorno
 	@GetMapping("/materiali/{provincia}/{data}")
 	public ResponseEntity<List<Materiale>> getMaterialiDisponibili(@PathVariable("provincia") String provincia, @PathVariable("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {

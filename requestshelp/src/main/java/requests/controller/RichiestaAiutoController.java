@@ -46,6 +46,14 @@ public class RichiestaAiutoController {
 		return richieste;
 	}
 
+	@GetMapping("/richiestepubblicate/not/{id}")
+	public List<RichiestaAiuto> getRichiestePubblicate(@PathVariable(value = "id") long accountId) {
+		List<RichiestaAiuto> richieste = new ArrayList<>(richiestaAiutoRepository.findAllByStato("pubblicata"));
+		richieste.removeIf(richiesta -> richiesta.getPubAccount().getId() == accountId || richiesta.getGiorno().isBefore(java.time.LocalDate.now()));
+		return richieste;
+	}
+
+
 	@GetMapping("/categorie")
 	public List<Categoria> getAllCategorie() {
 		List<Categoria> categories = new ArrayList<>();

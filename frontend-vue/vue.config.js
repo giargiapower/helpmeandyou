@@ -12,6 +12,7 @@ module.exports = defineConfig({
 				target: 'http://localhost:30000',
 				changeOrigin: true,
 			}
-		}
+		},
+		webSocketServer: false
 	}
 })

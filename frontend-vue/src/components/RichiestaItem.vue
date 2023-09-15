@@ -1,17 +1,5 @@
 <template>
-	<div class="col">
-		<div class="card">
-			<div class="card-body">
-				<h5 class="card-title">{{ richiesta.giorno }}</h5>
-				<hr class="line-separator">
-				<p class="card-text">{{ richiesta.descrizione }}</p>
-				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Aiuta</button>
-			</div>
-		</div>
-	</div>
-
-	<!-- visualizzaModal -->
-	<div class="modal fade" id="visualizzaModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizzaModalLabel" aria-hidden="true">
+	<div class="modal fade" :id="'btn-verifica-' + richiesta.id" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="btn-verificaLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<form ref="form">
@@ -70,7 +58,7 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Materiale:</span>
-											<span>{{ richiesta.idMateriale }}</span>
+											<span>{{ richiesta.nomeMateriale }}</span>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
@@ -105,50 +93,22 @@
 			SuccessShower
 		},
 		props: {
-			richiesta: {required: true, type: Object},
-			// id: {required: true, type: Number},
-			// idUtenteRichiesta: {required: true, type: Number},
-			// descrizione: {required: true, type: String},
-			// nome: {required: true, type: String},
-			// cognome: {required: true, type: String},
-			// giorno: {required: true, type: String},
-			// regione: {required: true, type: String},
-			// provincia: {required: true, type: String},
-			// citta: {required: true, type: String},
-			// categoria: {required: true, type: String},
-			// indirizzo: {required: true, type: String},
-			// idMateriale: {required: true, type: Number},
-			// idUtenteLoggato: {required: true, type: Number}
+			richiesta: {required: true, type: Object}
 		},
 		data() {
 			return {
-				materialeRichiesta: {},
 				successMessage: ''
 			}
 		},
 		methods: {
-			// Funzione che carica dal server i materiali presenti nel magazzino per mostrarli nel componente
-			async fetchMateriali() {
-				await axios.get('/api/magazzini/1/materiali')
-					.then(response => {
-						response.data.forEach(element => {
-							if (element.id === this.idMateriale)
-								this.materialeRichiesta = element;
-						});
-						console.log('Materiali caricati con successo!');
-					})
-					.catch(error => {
-						console.log(error);
-					})
-			},
 			async onSegnala() {
 				await axios.post('/api/segnalazioni/segnalazione/create',
 					{
 						titolo: '',
-						descrizione: this.descrizione,
+						descrizione: this.richiesta.descrizione,
 						tipologia: 'segnalazione richiesta',
-						creatore: this.idUtenteLoggato,
-						segnalato: this.idUtenteRichiesta
+						creatore: this.$store.state.userId,
+						segnalato: this.richiesta.pubAccount.id
 					})
 					.then(response => {
 						console.log(response.data);
@@ -164,7 +124,7 @@
 			},
 			// Funzione che permette di accettare una richiesta
 			async onAccetta() {
-				await axios.put(`/api/richiesteaiuto/richiesta/accetta/${this.id}/${this.idUtenteLoggato}`)
+				await axios.put(`/api/richiesteaiuto/richiesta/accetta/${this.richiesta.id}/${this.$store.state.userId}`)
 					.then(response => {
 						console.log(response.data);
 						this.successMessage = 'Grazie per la tua disponibilità!\nPuoi consultare le tue prenotazioni attive nella sezione "Le mie attività."';
@@ -189,29 +149,11 @@
 						}
 					})
 			}
-		},
-		mounted() {
-			this.fetchMateriali()
-		},
-		computed() {
-			this.fetchMateriali()
 		}
 	}
 </script>
 
 <style scoped>
-	.card {
-		margin-bottom: 50px;
-		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-		border-width: 1px;
-		border-radius: 20px;
-	}
-
-	.card-title {
-		font-weight: bold;
-	}
-
-
 	.btn-primary {
 		margin: 5px 0; /* Aggiunge spazio verticale prima e dopo il bottone */
 		padding: 5px 20px;
@@ -246,12 +188,6 @@
 		transition: background-color 0.5s ease;
 		border-radius: 20px;
 		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-	}
-
-	.line-separator {
-		background-color: #ccccccff;
-		flex-grow: 5;
-		height: 1px;
 	}
 
 	/*Parte Modal*/
