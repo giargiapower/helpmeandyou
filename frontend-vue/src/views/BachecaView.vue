@@ -142,6 +142,7 @@
 					})
 				return nomeMateriale;
 			},
+			// Funzione che si occupa di filtrare le richieste in base ai parametri inseriti dall'utente
 			async filterRequests() {
 				let richiesteFiltrate = [];
 				for (let i = 0; i < this.tutteRichieste.length; i++) {

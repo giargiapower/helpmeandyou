@@ -53,7 +53,6 @@ public class RichiestaAiutoController {
 		return richieste;
 	}
 
-
 	@GetMapping("/categorie")
 	public List<Categoria> getAllCategorie() {
 		List<Categoria> categories = new ArrayList<>();

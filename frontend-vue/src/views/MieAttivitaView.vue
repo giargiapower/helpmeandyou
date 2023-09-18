@@ -1,17 +1,17 @@
 <template>
-	<!-- Section: Design Block -->
 	<div class="home-container">
 		<bacheca-nav-bar/>
 		<section class="text-center">
-			<!-- Background image -->
 			<div class="p-5 bg-image"/>
-			<!-- Background image -->
 			<div class="col-lg-10 mx-auto">
 				<div class="card mx-4 shadow-5-strong">
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Le mie attività</h1>
+								<h1 class="fw-bold mb-5">
+									Le mie attività
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="fetchRichiesteAccettatePubblicateConcluse">
+								</h1>
 								<div class="accordion mb-3" id="accordionExample">
 									<div class="accordion-item">
 										<h2 class="accordion-header">
@@ -34,14 +34,14 @@
 															</tr>
 														</thead>
 														<tbody class="table-group-divider">
-															<tr v-for="(ric, index) in this.listaRichiesteAccettate" :key="ric.id" @click="mostraMateriale(richiesta = ric)">
+															<tr v-for="(ric, index) in this.listaRichiesteAccettate" :key="ric.id">
 																<th scope="row">{{ index + 1}}</th>
 																<td>{{ ric.giorno }}</td>
 																<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
 																<td>{{ ric.categoria.tipo }}</td>
-																<td>{{ materialeSelezionato }}</td>
+																<td>{{ ric.nomeMateriale }}</td>
 																<td>
-																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="prendiRichiesta(ricId = ric.id)">Visualizza</button>
+																	<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="settaRichiesta(ric.id)">Visualizza</button>
 																</td>
 															</tr>
 														</tbody>
@@ -71,14 +71,14 @@
 													</tr>
 													</thead>
 													<tbody class="table-group-divider">
-													<tr v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id" @click="mostraMateriale(ric)">
+													<tr v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id">
 														<th scope="row">{{ index + 1}}</th>
 														<td>{{ ric.giorno }}</td>
 														<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
 														<td>{{ ric.categoria.tipo }}</td>
-														<td>{{ materialeSelezionato }}</td>
+														<td>{{ ric.nomeMateriale }}</td>
 														<td>
-															<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
+															<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="settaRichiesta(ric.id)">Visualizza</button>
 														</td>
 													</tr>
 													</tbody>
@@ -108,17 +108,17 @@
 														</tr>
 													</thead>
 													<tbody class="table-group-divider">
-														<tr  v-for="(ric, index) in this.listaRichiesteConcluse" :key="ric.id" @click="mostraMateriale(ric)">
+														<tr  v-for="(ric, index) in this.listaRichiesteConcluse" :key="ric.id">
 															<th scope="row">{{ index + 1}}</th>
 															<td>{{ ric.giorno }}</td>
 															<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
 															<td>{{ ric.categoria.tipo }}</td>
-															<td>{{ materialeSelezionato }}</td>
+															<td>{{ ric.nomeMateriale }}</td>
 															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal">Visualizza</button>
+																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="settaRichiesta(ric.id)">Visualizza</button>
 															</td>
 															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal" @click="prendiRichiesta(ric.id)">Segnala</button>
+																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal" @click="settaRichiesta(ric.id)">Segnala</button>
 															</td>
 														</tr>
 													</tbody>
@@ -155,55 +155,55 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Nome:</span>
-<!--											<span>{{ richiestaSelezionata.pubAccount.nome }}</span>-->
+											<span>{{ richiestaSelezionata.pubAccount.nome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Cognome:</span>
-<!--											<span>{{ richiestaSelezionata.pubAccount.cognome }}</span>-->
+											<span>{{ richiestaSelezionata.pubAccount.cognome }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Regione:</span>
-<!--											<span>{{ richiestaSelezionata.indirizzo.regione }}</span>-->
+											<span>{{ richiestaSelezionata.indirizzo.regione }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Provincia:</span>
-<!--											<span>{{ richiestaSelezionata.indirizzo.provincia }}</span>-->
+											<span>{{ richiestaSelezionata.indirizzo.provincia }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Città:</span>
-<!--											<span>{{ richiestaSelezionata.indirizzo.citta }}</span>-->
+											<span>{{ richiestaSelezionata.indirizzo.citta }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Indirizzo:</span>
-<!--											<span>{{ richiesta.indirizzo.indirizzo }}</span>-->
+											<span>{{ richiestaSelezionata.indirizzo.indirizzo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Categoria:</span>
-<!--											<span>{{ richiestaSelezionata.categoria.tipo }}</span>-->
+											<span>{{ richiestaSelezionata.categoria.tipo }}</span>
 										</div>
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Materiale:</span>
-											<span>{{ materialeSelezionato }}</span>
+											<span>{{ richiestaSelezionata.nomeMateriale }}</span>
 										</div>
 									</div>
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Descrizione:</span>
-<!--											<span>{{ richiestaSelezionata.descrizione }}</span>-->
+											<span>{{ richiestaSelezionata.descrizione }}</span>
 										</div>
 									</div>
 								</div>
@@ -220,7 +220,7 @@
 	<div class="modal fade" id="segnalaModal" data-bs-show="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="segnalaModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form @submit.prevent="onSubmit" ref="form">
+				<form ref="form">
 					<fieldset>
 						<div class="modal-body">
 							<legend class="custom-legend">
@@ -236,7 +236,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary mx-4 flex-grow-1" data-bs-dismiss="modal" type="reset" id="chiaro-button">Annulla</button>
-							<button class="btn btn-primary mx-4 flex-grow-1" type="submit">Conferma</button>
+							<button class="btn btn-primary mx-4 flex-grow-1" type="button" @click="inviaSegnalazione">Conferma</button>
 						</div>
 					</fieldset>
 				</form>
@@ -261,170 +261,86 @@
 		},
 		data() {
 			return {
-				PrimoshowDropdown: false,
-				SecondoshowDropdown: false,
-				TerzoshowDropdown: false,
-				idUtente: this.$store.state.userId,
 				successMessage: '',
+				listaRichieste: [],
 				listaRichiesteAccettate: [],
 				listaRichiestePubblicate: [],
 				listaRichiesteConcluse: [],
-				listaMateriali: [],
-				materialeSelezionato: null,
-				ricId: 0,
-				richiesta: {
-					id: 0,
-					descrizione: '',
-					giorno: '',
-					indirizzo: {
-						id: 0,
-						regione: '',
-						provincia: '',
-						citta: '',
-						indirizzo: ''
-					},
-					stato: '',
-					accAccount: {
-						id: 0,
-						email: '',
-						password: '',
-						nome: '',
-						cognome: '',
-						telefono: '',
-						indirizzo: '',
-						stato: '',
-						path_curriculum: '',
-						path_documento: '',
-						categoria: null
-					},
-					pubAccount: {
-						id: 0,
-						email: '',
-						password: '',
-						nome: '',
-						cognome: '',
-						telefono: '',
-						indirizzo: '',
-						stato: '',
-						path_curriculum: '',
-						path_documento: '',
-						categoria: null
-					},
-					categoria: {
-						tipo: ''
-					},
-					idMateriale: 0
-				},
 				richiestaSelezionata: {
-					id: 0,
 					descrizione: '',
 					giorno: '',
 					indirizzo: {
-						id: 0,
 						regione: '',
 						provincia: '',
 						citta: '',
 						indirizzo: ''
 					},
-					stato: '',
 					accAccount: {
-						id: 0,
-						email: '',
-						password: '',
 						nome: '',
-						cognome: '',
-						telefono: '',
-						indirizzo: '',
-						stato: '',
-						path_curriculum: '',
-						path_documento: '',
-						categoria: null
+						cognome: ''
 					},
 					pubAccount: {
-						id: 0,
-						email: '',
-						password: '',
 						nome: '',
-						cognome: '',
-						telefono: '',
-						indirizzo: '',
-						stato: '',
-						path_curriculum: '',
-						path_documento: '',
-						categoria: null
+						cognome: ''
 					},
 					categoria: {
 						tipo: ''
 					},
-					idMateriale: 0
+					nomeMateriale: ''
 				},
 				descrizione: ''
 			}
 		},
 		methods: {
-			// TODO: bisogna anche implementare il termina richiesta accettata
 			// Funzione che seleziona una richiesta precisa
-			// questa ritorna correttamente la richiesta ma sembra che non la salvi o che questo calcolo avvenga durante il mount della pagina
-			async prendiRichiesta(ricId) {
-				await axios.get(`/api/richiesteaiuto/richiesta/${ricId}`)
-					.then(response => {
-						this.richiestaSelezionata = response.data;
+			settaRichiesta(ricId) {
+				for (let i = 0; i < this.listaRichieste.length; i++) {
+					if (this.listaRichieste[i].id === ricId) {
+						this.richiestaSelezionata = this.listaRichieste[i];
 						console.log(this.richiestaSelezionata);
-					})
-					.catch(error => {
-						if (error.response) {
-							console.error('Response Data:', error.response.data);
-							console.error('Response Status:', error.response.status);
-							console.error('Response Headers:', error.response.headers);
-						} else if (error.request) {
-							console.error('No response received:', error.request);
-						} else {
-							console.error('Error:', error.message);
-						}
-					})
+						return;
+					}
+				}
 			},
-			// Funzione per mostrare nel template il materiale scelto, se presente, all'interno di una richiesta
-			async mostraMateriale(richiesta) {
-				await axios.get('/api/magazzini/materiali/Torino/2023-12-22')
+			// Funzione che recupera il nome del materiale dato il suo id
+			async findName(idMateriale) {
+				let nomeMateriale = '';
+				await axios.get(`/api/magazzini/nome/1/${idMateriale}`)
 					.then(response => {
-						this.listaMateriali = response.data;
-							this.listaMateriali.forEach(mat => {
-								if(richiesta.idMateriale === mat.id) {
-									this.materialeSelezionato = mat.nome;
-								} else {
-									this.materialeSelezionato = '-';
-								}
-							});
+						nomeMateriale = response.data;
 					})
 					.catch(error => {
-						if (error.response) {
-							console.error('Response Data:', error.response.data);
-							console.error('Response Status:', error.response.status);
-							console.error('Response Headers:', error.response.headers);
-						} else if (error.request) {
-							console.error('No response received:', error.request);
-						} else {
-							console.error('Error:', error.message);
-						}
+						console.log(error);
 					})
+				return nomeMateriale;
 			},
 			// Funzione che restituisce tutte le richieste "accettate"/"pubblicate"/"concluse" dall'utente loggato
 			async fetchRichiesteAccettatePubblicateConcluse() {
-				let listaRichieste;
 				await axios.get('/api/richiesteaiuto/richieste')
-					.then(response => {
-						listaRichieste = response.data;
-						listaRichieste.forEach(req => {
-							if(req.stato === 'accettata' && req.accAccount.id === this.idUtente) {
-								this.listaRichiesteAccettate.push(req);
+					.then(async response => {
+						this.listaRichieste = [];
+						this.listaRichiesteAccettate = [];
+						this.listaRichiestePubblicate = [];
+						this.listaRichiesteConcluse = [];
+						let listaRichiesteTotali = response.data;
+						for (let i = 0; i < listaRichiesteTotali.length; i++) {
+							listaRichiesteTotali[i].nomeMateriale = await this.findName(listaRichiesteTotali[i].idMateriale);
+
+							if ((listaRichiesteTotali[i].stato !== 'terminata') && (new Date(listaRichiesteTotali[i].giorno) < new Date())) {
+								listaRichiesteTotali[i].stato = 'terminata';
+								this.terminaRichiesta(listaRichiesteTotali[i].id);
 							}
-							if((req.stato === 'pubblicata' || req.stato === 'accettata') && req.pubAccount.id === this.idUtente) {
-								this.listaRichiestePubblicate.push(req);
+							if (listaRichiesteTotali[i].stato === 'accettata' && listaRichiesteTotali[i].accAccount.id.toString() === this.$store.state.userId) {
+								this.listaRichieste.push(listaRichiesteTotali[i]);
+								this.listaRichiesteAccettate.push(listaRichiesteTotali[i]);
+							} else if (listaRichiesteTotali[i].stato === 'pubblicata' && listaRichiesteTotali[i].pubAccount.id.toString() === this.$store.state.userId) {
+								this.listaRichieste.push(listaRichiesteTotali[i]);
+								this.listaRichiestePubblicate.push(listaRichiesteTotali[i]);
+							} else if (listaRichiesteTotali[i].stato === 'terminata' && (listaRichiesteTotali[i].pubAccount.id.toString() === this.$store.state.userId || (listaRichiesteTotali[i].accAccount !== null && listaRichiesteTotali[i].accAccount.id.toString() === this.$store.state.userId))) {
+								this.listaRichieste.push(listaRichiesteTotali[i]);
+								this.listaRichiesteConcluse.push(listaRichiesteTotali[i]);
 							}
-							else if(req.stato === 'terminata' && (req.accAccount.id === this.idUtente || req.pubAccount.id === this.idUtente)) {
-								this.listaRichiesteConcluse.push(req);
-							}
-						});
+						}
 						console.log('accettate: ', this.listaRichiesteAccettate);
 						console.log('pubblicate: ', this.listaRichiestePubblicate);
 						console.log('concluse: ', this.listaRichiesteConcluse);
@@ -441,14 +357,33 @@
 						}
 					})
 			},
-			// TODO: funzione ancora da testare !!!
-			async onSubmit() {
+			// Funzione che termina una richiesta (causa data scaduta) (questa non ha async-await perché non restituisce nulla, basta che venga eseguita)
+			terminaRichiesta(ricId) {
+				axios.put(`/api/richiesteaiuto/richiesta/termina/${ricId}`)
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che invia una segnalazione
+			async inviaSegnalazione() {
+				this.settaRichiesta();
 				await axios.post('/api/segnalazioni/segnalazione/create',
 					{
 						titolo: '',
 						descrizione: this.descrizione,
 						tipologia: 'segnalazione utente',
-						creatore : this.idUtente,
+						creatore : this.$store.state.userId,
 						segnalato  : this.richiestaSelezionata.pubAccount.id
 					})
 					.then(response => {
@@ -456,9 +391,7 @@
 						this.successMessage ='Segnalazione inviata!\nFaremo del nostro meglio per prendere opportune precauzioni.';
 						this.$refs.succShower.toggle();
 						this.$refs.form.reset();
-						setTimeout(function() {
-							window.location.href = '/accedi-registrati/bacheca/mie-attivita/';
-						}, 3000);
+						this.descrizione = '';
 					})
 					.catch(error => {
 						if (error.response) {
@@ -475,13 +408,9 @@
 		},
 		mounted() {
 			this.fetchRichiesteAccettatePubblicateConcluse();
-			this.mostraMateriale(this.richiesta);
-			this.prendiRichiesta(this.ricId);
 		},
 		computed() {
 			this.fetchRichiesteAccettatePubblicateConcluse();
-			this.mostraMateriale(this.richiesta);
-			this.prendiRichiesta(this.ricId);
 		}
 	}
 </script>
@@ -620,5 +549,13 @@
 		border-top: 1px solid rgba(204, 204, 204, 0.6);
 		margin-bottom: 33px;
 		margin-top: -10px;
+	}
+
+	#reload {
+		width: 25px;
+		height: 25px;
+		margin-left: 20px;
+		margin-top: -5px;
+		cursor: pointer;
 	}
 </style>
