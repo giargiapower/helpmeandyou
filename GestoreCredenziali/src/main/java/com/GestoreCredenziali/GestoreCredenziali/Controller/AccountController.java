@@ -1,11 +1,8 @@
 package com.GestoreCredenziali.GestoreCredenziali.Controller;
 
-import com.GestoreCredenziali.GestoreCredenziali.File.FileController;
 import com.GestoreCredenziali.GestoreCredenziali.File.FileStorageService;
 import com.GestoreCredenziali.GestoreCredenziali.Model.Account;
 import com.GestoreCredenziali.GestoreCredenziali.Repository.AccountRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AccountController {
     @Autowired
     AccountRepository a_repository;
-
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -67,10 +62,10 @@ public class AccountController {
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
             return ResponseEntity.ok(accountEsistente);
-        } else {
-            // L'account non è presente, la password è errata o lo stato non è approvato
+        } else if (accountEsistente == null) {
             return ResponseEntity.badRequest().body(null);
-        }
+        } else
+            return ResponseEntity.badRequest().body(accountEsistente);
     }
 
     @PostMapping("/google-login")
@@ -78,10 +73,10 @@ public class AccountController {
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
         if (accountEsistente != null && accountEsistente.getStato().equals("approvato")) {
             return ResponseEntity.ok(accountEsistente);
-        } else {
-            // L'account non è presente o lo stato non è approvato
+        } else if (accountEsistente == null) {
             return ResponseEntity.badRequest().body(null);
-        }
+        } else
+            return ResponseEntity.badRequest().body(accountEsistente);
     }
 
     @GetMapping("/utente/{id}")

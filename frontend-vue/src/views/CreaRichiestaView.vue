@@ -7,6 +7,7 @@
 					<fieldset>
 						<legend>Crea richiesta d'aiuto</legend>
 						<p class="text-muted">Nota: Cerca di essere il più possibile dettagliato nella richiesta</p>
+						<p class="text-muted">NB: I materiali sono disponibili solo per la città di Torino. In alternativa se inseriti non verranno tenuti in considerazione!</p>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Data</span>
 							<input type="date" class="form-control" v-model="selectedData" :min="minDate" aria-label="Data" aria-describedby="Data" required>
@@ -107,18 +108,15 @@
 				this.$router.push('./');
 			},
 			// Funzione che crea la richiesta di aiuto
-			// TODO: la chiamata funziona, la richiesta viene accettata, compare nella bacheca,
-			// per sistemare bisogna: togliere un materiale dal magazzino (=> stato non disponibile)
-			// se ci sono più occorrenze di quel materiale nel magazzino
-			// l'utente non deve vedere in bacheca la propria richiesta, solo nella vista "Mie Attività"
-			// ultimo: aggiungere più categorie !!!
 			async onSubmit() {
-				let idSelectedMateriale;
-				this.listaMateriali.forEach(materiale => {
-					if(this.selectedMateriale === materiale.nome) {
-						idSelectedMateriale = materiale.id;
-					}
-				});
+				let idSelectedMateriale = null;
+				if (this.indirizzo.provincia === 'Torino') {
+					this.listaMateriali.forEach(materiale => {
+						if(this.selectedMateriale === materiale.nome) {
+							idSelectedMateriale = materiale.id;
+						}
+					});
+				}
 				await axios.post('/api/richiesteaiuto/richiesta/crea',
 					{
 						descrizione: this.descrizione,
@@ -141,7 +139,6 @@
 						this.$router.push('./');
 					})
 					.catch(error => {
-						// TODO: servirebbe un alert anche qui
 						if(error.response) {
 							// The request was made and the server responded with a status code
 							console.error('Response Data:', error.response.data);
@@ -198,7 +195,6 @@
 						console.log('Categorie caricate con successo.')
 					})
 					.catch(error => {
-						// TODO: servirebbe un alert anche qui
 						if(error.response) {
 							// The request was made and the server responded with a status code
 							console.error('Response Data:', error.response.data);
@@ -213,22 +209,6 @@
 						}
 					})
 			},
-			// Funzione che calcola le categorie da assegnare a una richiesta in modo univoco
-			// async fetchCategorieRichieste() {
-			// 	await axios.get('/api/richiesteaiuto/richieste')
-			// 		.then(response => {
-			// 			this.listaRichieste = response.data;
-			// 			this.listaRichieste.forEach(ric => {
-			// 				this.categorie.push({id: this.uniqueId, nome: ric.categoria.tipo});
-			// 			});
-			//
-			// 			console.log('Categorie caricate con successo!');
-			// 			console.log(this.categorie);
-			// 		})
-			// 		.catch(errore => {
-			// 			console.log(errore);
-			// 		})
-			// },
 			calculateMinDate() {
 				const currentDate = new Date();
 				const minYear = currentDate.getFullYear();
@@ -242,12 +222,10 @@
 			this.fetchMateriali();
 			this.uniqueMateriali();
 			this.fetchCategorie();
-			// this.fetchCategorieRichieste();
 		},
 		computed() {
 			this.fetchMateriali();
 			this.uniqueMateriali();
-			// this.fetchCategorieRichieste();
 		}
 	}
 </script>
@@ -259,10 +237,6 @@
 
 	.hero-section {
 		background: url("@/assets/home-background.jpg") center/cover no-repeat;
-		/*height: 100vh;*/
-		/*display: flex;*/
-		/*align-items: center;*/
-		/*justify-content: center;*/
 	}
 
 	.hero-content {

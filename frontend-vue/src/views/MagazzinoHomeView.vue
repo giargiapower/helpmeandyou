@@ -8,7 +8,6 @@
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-<!--								TODO: Il luogo qui sotto dipenderà dalle credenziali dell'utente.-->
 								<h1 class="fw-bold mb-5">Gestione magazzino: Torino</h1>
 								<p>
 									Denaro disponibile: {{ saldoMagazzino }}

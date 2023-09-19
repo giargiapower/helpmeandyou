@@ -33,7 +33,7 @@
 												</td>
 											</tr>
 										</tbody>
-										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente" :fromParent=1 @rimuovi-figlio="rimuoviFiglio"/>
+										<verifica-utente-item v-for="utente in listaUtentiDaApprovare" :key="'modal-' + utente.id" :utente="utente" :fromParent=1 @rimuovi-figlio="rimuoviFiglio" @blocca-utente="bloccaUtente"/>
 									</table>
 								</div>
 							</div>
@@ -98,7 +98,15 @@
 				console.log('Rimuovo utente con id ' + userID + ' dalla lista di utenti da approvare.')
 				this.successMessage ='Utente approvato!\nPuoi consultare la lista di tutti gli utenti nella sezione "Gestione utenti".';
 				this.$refs.succShower.toggle();
-				// this.listaUtentiDaApprovare = this.listaUtentiDaApprovare.filter(utente => utente.id !== userID);
+				setTimeout(function() {
+					window.location.href = '/admin/admin-home/';
+				}, 3000);
+			},
+			// Funzione che blocca un utente
+			async bloccaUtente (userID) {
+				console.log('Blocco utente con id ' + userID + '.')
+				this.successMessage ='Utente bloccato con successo!\nPuoi consultare la lista di tutti gli utenti nella sezione "Gestione utenti".';
+				this.$refs.succShower.toggle();
 				setTimeout(function() {
 					window.location.href = '/admin/admin-home/';
 				}, 3000);

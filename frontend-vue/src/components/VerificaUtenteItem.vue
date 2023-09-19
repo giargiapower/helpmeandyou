@@ -54,8 +54,7 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Documento:</span>
-<!--											è giusto che sia (utente.path_documento === utente.email) perché
-												se non è presente il doc, viene salvato in automatico con la mail -->
+<!--											è giusto che sia (utente.path_documento === utente.email) perché se non è presente il doc, viene salvato in automatico con la mail -->
 											<p v-if="utente.path_documento === utente.email + '.pdf'">Documento d'identità non caricato</p>
 											<a v-else href="#" @click="idDocPath(utente.email + '.pdf')">Download Doc.Identità</a>
 										</div>
@@ -63,7 +62,6 @@
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Curriculum:</span>
-<!--											vale lo stesso del documento d'identità -->
 											<p v-if="utente.path_curriculum === utente.email + '.pdf'">CV non caricato</p>
 											<a v-else href="#" @click="cvPath(utente.email + '.pdf')">Download CV</a>
 										</div>
@@ -117,10 +115,6 @@
 		},
 		methods: {
 			// Funzione che ritorna il CV di un utente
-			/*
-			PER FARLO FUNZIONARE è STATA CAMBIATA L'ANNOTAZIONE DA @RequestPart a @RequestParam,
-			perchè si chiama una GET e non una POST
-			 */
 			async cvPath(file) {
 				await axios.get(`/api/amministratore/cv?fileName=${file}`,
 					{
@@ -177,7 +171,7 @@
 
 				await axios.put(`/api/amministratore/da_approvare/valuta/${this.utente.id}`,
 					{
-						decisione: 'approvato'
+						decisione: 'approva'
 					})
 					.then(response => {
 						console.log(response.data);
@@ -239,12 +233,8 @@
 			async bloccaUtente() {
 				await axios.put(`/api/amministratore/blocca/${this.utente.id}`)
 					.then(response => {
-						// TODO: un messaggio che mostri che l'utente x sia bloccato
 						console.log(response.data);
-						if (this.fromParent === 1)
-							this.$emit('rimuovi-figlio', this.utente.id);
-						else
-							this.$emit('blocca-utente', this.utente.id);
+						this.$emit('blocca-utente', this.utente.id);
 					})
 					.catch(error => {
 						if (error.response) {

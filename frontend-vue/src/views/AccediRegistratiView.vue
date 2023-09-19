@@ -81,20 +81,13 @@
 								<span class="input-group-text">Password</span>
 								<input type="password" class="form-control" v-model="password" aria-label="Password" aria-describedby="Password" pattern=".{8,}" title="La password deve avere almeno 8 caratteri" required>
 							</div>
-<!--								TODO: io toglierei il domicilio all'utente e lo lascerei solo alla richiesta. Se vuole l'utente filtra la regione della richiesta e stop-->
 							<div class="input-group mb-3">
-								<span class="input-group-text">Domicilio(?)</span>
-								<input type="text" class="form-control" v-model="indirizzo" aria-label="Domicilio" aria-describedby="Domicilio" required>
+								<span class="input-group-text">Documento d'identità (.pdf)</span>
+								<input type="file" class="form-control" ref="documento_identita" accept="application/pdf" @change="handleFileChangeDoc" aria-label="Documento d'identità" aria-describedby="Documento d'identità" required>
 							</div>
 							<div class="input-group mb-3">
-								<span class="input-group-text">Documento d'identità</span>
-								<input type="file" class="form-control" ref="documento_identita" @change="handleFileChangeDoc" aria-label="Documento d'identità" aria-describedby="Documento d'identità" required>
-<!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
-							</div>
-							<div class="input-group mb-3">
-								<span class="input-group-text">Curriculum</span>
-								<input type="file" class="form-control" ref="cv" @change="handleFileChangeCv" aria-label="Curriculum" aria-describedby="Curriculum" required>
-<!--								Volendo qui sopra aggiungere "accept="application/pdf" se vogliamo solo pdf-->
+								<span class="input-group-text">Curriculum (.pdf)</span>
+								<input type="file" class="form-control" ref="cv" accept="application/pdf" @change="handleFileChangeCv" aria-label="Curriculum" aria-describedby="Curriculum" required>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -108,26 +101,6 @@
 	</div>
 	<ErrorShower ref="errShower" :message="errorMessage"/>
 	<SuccessShower ref="succShower" :message="successMessage"/>
-
-
-
-<!--	<div class="accedi-registrati">-->
-<!--		<form @submit="onSubmit" ref="form">-->
-<!--			<fieldset>-->
-<!--				<legend>Login</legend>-->
-<!--				<label for="email">Email:</label>-->
-<!--				<input type="email" @value="this.email" required>-->
-
-<!--				<label for="password">Password:</label>-->
-<!--				<input type="password" @value="this.password" required>-->
-
-<!--				&lt;!&ndash; Collega AccediRegistratiView con BachecaView &ndash;&gt;-->
-<!--				<input type="submit" value="Accedi">-->
-<!--				&lt;!&ndash; Collega AccediRegistratiView con RegistrazioneView &ndash;&gt;-->
-<!--				<input type="button" value="Registrati" @click="onClick">-->
-<!--			</fieldset>-->
-<!--		</form>-->
-<!--	</div>-->
 </template>
 
 <script>
@@ -151,7 +124,6 @@
 				nome: '',
 				cognome: '',
 				telefono: null,
-				indirizzo: '',
 				cv: null,
 				documento_identita: null,
 				maxDate: this.calculateMaxDate(),
@@ -175,15 +147,26 @@
 				try {
 					await axios.post('api/utenti/login', {email: this.email, password: this.password})
 						.then(response => {
+							console.log('Login effettuato')
 							console.log(response.data);
 							this.$refs.form.reset();
 							this.$store.commit('setUserId', response.data.id);
 							this.$router.push('../accedi-registrati/bacheca');
 						})
 						.catch(error => {
-							// Handle the error
-							this.errorMessage = 'Credenziali errate! Riprova o registrati.';
-							this.$refs.errShower.toggle();
+							if (this.email === error.response.data.email && this.password !== error.response.data.password) {
+								this.errorMessage = 'Credenziali errate! Riprova.';
+								this.$refs.errShower.toggle();
+							} else if (error.response.data.stato === 'da_approvare') {
+								this.errorMessage = 'Il tuo account è in fase di approvazione. Riprova più tardi.';
+								this.$refs.errShower.toggle();
+							} else if (error.response.data.stato === 'bloccato') {
+								this.errorMessage = 'Il tuo account è stato bloccato. Contatta un amministratore.';
+								this.$refs.errShower.toggle();
+							} else {
+								this.errorMessage = 'Account inesistente! Procedi con la registrazione.';
+								this.$refs.errShower.toggle();
+							}
 							if (error.response) {
 								// The request was made and the server responded with a status code
 								console.error('Response Data:', error.response.data);
@@ -227,6 +210,7 @@
 								this.$store.commit('setUserId', response.data.id);
 								this.$router.push('../accedi-registrati/bacheca');							})
 							.catch(error => {
+								console.log(error);
 								this.errorMessage = 'Credenziali errate! Riprova o registrati.';
 								this.$refs.errShower.toggle();
 								if (error.response) {
@@ -249,9 +233,7 @@
 					});
 			},
 
-			// Funziona che permette a un utente di registrarsi. Per funzionare si è dovuto aggiungere il dominio del
-			// frontend "http://localhost:8080" alle "origins" cel controller in AccountController
-			// TODO: manca il set dei documenti, per ora si lasciano vuoti
+			// Funziona che permette a un utente di registrarsi
 			async onSubmitRegistrazione() {
 				await axios.post('/api/utenti/registrazione/create/account',
 					{
