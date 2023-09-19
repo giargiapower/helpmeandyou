@@ -1,6 +1,6 @@
 <template>
 	<div class="home-container">
-		<bacheca-nav-bar :id-utente="idUtente"/>
+		<bacheca-nav-bar/>
 		<div class="hero-section">
 			<div class="container">
 				<div class="page-content page-container" id="page-content">
@@ -14,7 +14,7 @@
 										</div>
 										<div id="ombra">
 											<h3 class="f-w-600">{{ this.nome + ' ' + this.cognome}}</h3>
-											<h5>{{ this.categoria }}</h5>
+											<h5 v-if="this.categoria !== null">{{ this.categoria.tipo }}</h5>
 										</div>
 									</div>
 								</div>
@@ -23,8 +23,10 @@
 										<h3 class="m-b-25 p-b-5 b-b-default f-w-600" id="title">Il mio profilo</h3>
 										<div class="row">
 											<div class="col-sm-6">
-												<p class="m-b-10 f-w-600">Data di nascita</p>
-												<h6 class="text-muted f-w-400">NON C'è E NON SI PUò SETTARE, VA TOLTA</h6>
+												<p class="m-b-10 f-w-600">Email</p>
+												<h6 class="text-muted f-w-400">{{ editing ? '' : email }}</h6>
+												<input v-if="editing" v-model="editedEmail" class="form-control" @input="validateEmail">
+												<p v-if="emailError" class="text-danger" id="danger">{{ emailError }}</p>
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Numero di telefono</p>
@@ -35,30 +37,23 @@
 										</div>
 										<div class="row">
 											<div class="col-sm-6">
-												<p class="m-b-10 f-w-600">Email</p>
-												<h6 class="text-muted f-w-400">{{ editing ? '' : email }}</h6>
-												<input v-if="editing" v-model="editedEmail" class="form-control" @input="validateEmail">
-												<p v-if="emailError" class="text-danger" id="danger">{{ emailError }}</p>
-											</div>
-											<div class="col-sm-6">
-												<p class="m-b-10 f-w-600">Domicilio(?)</p>
-												<h6 class="text-muted f-w-400">{{ editing ? '' : domicile }}</h6>
-												<input v-if="editing" v-model="editedDomicile" class="form-control">
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Documento d'identità</p>
-<!--												TODO: volendo mettere il link per il download qui sotto come fatto altrove-->
-												<h6 class="text-muted f-w-400">{{ editing ? '' : identityDocument }}</h6>
+<!--												<h6 class="text-muted f-w-400">{{ editing ? '' : identityDocument }}</h6>-->
 <!--												<input v-if="editing" v-model="editedIdentityDocument" type="file" class="form-control">-->
+												<div v-if="!editing">
+													<p v-if="path_documento === email + '.pdf'">Documento d'identità non caricato</p>
+													<a v-else href="#" @click="idDocPath(email + '.pdf')">Download Doc.Identità</a>
+												</div>
 												<input v-if="editing" type="file" class="form-control">
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Curriculum</p>
-												<!--												TODO: volendo mettere il link per il download qui sotto come fatto altrove-->
-												<h6 class="text-muted f-w-400">{{ editing ? '' : curriculum }}</h6>
+<!--												<h6 class="text-muted f-w-400">{{ editing ? '' : curriculum }}</h6>-->
 <!--												<input v-if="editing" v-model="editedCurriculum" type="file" class="form-control">-->
+												<div v-if="!editing">
+													<p v-if="path_curriculum === email + '.pdf'">CV non caricato</p>
+													<a v-else href="#" @click="cvPath(email + '.pdf')">Download CV</a>
+												</div>
 												<input v-if="editing" type="file" class="form-control">
 											</div>
 										</div>
@@ -79,49 +74,6 @@
 
 	<SuccessShower ref="succShower" :message="successMessage"/>
 
-
-
-<!--	<div class="profilo">-->
-<!--		<bacheca-nav-bar></bacheca-nav-bar>-->
-<!--		<h2>Profilo</h2>-->
-<!--		<form @reset="gestisciReset" @submit="onSubmit">-->
-<!--			<table>-->
-<!--				<tbody>-->
-<!--				<tr>-->
-<!--					<td><label for="nome">Nome:</label></td>-->
-<!--					<td><input type="text" id="nome" name="nome" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="cognome">Cognome:</label></td>-->
-<!--					<td><input type="text" id="cognome" name="cognome" required></td>-->
-<!--					<td>-->
-<!--						<p>Documento d'identità:</p>-->
-<!--						<img :src="imageUrl" alt="Immagine caricata">-->
-<!--					</td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="data-nascita">Data di nascita:</label></td>-->
-<!--					<td><input type="date" id="data-nascita" name="data-nascita" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="telefono">Telefono:</label></td>-->
-<!--					<td><input type="text" id="telefono" name="telefono" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="domicilio">Domicilio:</label></td>-->
-<!--					<td><input type="text" id="domicilio" name="domicilio" required></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td><label for="categorie">Categoria/e:</label></td>-->
-<!--					<td><input type="text" id="categorie" name="categorie" required></td>-->
-<!--				</tr>-->
-<!--				</tbody>-->
-<!--			</table>-->
-<!--			<br>-->
-<!--			<input type="reset" value="Annulla"> |-->
-<!--			<input type="submit" value="Conferma i tuoi dati">-->
-<!--		</form>-->
-<!--	</div>-->
 </template>
 
 <script>
@@ -137,8 +89,6 @@
 		},
 		data() {
 			return {
-				// 	imageUrl: 'C:/Users/serra/Desktop/ProgettoTAASS/helpmeandyou/frontend-vue/src/assets/logo.png'
-				// TODO: questi dati sotto vanno presi con le get dal backend
 				nome: '',
 				cognome: '',
 				categoria: '',
@@ -146,39 +96,36 @@
 				phoneNumberError: '',
 				email: '',
 				emailError: '',
-				domicile: '',
-				identityDocument: '',
-				curriculum: '',
+				path_documento: '',
+				path_curriculum: '',
 				editedPhoneNumber: '',
 				editedEmail: '',
-				editedDomicile: '',
-				editedIdentityDocument: '',	// dato di tipo file
-				editedCurriculum: '',		// dato di tipo file
+				edited_documento: '',
+				edited_curriculum: '',
 				editing: false,
-				idUtente: this.$store.state.userId,
 				successMessage: ''
 			};
 		},
+		mounted() {
+			this.fetchInfoUtente();
+		},
+		computed() {
+			this.cvPath(this.file);
+			this.idDocPath(this.file);
+		},
 		methods: {
-			// onSubmit() {
-			// 	alert("Salvataggio dati profilo effettuato con successo!");
-			// 	this.$router.push('/accedi-registrati/bacheca');
-			// },
-			// gestisciReset() {
-			// 	this.$router.push('/accedi-registrati/bacheca');
-			// },
 			// Funzione che restituisce le info di un utente per id
 			async fetchInfoUtente() {
-				await axios.get(`/api/utenti/utente/${this.idUtente}`)
+				await axios.get(`/api/utenti/utente/${this.$store.state.userId}`)
 					.then(response => {
+						console.log(response.data);
 						this.nome = response.data.nome;
 						this.cognome = response.data.cognome;
 						this.categoria = response.data.categoria;
 						this.phoneNumber = response.data.telefono;
 						this.email = response.data.email;
-						this.domicile = response.data.indirizzo;
-						this.identityDocument = response.data.path_documento;
-						this.curriculum = response.data.path_curriculum;
+						this.path_documento = response.data.path_documento;
+						this.path_curriculum = response.data.path_curriculum;
 					})
 					.catch(error => {
 						if (error.response) {
@@ -197,9 +144,8 @@
 					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :) (solo in caso di eventuali modifiche)
 					this.phoneNumber = this.editedPhoneNumber;
 					this.email = this.editedEmail;
-					this.domicile = this.editedDomicile;
-					this.identityDocument = this.editedIdentityDocument;
-					this.curriculum = this.editedCurriculum;
+					// this.identityDocument = this.editedIdentityDocument;
+					// this.curriculum = this.editedCurriculum;
 
 					// se il salvataggio è tutto ok, allora:
 					this.successMessage ='Salvataggio dati profilo effettuato con successo!';
@@ -210,11 +156,60 @@
 					this.editedPhoneNumber = this.phoneNumber;
 					this.editedEmail = this.email;
 					this.emailError = '';
-					this.editedDomicile = this.domicile;
-					this.editedIdentityDocument = this.identityDocument;
-					this.editedCurriculum = this.curriculum;
+					// this.editedIdentityDocument = this.identityDocument;
+					// this.editedCurriculum = this.curriculum;
 				}
 				this.editing = !this.editing;
+			},
+			// Funzione che ritorna il curriculum di un utente
+			async cvPath(file) {
+				await axios.get(`/api/amministratore/cv?fileName=${file}`,
+					{
+						responseType: "blob",
+						headers: {
+							Accept: 'application/pdf'
+						}
+					})
+					.then(response => {
+						// Create a URL for the blob response and open it in a new window for download
+						const pdfURL = URL.createObjectURL(response.data);
+						console.log(pdfURL);
+						const downloadLink = document.createElement('a');
+						console.log(downloadLink);
+						downloadLink.href = pdfURL;
+						downloadLink.download = file;
+						downloadLink.click();
+						// Clean up the URL object after the download
+						URL.revokeObjectURL(pdfURL);
+					})
+					.catch(errors => {
+						console.log(errors);
+					})
+			},
+			// Funzione che ritorna il documento d'identità di un utente
+			async idDocPath(file) {
+				await axios.get(`/api/amministratore/id?fileName=${file}`,
+					{
+						responseType: "blob",
+						headers: {
+							Accept: 'application/pdf'
+						}
+					})
+					.then(response => {
+						// Create a URL for the blob response and open it in a new window for download
+						const pdfURL = URL.createObjectURL(response.data);
+						console.log(pdfURL);
+						const downloadLink = document.createElement('a');
+						console.log(downloadLink);
+						downloadLink.href = pdfURL;
+						downloadLink.download = file;
+						downloadLink.click();
+						// Clean up the URL object after the download
+						URL.revokeObjectURL(pdfURL);
+					})
+					.catch(errors => {
+						console.error(errors);
+					})
 			},
 			cancelEditing() {
 				this.editing = false;
@@ -239,9 +234,6 @@
 					this.emailError = '';
 				}
 			}
-		},
-		mounted() {
-			this.fetchInfoUtente();
 		}
 	}
 </script>
@@ -451,7 +443,7 @@
 	}
 
 	.text-muted {
-		color: #919aa3 !important;
+		color: #646a70 !important;
 	}
 
 	.f-w-600 {

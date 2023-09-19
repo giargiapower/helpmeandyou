@@ -33,12 +33,6 @@
 									</div>
 									<div class="col">
 										<div class="list-group-item d-flex">
-											<span class="fw-bold me-3">Domicilio(?):</span>
-											<span>{{ utente.indirizzo }}</span>
-										</div>
-									</div>
-									<div class="col">
-										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">N° telefono:</span>
 											<span>{{ utente.telefono }}</span>
 										</div>
@@ -60,7 +54,6 @@
 									<div class="col">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Documento:</span>
-<!--											<span>...</span>-->
 <!--											è giusto che sia (utente.path_documento === utente.email) perché
 												se non è presente il doc, viene salvato in automatico con la mail -->
 											<p v-if="utente.path_documento === utente.email + '.pdf'">Documento d'identità non caricato</p>
@@ -70,7 +63,6 @@
 									<div class="col col-lg col-md-12 col-sm-12">
 										<div class="list-group-item d-flex">
 											<span class="fw-bold me-3">Curriculum:</span>
-<!--											<span>...</span>-->
 <!--											vale lo stesso del documento d'identità -->
 											<p v-if="utente.path_curriculum === utente.email + '.pdf'">CV non caricato</p>
 											<a v-else href="#" @click="cvPath(utente.email + '.pdf')">Download CV</a>

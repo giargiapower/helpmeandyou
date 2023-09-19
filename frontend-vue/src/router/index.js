@@ -11,17 +11,35 @@ const routes = [
 	{
 		path: '/',
 		name: 'home',
-		component: HomeView
+		component: HomeView,
+		beforeEnter(to, from, next) {
+			if (app.$store.state.userId !== null)
+				next({name: 'bacheca'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/admin',
 		name: 'admin',
-		component: AdminView
+		component: AdminView,
+		beforeEnter(to, from, next) {
+			if (app.$store.state.adminLoggedIn !== null)
+				next({name: 'admin-home'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/magazzino',
 		name: 'magazzino',
-		component: MagazzinoView
+		component: MagazzinoView,
+		beforeEnter(to, from, next) {
+			if (app.$store.state.magLoggedIn !== null)
+				next({name: 'magazzino-home'});
+			else
+				next();
+		}
 	},
 	{
 		path: '/magazzino/magazzino-home',
@@ -71,11 +89,6 @@ const routes = [
 		path: '/accedi-registrati',
 		name: 'accedi-registrati',
 		component: () => import('../views/AccediRegistratiView.vue')
-	},
-	{
-		path: '/accedi-registrati/registrazione',
-		name: 'registrazione',
-		component: () => import('../views/RegistrazioneView.vue')
 	},
 	{
 		path: '/dona-ora',
