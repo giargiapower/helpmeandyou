@@ -151,7 +151,6 @@
 						}
 						console.log('Richieste aggiungete con successo');
 						console.log(this.richieste);
-						console.log(this.tutteRichieste);
 					})
 					.catch(error => {
 						console.log(error)
