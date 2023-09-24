@@ -25,36 +25,34 @@
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Email</p>
 												<h6 class="text-muted f-w-400">{{ editing ? '' : email }}</h6>
-												<input v-if="editing" v-model="editedEmail" class="form-control" @input="validateEmail">
+												<input v-if="editing" v-model="editedEmail" class="form-control" @input="validateEmail" name="email" autocomplete="prova@email.it">
 												<p v-if="emailError" class="text-danger" id="danger">{{ emailError }}</p>
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Numero di telefono</p>
 												<h6 class="text-muted f-w-400">{{ editing ? '' : '+39 ' + phoneNumber }}</h6>
-												<input v-if="editing" v-model="editedPhoneNumber" class="form-control" @input="validatePhoneNumber">
+												<input v-if="editing" v-model="editedPhoneNumber" class="form-control" @input="validatePhoneNumber" name="phoneNumber" autocomplete="0000000000">
 												<p v-if="phoneNumberError" class="text-danger" id="danger">{{ phoneNumberError }}</p>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Documento d'identità</p>
-<!--												<h6 class="text-muted f-w-400">{{ editing ? '' : identityDocument }}</h6>-->
-<!--												<input v-if="editing" v-model="editedIdentityDocument" type="file" class="form-control">-->
-												<div v-if="!editing">
-													<p v-if="path_documento === email + '.pdf'">Documento d'identità non caricato</p>
-													<a v-else href="#" @click="idDocPath(email + '.pdf')">Download Doc.Identità</a>
-												</div>
-												<input v-if="editing" type="file" class="form-control">
+												<p v-if="path_documento === email + '.pdf'">Documento d'identità non caricato</p>
+												<a v-else href="#" @click="idDocPath(this.email + '.pdf')">Download Doc.Identità</a>
+												<input v-if="editing" type="file" ref="documento_identita" style="display: none" accept=".pdf" @change="handleFileChange('doc', $event)"/>
+												<button @click="openFileInputDoc" v-if="editing" class="btn">
+													<i class="bi bi-pencil" title="Modifica documento"></i>
+												</button>
 											</div>
 											<div class="col-sm-6">
 												<p class="m-b-10 f-w-600">Curriculum</p>
-<!--												<h6 class="text-muted f-w-400">{{ editing ? '' : curriculum }}</h6>-->
-<!--												<input v-if="editing" v-model="editedCurriculum" type="file" class="form-control">-->
-												<div v-if="!editing">
-													<p v-if="path_curriculum === email + '.pdf'">CV non caricato</p>
-													<a v-else href="#" @click="cvPath(email + '.pdf')">Download CV</a>
-												</div>
-												<input v-if="editing" type="file" class="form-control">
+												<p v-if="path_curriculum === email + '.pdf'">CV non caricato</p>
+												<a v-else href="#" @click="cvPath(this.email + '.pdf')">Download CV</a>
+												<input v-if="editing" type="file" ref="curriculum" style="display: none" accept=".pdf" @change="handleFileChange('cv', $event)"/>
+												<button @click="openFileInputCv" v-if="editing" class="btn">
+													<i class="bi bi-pencil" title="Modifica curriculum"></i>
+												</button>
 											</div>
 										</div>
 										<button v-if="!editing" class="btn btn-block btn-primary d-grid gap-2 col-6 mx-auto" type="button" @click="toggleEditing">Modifica</button>
@@ -92,6 +90,8 @@
 				nome: '',
 				cognome: '',
 				categoria: '',
+				curriculum: null,
+				documento_identita: null,
 				phoneNumber: '',
 				phoneNumberError: '',
 				email: '',
@@ -100,18 +100,17 @@
 				path_curriculum: '',
 				editedPhoneNumber: '',
 				editedEmail: '',
-				edited_documento: '',
-				edited_curriculum: '',
+				editedAccount: false,
+				editedIdentityDocument: false,
+				temporaryIdentityDocument: null,
+				editedCurriculum: false,
+				temporaryCurriculum: null,
 				editing: false,
 				successMessage: ''
 			};
 		},
 		mounted() {
 			this.fetchInfoUtente();
-		},
-		computed() {
-			this.cvPath(this.file);
-			this.idDocPath(this.file);
 		},
 		methods: {
 			// Funzione che restituisce le info di un utente per id
@@ -126,6 +125,8 @@
 						this.email = response.data.email;
 						this.path_documento = response.data.path_documento;
 						this.path_curriculum = response.data.path_curriculum;
+						this.loadCvPath(this.email + '.pdf');
+						this.loadIdDocPath(this.email + '.pdf');
 					})
 					.catch(error => {
 						if (error.response) {
@@ -139,30 +140,76 @@
 						}
 					})
 			},
+			// Apre l'input file quando si fa clic sull'icona di modifica
+			openFileInputDoc() {
+				this.$refs.documento_identita.click();
+			},
+			openFileInputCv() {
+				this.$refs.curriculum.click();
+			},
+			handleFileChange(identifier, event) {
+				if (identifier === 'doc') {
+					this.editedIdentityDocument = true;
+					this.temporaryIdentityDocument = event.target.files[0];
+				} else if (identifier === 'cv') {
+					this.editedCurriculum = true;
+					this.temporaryCurriculum = event.target.files[0];
+				}
+			},
 			toggleEditing() {
 				if (this.editing && this.phoneNumberError === '' && this.emailError === '') {
-					// TODO: eseguire qui azioni di salvataggio: invio dati al backend :) (solo in caso di eventuali modifiche)
-					this.phoneNumber = this.editedPhoneNumber;
-					this.email = this.editedEmail;
-					// this.identityDocument = this.editedIdentityDocument;
-					// this.curriculum = this.editedCurriculum;
-
-					// se il salvataggio è tutto ok, allora:
-					this.successMessage ='Salvataggio dati profilo effettuato con successo!';
-					this.$refs.succShower.toggle();
+					if (this.phoneNumber !== this.editedPhoneNumber) {
+						this.phoneNumber = this.editedPhoneNumber;
+						this.editedAccount = true;
+					}
+					if (this.email !== this.editedEmail) {
+						this.email = this.editedEmail;
+						this.editedAccount = true;
+					}
+					if (this.editedIdentityDocument === true) {
+						this.documento_identita = this.temporaryIdentityDocument;
+					}
+					if(this.editedCurriculum === true) {
+						this.curriculum = this.temporaryCurriculum;
+					}
+					if (this.editedAccount === true) {
+						this.setAccount();
+					}
+					if (this.editedIdentityDocument === true || this.editedCurriculum === true) {
+						this.setDocuments();
+					}
+					if (this.editedAccount === true || this.editedIdentityDocument === true || this.editedCurriculum === true){
+						this.successMessage ='Salvataggio dati profilo effettuato con successo!';
+						this.$refs.succShower.toggle();
+					}
 				}
 				else {
-					this.phoneNumberError = '';
-					this.editedPhoneNumber = this.phoneNumber;
-					this.editedEmail = this.email;
 					this.emailError = '';
-					// this.editedIdentityDocument = this.identityDocument;
-					// this.editedCurriculum = this.curriculum;
+					this.phoneNumberError = '';
+					this.editedEmail = this.email;
+					this.editedPhoneNumber = this.phoneNumber;
+					this.editedAccount = false;
+					this.editedIdentityDocument = false;
+					this.editedCurriculum = false;
 				}
 				this.editing = !this.editing;
 			},
-			// Funzione che ritorna il curriculum di un utente
-			async cvPath(file) {
+			// Funzione che effettua il download di un file
+			downloadFile(file) {
+				let pdfURL = null;
+				// Create a URL for the blob response and open it in a new window for download
+				pdfURL = URL.createObjectURL(file);
+				// console.log(pdfURL);
+				let downloadLink = document.createElement('a');
+				// console.log(downloadLink);
+				downloadLink.href = pdfURL;
+				downloadLink.download = this.email + '.pdf';
+				downloadLink.click();
+				// Clean up the URL object after the download
+				URL.revokeObjectURL(pdfURL);
+			},
+			// Funzione che salva il curriculum di un utente
+			async loadCvPath(file) {
 				await axios.get(`/api/amministratore/cv?fileName=${file}`,
 					{
 						responseType: "blob",
@@ -171,23 +218,36 @@
 						}
 					})
 					.then(response => {
-						// Create a URL for the blob response and open it in a new window for download
-						const pdfURL = URL.createObjectURL(response.data);
-						console.log(pdfURL);
-						const downloadLink = document.createElement('a');
-						console.log(downloadLink);
-						downloadLink.href = pdfURL;
-						downloadLink.download = file;
-						downloadLink.click();
-						// Clean up the URL object after the download
-						URL.revokeObjectURL(pdfURL);
+						this.curriculum = response.data;
 					})
 					.catch(errors => {
 						console.log(errors);
 					})
 			},
-			// Funzione che ritorna il documento d'identità di un utente
-			async idDocPath(file) {
+			// Funzione che effettua il download del curriculum di un utente
+			async cvPath(file) {
+				if (this.editedCurriculum === true) {
+					this.downloadFile(this.temporaryCurriculum);
+				}
+				else {
+					await axios.get(`/api/amministratore/cv?fileName=${file}`,
+						{
+							responseType: "blob",
+							headers: {
+								Accept: 'application/pdf'
+							}
+						})
+						.then(response => {
+							this.curriculum = response.data;
+							this.downloadFile(this.curriculum);
+						})
+						.catch(errors => {
+							console.error(errors);
+						})
+				}
+			},
+			// Funzione che salva il documento d'identità di un utente
+			async loadIdDocPath(file) {
 				await axios.get(`/api/amministratore/id?fileName=${file}`,
 					{
 						responseType: "blob",
@@ -196,25 +256,91 @@
 						}
 					})
 					.then(response => {
-						// Create a URL for the blob response and open it in a new window for download
-						const pdfURL = URL.createObjectURL(response.data);
-						console.log(pdfURL);
-						const downloadLink = document.createElement('a');
-						console.log(downloadLink);
-						downloadLink.href = pdfURL;
-						downloadLink.download = file;
-						downloadLink.click();
-						// Clean up the URL object after the download
-						URL.revokeObjectURL(pdfURL);
+						this.documento_identita = response.data;
 					})
 					.catch(errors => {
 						console.error(errors);
 					})
 			},
+			// Funzione che effettua il download del documento d'identità di un utente
+			async idDocPath(file) {
+				if (this.editedIdentityDocument === true) {
+					this.downloadFile(this.temporaryIdentityDocument);
+				}
+				else {
+					await axios.get(`/api/amministratore/id?fileName=${file}`,
+						{
+							responseType: "blob",
+							headers: {
+								Accept: 'application/pdf'
+							}
+						})
+						.then(response => {
+							this.documento_identita = response.data;
+							this.downloadFile(this.documento_identita);
+						})
+						.catch(errors => {
+							console.error(errors);
+						})
+				}
+			},
+			// Funzione che fa il set dei documenti di un utente
+			async setDocuments() {
+				// Chiamata dei set dei documenti
+				const formData = new FormData();
+				formData.append('email', this.email);
+				formData.append('doc', this.documento_identita);
+				formData.append('cv', this.curriculum);
+
+				await axios.post('/api/utenti/registrazione/update/Documents', formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che fa il set delle modifiche di un utente
+			async setAccount() {
+				await axios.put(`/api/amministratore/modifica_dati/${this.$store.state.userId}`, {email: this.email, telefono: this.phoneNumber})
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						if (error.response) {
+							this.errorMessage = error.toString() || 'Errore inatteso';
+							this.$refs.errShower.toggle();
+							console.error('Response Data:', error.response.data);
+							console.error('Response Status:', error.response.status);
+							console.error('Response Headers:', error.response.headers);
+						} else if (error.request) {
+							console.error('No response received:', error.request);
+						} else {
+							console.error('Error:', error.message);
+						}
+					})
+			},
+			// Funzione che annulla le modifiche
 			cancelEditing() {
 				this.editing = false;
 				this.phoneNumberError = '';
 				this.emailError = '';
+				this.editedAccount = false;
+				this.editedCurriculum = false;
+				this.editedIdentityDocument = false;
 			},
 			validatePhoneNumber() {
 				if (!/^\d{10}$/.test(this.editedPhoneNumber)) {		/* Espressione regolare: ^\d{10}$ controlla che la stringa inizi (^) e finisca ($) con esattamente 10 cifre numeriche (\d). */
@@ -346,7 +472,7 @@
 			font-size: 16px;
 		}
 		.card-block .row {
-			margin-bottom: 20px;
+			margin-bottom: 40px;
 			padding-bottom: 5px;
 		}
 	}
@@ -417,7 +543,6 @@
 
 	.user-profile {
 		padding: 20px 0;
-		/*centra il contenuto*/
 	}
 
 	.m-b-25 {
@@ -448,5 +573,9 @@
 
 	.f-w-600 {
 		font-weight: 600;
+	}
+
+	.bi-pencil {
+		font-size: 1.2em;
 	}
 </style>

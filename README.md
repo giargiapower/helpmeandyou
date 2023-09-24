@@ -10,8 +10,8 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 ## TODO:
 
 - disponibilità materiali / richieste da sistemare
-- blocca utente + notifica in tempo reale da sistemare
-+ personalizzare messaggi di errore
++ blocca utente + notifica in tempo reale da sistemare
++ settaggio documenti su restart da sistemare
 
 ---
 

@@ -64,7 +64,7 @@
 													<tr>
 														<th scope="col">#</th>
 														<th scope="col">Data</th>
-														<th scope="col">Richiedente</th>
+														<th scope="col">Aiutante</th>
 														<th scope="col">Categoria</th>
 														<th scope="col">Materiale</th>
 														<th scope="col"></th>
@@ -74,7 +74,8 @@
 													<tr v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id">
 														<th scope="row">{{ index + 1}}</th>
 														<td>{{ ric.giorno }}</td>
-														<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
+														<td v-if = "ric.accAccount !== null">{{ ric.accAccount.nome + ' ' + ric.accAccount.cognome }}</td>
+														<td v-else>Non ancora accettata</td>
 														<td>{{ ric.categoria.tipo }}</td>
 														<td>{{ ric.nomeMateriale }}</td>
 														<td>
@@ -101,6 +102,7 @@
 															<th scope="col">#</th>
 															<th scope="col">Data</th>
 															<th scope="col">Richiedente</th>
+															<th scope="col">Aiutante</th>
 															<th scope="col">Categoria</th>
 															<th scope="col">Materiale</th>
 															<th scope="col"></th>
@@ -112,13 +114,15 @@
 															<th scope="row">{{ index + 1}}</th>
 															<td>{{ ric.giorno }}</td>
 															<td>{{ ric.pubAccount.nome + ' ' + ric.pubAccount.cognome }}</td>
+															<td v-if = "ric.accAccount !== null">{{ ric.accAccount.nome + ' ' + ric.accAccount.cognome }}</td>
+															<td v-else> - </td>
 															<td>{{ ric.categoria.tipo }}</td>
 															<td>{{ ric.nomeMateriale }}</td>
 															<td>
 																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#visualizzaModal" @click="settaRichiesta(ric.id)">Visualizza</button>
 															</td>
 															<td>
-																<button class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal" @click="settaRichiesta(ric.id)">Segnala</button>
+																<button v-if="ric.accAccount !== null" class="btn btn-block btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#segnalaModal" @click="settaRichiesta(ric.id)">Segnala</button>
 															</td>
 														</tr>
 													</tbody>
@@ -259,6 +263,12 @@
 			BachecaNavBar,
 			SuccessShower
 		},
+		mounted() {
+			this.fetchRichiesteAccettatePubblicateConcluse();
+		},
+		computed() {
+			this.fetchRichiesteAccettatePubblicateConcluse();
+		},
 		data() {
 			return {
 				successMessage: '',
@@ -323,6 +333,7 @@
 						this.listaRichiestePubblicate = [];
 						this.listaRichiesteConcluse = [];
 						let listaRichiesteTotali = response.data;
+						console.log(listaRichiesteTotali);
 						for (let i = 0; i < listaRichiesteTotali.length; i++) {
 							listaRichiesteTotali[i].nomeMateriale = await this.findName(listaRichiesteTotali[i].idMateriale);
 
@@ -333,7 +344,7 @@
 							if (listaRichiesteTotali[i].stato === 'accettata' && listaRichiesteTotali[i].accAccount.id.toString() === this.$store.state.userId) {
 								this.listaRichieste.push(listaRichiesteTotali[i]);
 								this.listaRichiesteAccettate.push(listaRichiesteTotali[i]);
-							} else if (listaRichiesteTotali[i].stato === 'pubblicata' && listaRichiesteTotali[i].pubAccount.id.toString() === this.$store.state.userId) {
+							} else if ((listaRichiesteTotali[i].stato === 'pubblicata' || listaRichiesteTotali[i].stato === 'accettata') && listaRichiesteTotali[i].pubAccount.id.toString() === this.$store.state.userId) {
 								this.listaRichieste.push(listaRichiesteTotali[i]);
 								this.listaRichiestePubblicate.push(listaRichiesteTotali[i]);
 							} else if (listaRichiesteTotali[i].stato === 'terminata' && (listaRichiesteTotali[i].pubAccount.id.toString() === this.$store.state.userId || (listaRichiesteTotali[i].accAccount !== null && listaRichiesteTotali[i].accAccount.id.toString() === this.$store.state.userId))) {
@@ -405,12 +416,6 @@
 						}
 					})
 			}
-		},
-		mounted() {
-			this.fetchRichiesteAccettatePubblicateConcluse();
-		},
-		computed() {
-			this.fetchRichiesteAccettatePubblicateConcluse();
 		}
 	}
 </script>

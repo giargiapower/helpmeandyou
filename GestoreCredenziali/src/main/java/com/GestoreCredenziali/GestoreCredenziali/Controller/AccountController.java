@@ -56,6 +56,20 @@ public class AccountController {
         return ResponseEntity.ok("Documenti inviati con successo");
     }
 
+    // PRIMA DI CHIAMARLO E' NECESSARIO CHE PRIMA SIA STATO SALVATO L'ACCOUNT NEL SISTEMA !!!!
+    @PostMapping(value = "/registrazione/update/Documents")
+    public ResponseEntity<String> updateDocuments(@RequestPart("email") String email , @RequestParam("doc") MultipartFile document, @RequestParam("cv") MultipartFile curriculum) {
+        String doc = fileStorageService.storeFile(document, "Documenti_identita" , email);
+        String cv = fileStorageService.storeFile(curriculum,"CV",  email);
+        Account account = a_repository.findByEmail(email);
+        account.setStato("in_aggiornamento");
+        account.setPath_curriculum(cv);
+        account.setPath_documento(doc);
+        a_repository.save(account);
+        // Restituisce una segnalazione di successo
+        return ResponseEntity.ok("Documenti inviati con successo");
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account){

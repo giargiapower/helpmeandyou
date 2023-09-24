@@ -66,6 +66,7 @@ public class AmministatoreController {
 	public List<Account> getAllAccountToApprove() {
 		List<Account> accounts = new ArrayList<>();
 		repository.findAllByStato("da_approvare").forEach(accounts::add);
+		repository.findAllByStato("in_aggiornamento").forEach(accounts::add);
 		return accounts;
 	}
 
@@ -118,6 +119,13 @@ public class AmministatoreController {
 				.body(resource);
 	}
 
+	@GetMapping("/categorie")
+	public List<Categoria> getAllCategorie() {
+		List<Categoria> categories = new ArrayList<>();
+		categoriaRepository.findAll().forEach(categories::add);
+		return categories;
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<Amministratore> login(@RequestBody Amministratore amministratore) {
 		Account accountEsistente = repository.findByEmail(amministratore.getEmail());
@@ -127,13 +135,6 @@ public class AmministatoreController {
 			// L'account non è presente o password errata
 			return ResponseEntity.badRequest().body(null);
 		}
-	}
-
-	@GetMapping("/categorie")
-	public List<Categoria> getAllCategorie() {
-		List<Categoria> categories = new ArrayList<>();
-		categoriaRepository.findAll().forEach(categories::add);
-		return categories;
 	}
 
 	@PostMapping("/categoria/crea")
@@ -165,7 +166,7 @@ public class AmministatoreController {
 	}
 
 	@PutMapping("/aggiorna_categoria/{id}")
-	public ResponseEntity<Account> aggiorna_categoria(@PathVariable("id") long id, @RequestBody Categoria categoria) {
+	public ResponseEntity<Account> aggiornaCategoria(@PathVariable("id") long id, @RequestBody Categoria categoria) {
 		Account account = repository.findById(id);
 		Categoria cat = categoriaRepository.findByTipo(categoria.getTipo());
 
@@ -189,10 +190,33 @@ public class AmministatoreController {
 		}
 	}
 
+	@PutMapping("/modifica_dati/{id}")
+	public ResponseEntity<Account> modificaDati(@PathVariable("id") long id, @RequestBody Account account) {
+		Account accountEsistente = repository.findById(id);
+		if (accountEsistente!=null){
+			accountEsistente.setEmail(account.getEmail());
+			accountEsistente.setTelefono(account.getTelefono());
+			return new ResponseEntity<>(repository.save(accountEsistente), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@DeleteMapping("/categoria/elimina")
 	public ResponseEntity<Categoria> eliminaCategoria (@RequestBody Categoria categoria){
 		Categoria cat = categoriaRepository.findByTipo(categoria.getTipo());
 		categoriaRepository.delete(cat);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@DeleteMapping("/account/elimina/{id}")
+	public ResponseEntity<Account> eliminaAccount (@PathVariable("id") long id){
+		Account account = repository.findById(id);
+		if (account!=null){
+			repository.delete(account);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 }

@@ -66,7 +66,12 @@
 				<div class="col" v-for="richiesta in richieste" :key="richiesta.id">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">{{ richiesta.giorno }}</h5>
+							<h5 class="card-title">
+								{{ richiesta.giorno }}
+								<div v-if="richiesta.categoria !== null">
+									{{ richiesta.categoria.tipo }}
+								</div>
+							</h5>
 							<hr class="line-separator">
 							<p class="card-text">{{ richiesta.descrizione }}</p>
 							<button class="btn btn-primary" type="button" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + richiesta.id">Aiuta</button>

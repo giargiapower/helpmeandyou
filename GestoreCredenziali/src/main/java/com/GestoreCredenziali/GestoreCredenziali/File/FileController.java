@@ -24,28 +24,6 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    /**@PostMapping("/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        return new ResponseEntity<>(fileStorageService.storeFile(file), HttpStatus.OK);
-
-       /** String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-        System.out.println(fileDownloadUri);
-
-        //return new ResponseEntity<>(new UploadFileResponse(fileName, "fileDownloadUri",
-         //       "file.getContentType()", 3), HttpStatus.OK); //file.getSize()
-    }*/
-
- /**   @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
-    }*/
-
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
