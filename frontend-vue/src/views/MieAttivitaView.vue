@@ -75,7 +75,7 @@
 														<th scope="row">{{ index + 1}}</th>
 														<td>{{ ric.giorno }}</td>
 														<td v-if = "ric.accAccount !== null">{{ ric.accAccount.nome + ' ' + ric.accAccount.cognome }}</td>
-														<td v-else>Non ancora accettata</td>
+														<td v-else> - </td>
 														<td>{{ ric.categoria.tipo }}</td>
 														<td>{{ ric.nomeMateriale }}</td>
 														<td>

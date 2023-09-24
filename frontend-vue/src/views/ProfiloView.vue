@@ -14,7 +14,7 @@
 										</div>
 										<div id="ombra">
 											<h3 class="f-w-600">{{ this.nome + ' ' + this.cognome}}</h3>
-											<h5 v-if="this.categoria !== null">{{ this.categoria.tipo }}</h5>
+											<h5 v-if="this.categoria !== null && this.categoria.tipo !== 'Nessuna categoria'">{{ this.categoria.tipo }}</h5>
 										</div>
 									</div>
 								</div>

@@ -68,7 +68,7 @@
 						<div class="card-body">
 							<h5 class="card-title">
 								{{ richiesta.giorno }}
-								<div v-if="richiesta.categoria !== null">
+								<div v-if="richiesta.categoria.tipo !== 'Nessuna categoria'">
 									{{ richiesta.categoria.tipo }}
 								</div>
 							</h5>
@@ -98,12 +98,12 @@
 		},
 		data() {
 			return {
+				categoriaUtente: null,
 				richieste: [],
 				typedTitle: null,
 				minDate: this.calculateMinDate(),
 				maxDate: null,
 				startDate: this.calculateMinDate(),
-				loggedUser: this.$store.state.userId,
 				regioneFilter: '',
 				provinciaFilter: '',
 				cittaFilter: '',
@@ -111,25 +111,47 @@
 			}
 		},
 		mounted() {
+			this.fetchInfoUtente();
 			this.fetchRichieste();
 		},
 		unmounted() {
 			this.stopTypedEffects(); // Interrompe gli effetti Typed quando il componente viene distrutto
 		},
 		computed() {
+			this.fetchInfoUtente();
 			this.fetchRichieste();
 		},
 		methods: {
+			// Funzione che recupera le informazioni dell'utente loggato
+			async fetchInfoUtente() {
+				await axios.get(`/api/utenti/utente/${this.$store.state.userId}`)
+					.then(response => {
+						if (response.data.categoria === null)
+							this.categoriaUtente = 'Nessuna categoria';
+						else
+							this.categoriaUtente = response.data.categoria.tipo;
+					})
+					.catch(error => {
+						console.log(error);
+					})
+			},
+			// Funzione che recupera le richieste di aiuto pubblicate da altri utenti
 			async fetchRichieste() {
-				await axios.get(`/api/richiesteaiuto/richiestepubblicate/not/${this.loggedUser}`)
+				await axios.get(`/api/richiesteaiuto/richiestepubblicate/not/${this.$store.state.userId}`)
 					.then(async response => {
 						this.richieste = response.data;
 						for (let i = 0; i < this.richieste.length; i++) {
 							this.richieste[i].nomeMateriale = await this.findName(this.richieste[i].idMateriale);
+							if((this.richieste[i].categoria.tipo === 'Nessuna categoria') ||  (this.richieste[i].categoria.tipo === this.categoriaUtente))
+								this.tutteRichieste.push(JSON.parse(JSON.stringify(this.richieste[i])));
+							else {
+								this.richieste.splice(i, 1);
+								i--;
+							}
 						}
-						this.tutteRichieste = this.richieste;
 						console.log('Richieste aggiungete con successo');
 						console.log(this.richieste);
+						console.log(this.tutteRichieste);
 					})
 					.catch(error => {
 						console.log(error)
