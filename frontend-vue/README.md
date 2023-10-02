@@ -12,8 +12,21 @@ Da settare per far funzionare il tutto:
 - inserire almeno un conto con id=1 nel backend
 
 ---
+## Esecuzione con Docker
+Dopo aver eseguito il backend, per eseguire il frontend:
+- **Aprire terminale ed entrare nella directory /frontend-vue**
+- La prima volta lanciare il comando:
+  ```
+  docker-compose up
+  ```
+- Per eseguire il progetto lanciare il comando:
+  ```
+  docker-compose up
+  ```
+- Aprire il browser e andare su http://localhost:8080/
 
-## Esecuzione
+---
+## Esecuzione senza docker
 Dopo aver eseguito il backend, per eseguire il frontend:
 - **Aprire terminale ed entrare nella directory /frontend-vue**
 - La prima volta lanciare il comando:
@@ -32,12 +45,6 @@ Dopo aver eseguito il backend, per eseguire il frontend:
 - Aprire il browser e andare su http://localhost:8080/
 
 ---
-
-#### Lints and fixes files
-```
-npm run lint
-```
-
 #### Prendere cose da bootstrap
 https://getbootstrap.com/docs/5.3/getting-started/introduction/
 
@@ -55,10 +62,8 @@ npm install bootstrap
 
 npm install vuex --save
 ```
-ma dovrebbero installarsi in automatico nel package.json con la "npm install" generale.
 
 ---
-
 Per il problema di login con Google, è un issue aperto su GitHub
 
 https://github.com/devbaji/vue3-google-login/issues/40
