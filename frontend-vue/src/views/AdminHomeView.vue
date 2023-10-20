@@ -15,7 +15,10 @@
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
-											<tr>
+											<tr v-if="listaUtentiDaApprovare.length === 0">
+												<td class="text-center">Nessun utente da approvare o in aggiornamento</td>
+											</tr>
+											<tr v-else>
 												<th scope="col">#</th>
 												<th scope="col">Utente</th>
 												<th scope="col">Stato account</th>

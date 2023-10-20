@@ -3,17 +3,9 @@
 Progetto di Tecniche Avanzate di Sviluppo Software 2022/2023 di
 Anna Fontana, Gianni Molinari e Fernando Serrano.
 
---Breve descrizione progetto--
-
----
-
-## TODO:
-
-- disponibilità materiali / richieste da sistemare
-+ blocca utente + notifica in tempo reale da sistemare
-+ settaggio documenti su restart da sistemare
-
----
+Il progetto ha come obiettivo quello di creare un'applicazione che permetta agli utenti di pubblicare e accettare richieste
+di aiuto. Sono previste inoltre due parti relative alla gestione delle segnalazioni e alla gestione delle credenziali
+(amministratore) e alla gestione del magazzino e visualizzazione delle donazioni (magazziniere).
 
 ## Esecuzione con Kubernetes
 
@@ -30,7 +22,16 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
   ```
   kubectl apply -f .\kubernetes-manifests.yaml
   ```
-- Verranno fatti partire tutti i pod e i servizi necessari.
+- **Lanciare il frontend** dalla relativa cartella su Docker. Quindi entrare nella directory /frontend-vue e lanciare il
+  comando:
+  ```
+  docker-compose build
+  ```
+  e poi:
+  ```
+  docker-compose up
+  ```
+- Per il backend verranno fatti partire tutti i pod e i servizi necessari.
 	- Per verificare che i pod siano partiti correttamente lanciare il comando:
 	  ```
 		kubectl get pods
@@ -60,7 +61,7 @@ Anna Fontana, Gianni Molinari e Fernando Serrano.
 	  ```
 	  (Per sapere il nome del pod di RabbitMQ lanciare il comando ```kubectl get pods```)
 	- andare su http://localhost:15672/ e loggarsi con le credenziali di default (user: guest, password: guest)
-	- si dovrebbe vedere una coda (richieste - account)
+	- si dovrebbero vederere due code (richieste - account // richieste - magazzino)
 
 
 - Per accedere al **servizio di Eureka Server**:

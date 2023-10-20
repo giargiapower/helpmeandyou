@@ -32,6 +32,9 @@ public class RichiestaAiutoController {
 	@Autowired
 	CategoriaRepository categoriaRepository;
 
+	@Autowired
+	requests.RabbitSenderRequest rabbitSender = new requests.RabbitSenderRequest();
+
 
 	@GetMapping("/richiesta/{id}")
 	public RichiestaAiuto getRichiestaById(@PathVariable(value = "id") long richiestaId) {
@@ -69,6 +72,9 @@ public class RichiestaAiutoController {
 		// ipotizziamo infatti che uno stesso utente non faccia troppe richieste di aiuto, ma che si tratti di aiuti occasionali.
 		Indirizzo ind = richiestaAiuto.getIndirizzo();
 		indirizzoRepository.save(ind);
+
+		// manda al magazzino la richiesta creata in modo tale che gestisca i materiali
+		rabbitSender.send(fin);
 
 		return richiestaAiutoRepository.save(fin);
 	}

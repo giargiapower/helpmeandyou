@@ -26,16 +26,16 @@ const store = new Vuex.Store({
 			localStorage.removeItem('userId');
 		},
 		setMagLoggedIn(state) {
-			state.magLoggedIn = true;
-			localStorage.setItem('magLoggedIn', true);
+			state.magLoggedIn = 'true';
+			localStorage.setItem('magLoggedIn', 'true');
 		},
 		logoutMag(state) {
 			state.magLoggedIn = false;
 			localStorage.removeItem('magLoggedIn');
 		},
 		setAdminLoggedIn(state) {
-			state.adminLoggedIn = true;
-			localStorage.setItem('adminLoggedIn', true);
+			state.adminLoggedIn = 'true';
+			localStorage.setItem('adminLoggedIn', 'true');
 		},
 		logoutAdmin(state) {
 			state.adminLoggedIn = false;

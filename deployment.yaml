@@ -329,12 +329,12 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-data
+              name: db-data-persistent-storage-gestorecredenziali
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: db-data-persistent-storage-gestorecredenziali
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: db-data-gestorecredenziali
 status: {}
 
 ---
@@ -343,8 +343,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: db-data
-  name: db-data
+    io.kompose.service: db-data-gestorecredenziali
+  name: db-data-gestorecredenziali
 spec:
   accessModes:
     - ReadWriteOnce
@@ -468,7 +468,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: dbpostgresqlmagazzino
-  name: dbpostgresdbpostgresqlmagazzinoql
+  name: dbpostgresqlmagazzino
 spec:
   replicas : 1
   selector:
@@ -503,12 +503,12 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-data
+              name: db-data-persistent-storage-magazzino
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: db-data-persistent-storage-magazzino
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: db-data-magazzino
 status: {}
 
 ---
@@ -517,8 +517,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: db-data
-  name: db-data
+    io.kompose.service: db-data-magazzino
+  name: db-data-magazzino
 spec:
   accessModes:
     - ReadWriteOnce
@@ -675,12 +675,12 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-data
+              name: db-data-persistent-storage-requestshelp
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: db-data-persistent-storage-requestshelp
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: db-data-requestshelp
 status: {}
 
 ---
@@ -689,8 +689,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: db-data
-  name: db-data
+    io.kompose.service: db-data-requestshelp
+  name: db-data-requestshelp
 spec:
   accessModes:
     - ReadWriteOnce
@@ -849,12 +849,12 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-data
+              name: db-data-persistent-storage-segnalazioni
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: db-data-persistent-storage-segnalazioni
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: db-data-segnalazioni
 status: {}
 
 ---
@@ -863,8 +863,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: db-data
-  name: db-data
+    io.kompose.service: db-data-segnalazioni
+  name: db-data-segnalazioni
 spec:
   accessModes:
     - ReadWriteOnce

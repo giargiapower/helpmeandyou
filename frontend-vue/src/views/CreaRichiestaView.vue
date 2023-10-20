@@ -7,10 +7,10 @@
 					<fieldset>
 						<legend>Crea richiesta d'aiuto</legend>
 						<p class="text-muted">Nota: Cerca di essere il più possibile dettagliato nella richiesta</p>
-						<p class="text-muted">NB: I materiali sono disponibili solo per la città di Torino. In alternativa se inseriti non verranno tenuti in considerazione!</p>
+						<p class="text-muted">NB: I materiali sono disponibili solo per la città di Torino per il momento.</p>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Data</span>
-							<input type="date" class="form-control" v-model="selectedData" :min="minDate" aria-label="Data" aria-describedby="Data" required>
+							<input type="date" class="form-control" v-model="selectedData" :min="minDate" aria-label="Data" aria-describedby="Data" @input="modSearch" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Regione</span>
@@ -18,7 +18,7 @@
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Provincia</span>
-							<input type="text" class="form-control" v-model="indirizzo.provincia" minlength="3" aria-label="Provincia" aria-describedby="Provincia" title="Inserisci il nome per esteso" required>
+							<input type="text" class="form-control" v-model="indirizzo.provincia" minlength="3" aria-label="Provincia" aria-describedby="Provincia" @input="modSearch" title="Inserisci il nome per esteso" required>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">Città</span>
@@ -41,12 +41,12 @@
 						<div class="input-group mb-3">
 							<span class="input-group-text">Materiale</span>
 							<select class="form-select" aria-label="Categoria" required v-model="selectedMateriale">
-								<option disabled value="">Scegli un materiale...</option>
-								<option value="nessunaMateriale">Nessun materiale</option>
-								<option v-for="materiale in this.uniqueMateriali()" :key="materiale.id">{{
-										materiale.nome
-									}}
-								</option>
+								<option v-if="selectedData === '' || indirizzo.provincia === ''" disabled value="">Seleziona prima la data e la provincia!</option>
+								<option v-if="selectedData !== '' && indirizzo.provincia !== ''" disabled value="">Scegli un materiale...</option>
+								<option v-if="selectedData !== '' && indirizzo.provincia !== ''" value="nessunMateriale">Nessun materiale</option>
+								<template v-for="materiale in this.listaMaterialiNonDuplicati" :key="materiale.id">
+									<option v-if="selectedData !== '' && indirizzo.provincia !== ''" :value="materiale.nome">{{ materiale.nome }}</option>
+								</template>
 							</select>
 							<span class="input-group-text text-muted custom-tooltip" id="infoMateriale">
 								<i class="bi bi-question-circle"></i>
@@ -95,11 +95,15 @@
 				textValue: '',
 				listaRichieste: [],
 				listaMateriali: [],
+				listaMaterialiNonDuplicati: [],
 				categorie: [],
 				minDate: this.calculateMinDate(),
 				idUtente: this.$store.state.userId,
 				successMessage: ''
 			}
+		},
+		mounted() {
+			this.fetchCategorie();
 		},
 		methods: {
 			// Funzione che annulla la procedura di creazione della richiesta
@@ -153,6 +157,12 @@
 						}
 					})
 			},
+
+			// Funzione che modifica la ricerca dei materiali
+			async modSearch() {
+				await this.fetchMateriali();
+			},
+
 			// Funzione che calcola la lista dei materiali non duplicati
 			uniqueMateriali() {
 				const uniqueMateriali = [];
@@ -171,19 +181,25 @@
 					item.count = countMateriali[item.nome];
 				}
 
-				return uniqueMateriali;
+				this.listaMaterialiNonDuplicati = uniqueMateriali;
 			},
+
 			// Funzione che calcola lista dei materiali
 			async fetchMateriali() {
-				await axios.get('/api/magazzini/1/materiali')
-					.then(response => {
-						this.listaMateriali = response.data;
-						console.log('Materiali caricati!');
-					})
-					.catch(errore => {
-						console.log(errore);
-					})
+				if (this.selectedData !== '' && this.indirizzo.provincia !== '') {
+					await axios.get(`/api/magazzini/materiali/${this.indirizzo.provincia}/${this.selectedData}`)
+						.then(response => {
+							console.log(response.data);
+							this.listaMateriali = response.data;
+							this.uniqueMateriali();
+							console.log('Materiali caricati!');
+						})
+						.catch(errore => {
+							console.log(errore);
+						})
+				}
 			},
+
 			// Funzione per restituire tutte le categorie
 			async fetchCategorie() {
 				await axios.get('/api/amministratore/categorie')
@@ -217,15 +233,6 @@
 
 				return `${minYear}-${minMonth.toString().padStart(2, '0')}-${minDay.toString().padStart(2, '0')}`;
 			}
-		},
-		mounted() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
-			this.fetchCategorie();
-		},
-		computed() {
-			this.fetchMateriali();
-			this.uniqueMateriali();
 		}
 	}
 </script>

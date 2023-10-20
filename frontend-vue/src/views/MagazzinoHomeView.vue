@@ -8,7 +8,10 @@
 					<div class="card-body py-5">
 						<div class="row d-flex justify-content-center">
 							<div class="col-lg-10">
-								<h1 class="fw-bold mb-5">Gestione magazzino: Torino</h1>
+								<h1 class="fw-bold mb-5">
+									Gestione magazzino: Torino
+									<img src="@/assets/reload.png" alt="reload" id="reload" @click="chiamaFunzioni">
+								</h1>
 								<p>
 									Denaro disponibile: {{ saldoMagazzino }}
 									<img src="@/assets/reload.png" alt="reload" id="reload" @click="calcSaldoMagazzino">
@@ -128,6 +131,11 @@
 			this.uniqueMateriali();
 		},
 		methods: {
+			// Funzione che chiama le altre funzioni di setup
+			chiamaFunzioni() {
+				this.fetchMaterialiMagazzino();
+				this.uniqueMateriali();
+			},
 			// Funzione che calcola la quantità di un materiale per nome
 			fetchQuantitaMateriale() {
 				this.quantita = this.listaMateriali.reduce((acc, materiale) => {
@@ -149,21 +157,20 @@
 					if (!countMateriali[item.nome]) {
 						countMateriali[item.nome] = 1;
 						uniqueMateriali.push(item);
-					} else {
-						countMateriali[item.nome]++;
 					}
+					else
+						countMateriali[item.nome]++;
 				}
-
 				for (const item of uniqueMateriali) {
 					item.count = countMateriali[item.nome];
 				}
-
 				return uniqueMateriali;
 			},
+			// Funzione che calcola il saldo del magazzino
 			async calcSaldoMagazzino() {
 				await axios.get('http://localhost:32000/api/v1/conto/1')
 					.then(response => {
-						// console.log(response.data);
+						console.log("Aggiornamento saldo: " + response.data.saldo);
 						this.saldoMagazzino = response.data.saldo;
 					})
 					.catch(error => {
@@ -172,9 +179,10 @@
 			},
 			// Funzione che carica dal server i materiali presenti nel magazzino
 			async fetchMaterialiMagazzino() {
-				await axios.get('/api/magazzini/1/materiali')
+				await axios.get('/api/magazzini/magazzini')
 					.then(response => {
-						this.listaMateriali = response.data;
+						console.log(response.data[0].materiali);
+						this.listaMateriali = response.data[0].materiali;
 						this.fetchQuantitaMateriale();
 						// Inizializza editingItems a false per ogni elemento nella lista (non null)
 						this.listaMateriali.forEach(item => {
@@ -188,6 +196,7 @@
 						console.log(error);
 					})
 			},
+			// Funzione che aggiunge un nuovo materiale al magazzino
 			async aggiungiNuovoMateriale() {
 				// controlla se in listaMateriali c'è già un materiale con lo stesso nome
 				if (this.listaMateriali.some(item => item.nome === this.nome)) {
@@ -196,11 +205,11 @@
 					this.$refs.form.reset();
 					return;
 				}
-				// console.log(this.nome)
 				const url = `/api/magazzini/create/1/${this.nome}`;
 				await axios.put(url, {nome: this.nome})
 					.then(response => {
-						this.listaMateriali = response.data.materiali;
+						console.log(response.data);
+						this.listaMateriali.push(response.data);
 						this.fetchQuantitaMateriale();
 						// Inizializza editingItems a false per ogni elemento nella lista (non null)
 						this.listaMateriali.forEach(item => {
@@ -216,34 +225,34 @@
 						console.error(errors);
 					})
 			},
+			// Funzione che gestisce la modifica della quantità di un materiale
 			toggleEditing(item) {
 				if (this.editingItems[item.nome]) {
 					// Si procede solo nel caso in cui la quantità venga cambiata
 					if (this.quantita[item.nome] !== item.editedQuantity) {
-						this.quantita[item.nome] = item.editedQuantity;
 						// Salvataggio delle nuove quantità. Se la quantità è 0 elimina il materiale, altrimenti ne aggiorna la quantità
-						if (item.editedQuantity === 0) {
-							this.eliminaMateriale(item.nome);
-						} else {
-							this.aggiornaQuantitaMateriale(item.nome, item.editedQuantity);
-						}
+						if (item.editedQuantity === 0)
+							this.eliminaMateriale(item);
+						else
+							this.aggiornaQuantitaMateriale(item);
+						this.quantita[item.nome] = item.editedQuantity;
 					}
-				} else {
-					item.editedQuantity = this.quantita[item.nome];
 				}
+				else
+					item.editedQuantity = this.quantita[item.nome];
 				this.editingItems[item.nome] = !this.editingItems[item.nome];
 			},
+			// Funzione che annulla la modifica della quantità di un materiale
 			cancelEditing(item) {
 				this.editingItems[item.nome] = false;
 				item.editedQuantity = this.quantita[item.nome];
 				this.$refs.form.reset();
 			},
-			async eliminaMateriale(nomeItem) {
-				// console.log("Sto eliminando: " + nomeItem)
-				const url = `/api/magazzini/elimina/nome/1/${nomeItem}`;
-				await axios.delete(url, {materiale_nome: nomeItem})
+			// Funzione che elimina un materiale dal magazzino
+			async eliminaMateriale(item) {
+				const url = `/api/magazzini/elimina/nome/1/${item.nome}`;
+				await axios.delete(url, {materiale_nome: item.nome})
 					.then(response => {
-						// console.log(response.data);
 						this.listaMateriali = response.data.materiali;
 						this.fetchQuantitaMateriale();
 					})
@@ -251,10 +260,10 @@
 						console.error(errors);
 					})
 			},
-			async aggiornaQuantitaMateriale(nomeItem, editedQuantity) {
-				// console.log("Sto aggiornando la quantità di: " + nomeItem + " con " + editedQuantity)
-				const url = `/api/magazzini/aggiorna/1/${nomeItem}/${editedQuantity}`;
-				await axios.put(url, { materiale_nome: nomeItem, quantita: editedQuantity })
+			// Funzione che aggiorna la quantità di un materiale nel magazzino
+			async aggiornaQuantitaMateriale(item) {
+				const url = `/api/magazzini/aggiorna/1/${item.nome}/${item.editedQuantity}`;
+				await axios.put(url, { materiale_nome: item.nome, quantita: item.editedQuantity })
 					.then(response => {
 						console.log(response.data);
 					})

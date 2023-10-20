@@ -24,7 +24,10 @@
 												<div class="table-responsive">
 													<table class="table table-hover">
 														<thead>
-															<tr>
+															<tr v-if="this.listaRichiesteAccettate.length === 0">
+																Nessuna richiesta accettata in corso
+															</tr>
+															<tr v-else>
 																<th scope="col">#</th>
 																<th scope="col">Data</th>
 																<th scope="col">Richiedente</th>
@@ -61,14 +64,17 @@
 											<div class="accordion-body">
 												<table class="table table-hover">
 													<thead>
-													<tr>
-														<th scope="col">#</th>
-														<th scope="col">Data</th>
-														<th scope="col">Aiutante</th>
-														<th scope="col">Categoria</th>
-														<th scope="col">Materiale</th>
-														<th scope="col"></th>
-													</tr>
+														<tr v-if="this.listaRichiestePubblicate.length === 0">
+															Nessuna richiesta pubblicata in corso
+														</tr>
+														<tr v-else>
+															<th scope="col">#</th>
+															<th scope="col">Data</th>
+															<th scope="col">Aiutante</th>
+															<th scope="col">Categoria</th>
+															<th scope="col">Materiale</th>
+															<th scope="col"></th>
+														</tr>
 													</thead>
 													<tbody class="table-group-divider">
 													<tr v-for="(ric, index) in this.listaRichiestePubblicate" :key="ric.id">
@@ -98,7 +104,10 @@
 											<div class="accordion-body">
 												<table class="table table-hover">
 													<thead>
-														<tr>
+														<tr v-if="this.listaRichiesteConcluse.length === 0">
+															Nessuna richiesta conclusa
+														</tr>
+														<tr v-else>
 															<th scope="col">#</th>
 															<th scope="col">Data</th>
 															<th scope="col">Richiedente</th>
@@ -263,11 +272,8 @@
 			BachecaNavBar,
 			SuccessShower
 		},
-		mounted() {
-			this.fetchRichiesteAccettatePubblicateConcluse();
-		},
-		computed() {
-			this.fetchRichiesteAccettatePubblicateConcluse();
+		async mounted() {
+			await this.fetchRichiesteAccettatePubblicateConcluse();
 		},
 		data() {
 			return {
@@ -326,7 +332,7 @@
 			},
 			// Funzione che restituisce tutte le richieste "accettate"/"pubblicate"/"concluse" dall'utente loggato
 			async fetchRichiesteAccettatePubblicateConcluse() {
-				await axios.get('/api/richiesteaiuto/richieste')
+				return axios.get('/api/richiesteaiuto/richieste')
 					.then(async response => {
 						this.listaRichieste = [];
 						this.listaRichiesteAccettate = [];
@@ -337,7 +343,9 @@
 						for (let i = 0; i < listaRichiesteTotali.length; i++) {
 							listaRichiesteTotali[i].nomeMateriale = await this.findName(listaRichiesteTotali[i].idMateriale);
 
-							if ((listaRichiesteTotali[i].stato !== 'terminata') && (new Date(listaRichiesteTotali[i].giorno) < new Date())) {
+							let today = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString();
+
+							if ((listaRichiesteTotali[i].stato !== 'terminata') && (listaRichiesteTotali[i].giorno !== today) && (new Date(listaRichiesteTotali[i].giorno) < new Date())) {
 								listaRichiesteTotali[i].stato = 'terminata';
 								this.terminaRichiesta(listaRichiesteTotali[i].id);
 							}

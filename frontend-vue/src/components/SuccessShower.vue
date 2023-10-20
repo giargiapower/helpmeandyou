@@ -21,7 +21,7 @@ function toggle() {
 		this.myModal = new Modal(this.$refs.confirmed)
 	this.myModal.show();
 	const supModal = this.myModal;
-	setTimeout(() => supModal.hide(), 5000);
+	setTimeout(() => supModal.hide(), 4000);
 }
 
 export default {

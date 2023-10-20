@@ -8,7 +8,7 @@ Frontend sviluppato con Vue.js.
 ## Note
 Da settare per far funzionare il tutto:
 - inserire le stesse categorie nel backend sia per requests help che per gestore credenziali. In entrambe inserire anche una categoria chiamata "Nessuna categoria"
-- inserire almeno un magazzino con id=1 nel backend (città Torino meglio -- vd TODO in frontend)
+- inserire almeno un magazzino con id=1 nel backend (e con città Torino)
 - inserire almeno un conto con id=1 nel backend
 
 ---
@@ -17,7 +17,7 @@ Dopo aver eseguito il backend, per eseguire il frontend:
 - **Aprire terminale ed entrare nella directory /frontend-vue**
 - La prima volta lanciare il comando:
   ```
-  docker-compose up
+  docker-compose build
   ```
 - Per eseguire il progetto lanciare il comando:
   ```

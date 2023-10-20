@@ -9,7 +9,8 @@ module.exports = defineConfig({
 		},
 		proxy: {
 			'/api': {
-				target: 'http://localhost:30000',
+				// target: 'http://localhost:30000',
+				target: 'http://host.docker.internal:30000',
 				changeOrigin: true,
 			}
 		},

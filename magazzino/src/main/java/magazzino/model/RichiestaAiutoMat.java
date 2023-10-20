@@ -23,7 +23,8 @@ public class RichiestaAiutoMat {
 	@JsonIgnore
 	private Materiale materiale;
 
-	public RichiestaAiutoMat(LocalDate giorno, String provincia, Materiale materiale) {
+	public RichiestaAiutoMat(long id, LocalDate giorno, String provincia, Materiale materiale) {
+		this.id = id;
 		this.giorno = giorno;
 		this.provincia = provincia;
 		this.materiale = materiale;

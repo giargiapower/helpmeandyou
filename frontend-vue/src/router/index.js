@@ -24,7 +24,7 @@ const routes = [
 		name: 'admin',
 		component: AdminView,
 		beforeEnter(to, from, next) {
-			if (app.$store.state.adminLoggedIn === true)
+			if (app.$store.state.adminLoggedIn === 'true')
 				next({name: 'admin-home'});
 			else
 				next();
@@ -35,7 +35,7 @@ const routes = [
 		name: 'magazzino',
 		component: MagazzinoView,
 		beforeEnter(to, from, next) {
-			if (app.$store.state.magLoggedIn === true)
+			if (app.$store.state.magLoggedIn === 'true')
 				next({name: 'magazzino-home'});
 			else
 				next();

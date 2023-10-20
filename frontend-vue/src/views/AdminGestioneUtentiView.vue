@@ -15,7 +15,10 @@
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
-											<tr>
+											<tr v-if="listaTuttiUtenti.length === 0">
+												<th scope="col">Non ci sono utenti da verificare</th>
+											</tr>
+											<tr v-else>
 												<th scope="col">#</th>
 												<th scope="col">Utente</th>
 												<th scope="col">Stato</th>
@@ -26,7 +29,10 @@
 											<tr>
 												<th scope="row">{{index + 1}}</th>
 												<td>{{ user.nome + ' ' + user.cognome }}</td>
-												<td>{{ user.stato }}</td>
+												<td v-if="user.stato === 'approvato'">Approvato</td>
+												<td v-else-if="user.stato === 'da_approvare'">Approvare</td>
+												<td v-else-if="user.stato === 'bloccato'">Bloccato</td>
+												<td v-else>Aggiornamento</td>
 												<td class="text-end">
 													<button class="btn btn-block btn-primary btn-sm max-width-button" type="button" data-bs-toggle="modal" :data-bs-target="'#btn-verifica-' + user.id">Visualizza</button>
 												</td>

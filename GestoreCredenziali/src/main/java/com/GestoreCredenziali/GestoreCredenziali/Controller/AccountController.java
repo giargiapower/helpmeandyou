@@ -74,7 +74,7 @@ public class AccountController {
     @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account){
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
-        if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && accountEsistente.getStato().equals("approvato")) {
+        if (accountEsistente != null && accountEsistente.getPassword().equals(account.getPassword()) && (accountEsistente.getStato().equals("approvato") || accountEsistente.getStato().equals("in_aggiornamento"))) {
             return ResponseEntity.ok(accountEsistente);
         } else if (accountEsistente == null) {
             return ResponseEntity.badRequest().body(null);
@@ -85,7 +85,7 @@ public class AccountController {
     @PostMapping("/google-login")
     public ResponseEntity<Account> GoogleLogin(@RequestBody Account account){
         Account accountEsistente = a_repository.findByEmail(account.getEmail());
-        if (accountEsistente != null && accountEsistente.getStato().equals("approvato")) {
+        if (accountEsistente != null && (accountEsistente.getStato().equals("approvato") || accountEsistente.getStato().equals("in_aggiornamento"))) {
             return ResponseEntity.ok(accountEsistente);
         } else if (accountEsistente == null) {
             return ResponseEntity.badRequest().body(null);

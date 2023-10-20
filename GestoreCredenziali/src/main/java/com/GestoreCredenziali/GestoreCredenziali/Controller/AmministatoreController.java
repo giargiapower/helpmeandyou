@@ -45,6 +45,7 @@ public class AmministatoreController {
 	public List<Account> getAllUtenti() {
 		List<Account> accounts = new ArrayList<>(repository.findAllByStato("approvato"));
 		accounts.addAll(repository.findAllByStato("da_approvare"));
+		accounts.addAll(repository.findAllByStato("in_aggiornamento"));
 		accounts.addAll(repository.findAllByStato("bloccato"));
 		return accounts;
 	}
@@ -65,8 +66,8 @@ public class AmministatoreController {
 	@GetMapping("/da_approvare/list")
 	public List<Account> getAllAccountToApprove() {
 		List<Account> accounts = new ArrayList<>();
-		repository.findAllByStato("da_approvare").forEach(accounts::add);
-		repository.findAllByStato("in_aggiornamento").forEach(accounts::add);
+		accounts.addAll(repository.findAllByStato("da_approvare"));
+		accounts.addAll(repository.findAllByStato("in_aggiornamento"));
 		return accounts;
 	}
 

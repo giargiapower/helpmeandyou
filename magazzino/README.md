@@ -52,15 +52,6 @@ Fare in un primo momento questa query sul database PgAdmin:
 ```
 INSERT INTO materiale(id, nome, magazzino_id) VALUES (1, 'stampelle', 1)
 ```
-- Mettere su postman put e all'indirizzo http://localhost:8080/api/magazzini/aggiungi/1/richiesta
-  andare su body, settare raw in formato json e inserire ad esempio:
-
-```
-{
-    "giorno": "2024-04-30",
-    "provincia": "Firenze"
-}
-```
 
 
 #### DELETE

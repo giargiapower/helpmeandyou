@@ -15,7 +15,10 @@
 								<div class="table-responsive">
 									<table class="table table-hover">
 										<thead>
-											<tr>
+											<tr v-if="listaSegnalazioni.length === 0">
+												<td class="text-center">Nessuna segnalazione</td>
+											</tr>
+											<tr v-else>
 												<th scope="col">#</th>
 												<th scope="col">Utente segnalato</th>
 												<th scope="col">Tipologia</th>
