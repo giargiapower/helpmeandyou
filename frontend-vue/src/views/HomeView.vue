@@ -66,7 +66,7 @@
 				});
 
 				this.typedText = new Typed('.typed-text', {
-					strings: ["Non possiamo aiutare tutti, ma tutti possono aiutare e richiedere aiuto!"],
+					strings: ["Non possiamo aiutare tutti, ma tutti possono aiutare ed essere aiutati!"],
 					typeSpeed: 40,
 					showCursor: false
 				});
