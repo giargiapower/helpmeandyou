@@ -179,8 +179,6 @@
 			async bloccaUtente(segnalatoId) {
 				await axios.put(`/api/amministratore/blocca/${segnalatoId}`)
 					.then(response => {
-						// TODO: un messaggio che mostri che l'utente x sia bloccato
-
 						console.log(response.data);
 
 						// Elimina tutte le segnalazioni dell'utente bloccato

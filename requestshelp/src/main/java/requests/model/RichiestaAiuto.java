@@ -13,7 +13,6 @@ public class RichiestaAiuto {
 	@Column(name = "descrizione")
 	private String descrizione;
 
-	// TODO: vedere se mi servirà anche l'ora (mattina/pome) o meno
 	@Column(name = "giorno")
 	private LocalDate giorno;
 
