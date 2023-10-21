@@ -105,7 +105,7 @@
 
 <script>
 	import HomeNavBar from "@/components/HomeNavBar";
-	import ErrorShower from "@/components/ErrorShower.vue";
+	import ErrorShower from "@/components/ErrorShower";
 	import SuccessShower from "@/components/SuccessShower";
 	import axios from "axios";
 	import { googleTokenLogin } from "vue3-google-login";

@@ -13,17 +13,22 @@ window.bootstrap = bootstrap;
 const store = new Vuex.Store({
 	state: {
 		userId: localStorage.getItem('userId') || null,
+		lastLoginTime: localStorage.getItem('lastLoginTime') || null,
 		magLoggedIn: localStorage.getItem('magLoggedIn') || false,
 		adminLoggedIn: localStorage.getItem('adminLoggedIn') || false
 	},
 	mutations: {
 		setUserId(state, userId) {
 			state.userId = userId;
+			state.lastLoginTime = new Date().getTime().toString();
+			localStorage.setItem('lastLoginTime', new Date().getTime().toString());
 			localStorage.setItem('userId', userId);
 		},
 		logout(state) {
 			state.userId = null;
+			state.lastLoginTime = null;
 			localStorage.removeItem('userId');
+			localStorage.removeItem('lastLoginTime');
 		},
 		setMagLoggedIn(state) {
 			state.magLoggedIn = 'true';
@@ -41,8 +46,27 @@ const store = new Vuex.Store({
 			state.adminLoggedIn = false;
 			localStorage.removeItem('adminLoggedIn');
 		}
-	}
+	},
 });
+
+// Imposta un timer per il logout automatico dopo 30 minuti
+setInterval(() => {
+	if (store.state.userId && store.state.lastLoginTime) {
+		console.log('Sono passati 10 minuti dal login');
+		const lastLoginTime = store.state.lastLoginTime;
+		const currentTime = new Date().getTime();
+		const sessionTimeout = 30 * 60 * 1000; // 30 minuti in millisecondi (30 * 60 * 1000)
+
+		if (currentTime - parseInt(lastLoginTime, 10) > sessionTimeout) {
+			store.commit('logout');
+			window.location.href = '/accedi-registrati';
+		}
+	}
+	else {
+		console.log('Non è stato effettuato il login');
+	}
+}, 300000); // Ogni 5 minuti (300000 millisecondi)
+
 
 export default createApp(App)
     .use(router)

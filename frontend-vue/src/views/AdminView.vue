@@ -22,7 +22,7 @@
 </template>
 
 <script>
-	import ErrorShower from "@/components/ErrorShower.vue";
+	import ErrorShower from "@/components/ErrorShower";
 
 	export default {
 		name: "AdminView",
