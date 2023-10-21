@@ -52,7 +52,6 @@ const store = new Vuex.Store({
 // Imposta un timer per il logout automatico dopo 30 minuti
 setInterval(() => {
 	if (store.state.userId && store.state.lastLoginTime) {
-		console.log('Sono passati 10 minuti dal login');
 		const lastLoginTime = store.state.lastLoginTime;
 		const currentTime = new Date().getTime();
 		const sessionTimeout = 30 * 60 * 1000; // 30 minuti in millisecondi (30 * 60 * 1000)
@@ -61,9 +60,6 @@ setInterval(() => {
 			store.commit('logout');
 			window.location.href = '/accedi-registrati';
 		}
-	}
-	else {
-		console.log('Non è stato effettuato il login');
 	}
 }, 300000); // Ogni 5 minuti (300000 millisecondi)
 
