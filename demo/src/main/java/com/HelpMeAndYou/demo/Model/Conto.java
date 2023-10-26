@@ -9,7 +9,6 @@ public class Conto{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
     @Column(name = "saldo")
     private float saldo;
 

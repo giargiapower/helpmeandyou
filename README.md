@@ -1,4 +1,4 @@
-# HelpMeAndYou: backend
+# HelpMeAndYou
 
 Progetto di Tecniche Avanzate di Sviluppo Software 2022/2023 di
 Anna Fontana, Gianni Molinari e Fernando Serrano.

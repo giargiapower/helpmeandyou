@@ -2,14 +2,11 @@ package requests.model;
 
 
 public class Message {
-
     private long request_id;
 
     private String giorno;
 
-
     private String provincia;
-
 
     private long materiale_id;
 

@@ -57,7 +57,6 @@ public class RichiestaAiuto {
 
 	}
 
-
 	public long getId() {
 		return id;
 	}
