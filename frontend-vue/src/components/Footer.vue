@@ -38,7 +38,6 @@
 	}
 
 	.footer-title-italic {
-		font-family: "Droid Sans Mono Dotted", serif;
 		font-style: italic;
 		font-size: 50px;
 	}

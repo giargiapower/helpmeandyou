@@ -16,7 +16,7 @@
 									<table class="table table-hover">
 										<thead>
 											<tr v-if="listaTuttiUtenti.length === 0">
-												<th scope="col">Non ci sono utenti da verificare</th>
+												<td class="text-center">Non ci sono utenti da verificare</td>
 											</tr>
 											<tr v-else>
 												<th scope="col">#</th>
@@ -119,7 +119,7 @@
 	.home-container {
 		min-height: 100%;
 		text-align: center;
-		background: linear-gradient(to top, #595cff, #9bf8f4, #9bf8f4);
+		background: linear-gradient(to top, rgba(89, 92, 255, 0.8), rgba(155, 248, 244, 0.8), rgba(155, 248, 244, 0.8));
 		animation: fadeInUp 1s ease;
 	}
 

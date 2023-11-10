@@ -58,7 +58,7 @@
 	}
 
 	.hero-section {
-		background: linear-gradient(to bottom, #e60b09, #ede342);
+		background: linear-gradient(to bottom, rgba(230, 11, 9, 0.8), rgba(237, 227, 66, 0.8));
 		height: 100vh;
 		display: flex;
 		align-items: center;

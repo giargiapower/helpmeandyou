@@ -104,6 +104,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background-attachment: fixed;
 	}
 
 	.hero-content {
@@ -114,10 +115,10 @@
 		padding: 0.5em 3em;
 		display: inline-block;
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* ombra al testo */
+		backdrop-filter: blur(10px); /* sfocatura dello sfondo */
 	}
 
 	.hero-title {
-		font-family: 'Great Vibes', cursive;
 		font-size: 36px;
 		margin-bottom: 20px;
 	}
@@ -157,7 +158,7 @@
 	}
 
 	h2 {
-		font-family: "Droid Sans Mono Dotted", serif;
+		/*font-family: "Droid Sans Mono Dotted", serif;*/
 		font-size: 2.5em;
 		margin-bottom: 20px;
 	}

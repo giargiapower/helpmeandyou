@@ -57,16 +57,17 @@
 	}
 
 	.navbar {
-		background: linear-gradient(to left, #0061ff, #60efff);
+		background: linear-gradient(to left, rgba(0, 97, 255, 0.8), rgba(96, 239, 255, 0.8));
 	}
 
 	.navbar-nav {
-		/*--bs-nav-link-font-weight: bold;*/
 		--bs-nav-link-color: white;
 		--bs-nav-link-hover-color: #bbf7fd;
 	}
 
 	nav a.router-link-exact-active {
-		color: black;
+		color: white;
+		font-weight: bold;
+		text-decoration: underline;
 	}
 </style>

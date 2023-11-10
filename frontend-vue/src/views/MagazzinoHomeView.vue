@@ -279,7 +279,7 @@
 	.home-container {
 		min-height: 100%;
 		text-align: center;
-		background: linear-gradient(to top, #e60b09, #ede342, #ede342);
+		background: linear-gradient(to top, rgba(230, 11, 9, 0.8), rgba(237, 227, 66, 0.8), rgba(237, 227, 66, 0.8));
 		animation: fadeInUp 1s ease;
 	}
 

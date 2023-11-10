@@ -70,6 +70,8 @@
 	}
 
 	nav a.router-link-exact-active {
-		color: black;
+		color: white;
+		font-weight: bold;
+		text-decoration: underline;
 	}
 </style>
