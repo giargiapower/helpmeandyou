@@ -75,12 +75,6 @@
 								<span>{{ currentSegnalazione.nomeSegnalato }}</span>
 							</div>
 						</div>
-						<div v-if="currentSegnalazione.tipologia !== 'segnalazione richiesta'" class="col">
-							<div class="list-group-item d-flex">
-								<span class="fw-bold me-3">Titolo:</span>
-								<span>{{ currentSegnalazione.titolo }}</span>
-							</div>
-						</div>
 						<div class="col col-lg col-md-12 col-sm-12">
 							<div class="list-group-item d-flex">
 								<span class="fw-bold me-3">Descrizione:</span>

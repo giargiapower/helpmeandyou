@@ -88,6 +88,13 @@ di aiuto. Sono previste inoltre due parti relative alla gestione delle segnalazi
 
 ---
 
+- Per vedere tutti i vari **IP** dei servizi e dei pod lanciare il comando:
+  ```
+  kubectl get all -o wide
+  ```
+
+---
+
 ## NB!!!
 
 - ***Tutte le chiamate vanno fatte sulla porta 30000*** (
